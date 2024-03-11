@@ -2,28 +2,29 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import GenerateAlloc from './dashboard/GenerateAlloc';
 import ImportSdata from './dashboard/ImportSdata';
-import GenSalloc from './dashboard/GenSalloc';
-import Takeattendance from './dashboard/Takeattendance';
 import Uploadpaper from './dashboard/Uploadpaper';
-import Ttgenration from './dashboard/Ttgenration';
+import Ttgeneration from './dashboard/Ttgenration';
+import GenSalloc from './allocations/StudentAlloc';
 
 function Home() {
   return (
     <>
       <div className='bg-white flex'>
-        <NavLink to="/GenerateAlloc">GenerateAlloc</NavLink>
-        <NavLink to="/ImportStudentdata">ImportStudentdata</NavLink>
-        <NavLink to="/GenrateStudentAllocation">GenrateStudentAllocation</NavLink>
-        <NavLink to="/Uploadpaper">Uploadpaper</NavLink>
-        <NavLink to="/TakeAttendance">TakeAttendance</NavLink>
+        <NavLink to="/ttgen">Time Table Generation</NavLink>
+        <NavLink to="/GenerateAlloc">Generate Teachers Allocation</NavLink>
+        <NavLink to="/gensalloc">Generate Student Allocation</NavLink>
+        <NavLink to="/Uploadpaper">Upload paper</NavLink>
+        <NavLink to="/ImportStudentdata">Import Student data</NavLink>
+
       </div>
       <Routes>
         <Route path="/" exact element={<HomeComponent/>} />
         <Route path="/GenerateAlloc" element={<GenerateAlloc/>} />
         <Route path="/ImportStudentdata" element={<ImportSdata/>} />
-        <Route path="/GenrateStudentAllocation" element={<GenSalloc/>} />
         <Route path="/Uploadpaper" element={<Uploadpaper/>} />
-        <Route path="/TakeAttendance" element={<Takeattendance/>} />
+        <Route path="/ttgen" element={<Ttgeneration/>} />
+        <Route path="/gensalloc" element={<GenSalloc/>} />
+
       </Routes>
     </>
   );
@@ -41,7 +42,7 @@ function NavLink({ to, children }) {
   const isActive = pathname === to;
 
   return (
-    <Link to={to} className={` ${isActive ? 'text-red-800 bg-slate-200 p-2' : 'hover:bg-slate-200 p-2'}`} >
+    <Link to={to} className={` ${isActive ? 'text-red-800 bg-slate-200 p-2 border-r-2 border-gray-200' : 'hover:bg-slate-200 p-2 border-r-2 border-gray-200'}`} >
       {children}
     </Link>
   );

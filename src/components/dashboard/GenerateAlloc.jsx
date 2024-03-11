@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const AllocationTable = ({ data }) => {
   return (
-    <div className="table mx-auto bg-white shadow-md rounded-lg overflow-hidden max-w-4xl w-full m-2">
+    <div className="table mx-auto bg-white shadow-md rounded-lg overflow-hidden max-w-4xl w-full">
       <section className="table_header bg-red-700 text-white text-center py-3 text-xl w-full">
         <h1>Teachers Allocation SY</h1>
       </section>
@@ -68,7 +68,7 @@ const GenerateAlloc = () => {
   };
 
   return (
-    <div className=' mt-5'>
+    <div className='mt-5'>
       <div className=' absolute bottom-12 z-10'>
         <button onClick={fetchData} className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md mr-2">
           Fetch Data

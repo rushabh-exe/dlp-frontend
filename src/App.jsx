@@ -1,14 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink, useLocation } from 'react-router-dom';
-import { RiAdminLine, RiBox2Line, RiHome2Line, RiLoginBoxLine, RiLogoutBoxFill, RiSettings3Line, RiTable2, RiTableAltLine, RiTableLine, RiTabletLine, RiUserLine, RiUserSettingsLine } from 'react-icons/ri'; // Import icons
+import { RiAdminLine, RiBox2Line, RiCheckLine, RiCheckboxBlankLine, RiCheckboxMultipleFill, RiHome2Line, RiLoginBoxLine, RiLogoutBoxFill, RiSettings3Line, RiTable2, RiTableAltLine, RiTableLine, RiTabletLine, RiUser6Line, RiUserLine, RiUserSettingsFill, RiUserSettingsLine } from 'react-icons/ri'; // Import icons
 import Home from './components/Home';
 import TeacherAlloc from './components/allocations/TeacherAlloc';
-import StudentAlloc from './components/allocations/StudentAlloc';
 import imageSrc from './assets/svg.jpg';
 import ClassroomAlloc from './components/allocations/ClassroomAlloc';
-import Ttgeneration from './components/dashboard/Ttgenration';
 import Settings from './components/Settings';
 import Snlin from './components/Snlin';
+import TakeAttendance from './components/dashboard/Takeattendance';
+import StudentAlloc from './components/dashboard/GenSalloc'
 
 function App() {
   return (
@@ -19,11 +19,11 @@ function App() {
           <Routes>
             <Route path="*" element={<Home />} />
             <Route path="/teacherAlloc" element={<TeacherAlloc />} />
-            <Route path="/studentAlloc" element={<StudentAlloc />} />
             <Route path="/classroomAlloc" element={<ClassroomAlloc />} />
-            <Route path="/ttgen" element={<Ttgeneration />} />
+            <Route path="/takeattendance" element={<TakeAttendance />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/signup" element={<Snlin />} />
+            <Route path="/studentalloc" element={<StudentAlloc/>} />
           </Routes>
         </div>
       </main>
@@ -41,9 +41,11 @@ function Navigation() {
         <p className='text-center text-sm border-t-2 border-b-2 py-2'>Welcome User</p>
         <CustomNavLink to="/" currentPath={location.pathname} icon={<RiHome2Line />}>Home</CustomNavLink>
         <CustomNavLink to="/teacherAlloc" currentPath={location.pathname} icon={<RiUserLine />}>Teacher Alloc</CustomNavLink>
-        <CustomNavLink to="/studentAlloc" currentPath={location.pathname} icon={<RiUserSettingsLine />}>Student Alloc</CustomNavLink>
         <CustomNavLink to="/classroomAlloc" currentPath={location.pathname} icon={<RiBox2Line />}>Classroom Alloc</CustomNavLink>
-        <CustomNavLink to="/ttgen" currentPath={location.pathname} icon={<RiTableLine/>}>Time Table</CustomNavLink>
+        <CustomNavLink to="/takeattendance" currentPath={location.pathname} icon={<RiCheckboxMultipleFill />}>TakeAttendance</CustomNavLink>
+        <CustomNavLink to="/studentalloc" currentPath={location.pathname} icon={<RiUserSettingsLine />}>Student Allocation</CustomNavLink>
+
+
       </div>
       <div>
         <CustomNavLink to="/settings" currentPath={location.pathname} icon={<RiSettings3Line />}>Settings</CustomNavLink>

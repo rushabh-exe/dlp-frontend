@@ -33,7 +33,7 @@ function TakeAttendance() {
   };
 
   return (
-    <div className="table mx-auto bg-white shadow-md rounded-lg overflow-hidden mt-5 max-w-5xl w-full">
+    <div className="table mx-auto bg-white shadow-md rounded-lg overflow-hidden max-w-5xl w-full">
       <section className="table_header bg-red-700 text-white text-center py-3">
         <h1>Student Attendance SY</h1>
       </section>
