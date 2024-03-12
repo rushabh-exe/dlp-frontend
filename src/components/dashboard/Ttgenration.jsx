@@ -6,8 +6,8 @@ function Ttgeneration() {
     const [newEntry, setNewEntry] = useState({
         date: '',
         subject: '',
-        startTime: '',
-        endTime: ''
+        start_time: '',
+        endTime_time: ''
     });
 
     // Separate state variables for each year's timetable
@@ -17,6 +17,10 @@ function Ttgeneration() {
 
     const handleYearChange = (year) => {
         setSelectedYear(year);
+        setNewEntry(prevEntry => ({
+            ...prevEntry,
+            year: year // Set the selected year in the new entry
+        }));
     };
 
     const handleInputChange = (e) => {
@@ -29,7 +33,7 @@ function Ttgeneration() {
 
     const handleUpdate = () => {
         // Check if any of the fields are empty
-        if (!newEntry.date || !newEntry.subject || !newEntry.startTime || !newEntry.endTime) {
+        if (!newEntry.date || !newEntry.subject || !newEntry.start_time || !newEntry.end_time) {
             alert('Please fill in all fields');
             return; // Exit function if any field is empty
         }
@@ -52,8 +56,8 @@ function Ttgeneration() {
         setNewEntry({
             date: '',
             subject: '',
-            startTime: '',
-            endTime: ''
+            start_time: '',
+            end_time: ''
         });
     };
 
@@ -63,8 +67,8 @@ function Ttgeneration() {
         setNewEntry({
             date: '',
             subject: '',
-            startTime: '',
-            endTime: ''
+            start_time: '',
+            end_time: ''
         });
 
         // Reset the corresponding timetable based on the selected year
@@ -87,16 +91,21 @@ function Ttgeneration() {
     const handleSubmit = async () => {
         try {
             let requestBody;
+            // Add the selected year to the new entry
+            setNewEntry(prevEntry => ({
+                ...prevEntry,
+                year: selectedYear
+            }));
             // Determine the timetable based on the selected year
             switch (selectedYear) {
                 case 'SY':
-                    requestBody = { reqAll: timetableSY };
+                    requestBody = { reqAll: timetableSY, year: selectedYear };
                     break;
                 case 'TY':
-                    requestBody = { reqAll: timetableTY };
+                    requestBody = { reqAll: timetableTY, year: selectedYear };
                     break;
                 case 'LY':
-                    requestBody = { reqAll: timetableLY };
+                    requestBody = { reqAll: timetableLY, year: selectedYear };
                     break;
                 default:
                     break;
@@ -104,12 +113,13 @@ function Ttgeneration() {
             // Log the request body
             console.log('Post Request Body:', requestBody);
             // Make the axios post request
-            const response = await axios.post('http://localhost:3000/api/creatett', requestBody);
+            const response = await axios.post('http://localhost:9876/createTT', requestBody);
             console.log(response.data);
         } catch (error) {
             console.error('Error:', error);
         }
     };
+    
 
 
     let selectedTimetable;
@@ -137,10 +147,10 @@ function Ttgeneration() {
             </div>
             <div className=' m-5'>
                 <div className='inputbox flex justify-between mb-5'>
-                    <input type="text" name="date" value={newEntry.date} onChange={handleInputChange} placeholder='Date' />
+                    <input type="date" name="date" value={newEntry.date} onChange={handleInputChange} placeholder='Date' />
                     <input type="text" name="subject" value={newEntry.subject} onChange={handleInputChange} placeholder='Subject' />
-                    <input type="text" name="startTime" value={newEntry.startTime} onChange={handleInputChange} placeholder='Start Time' />
-                    <input type="text" name="endTime" value={newEntry.endTime} onChange={handleInputChange} placeholder='End Time' />
+                    <input type="time" name="start_time" value={newEntry.start_time} onChange={handleInputChange} placeholder='Start Time' />
+                    <input type="time" name="end_time" value={newEntry.end_time} onChange={handleInputChange} placeholder='End Time' />
                     <div className="">
                         <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={handleUpdate}>Update</button>
                         <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={handleReset}>Reset</button>
@@ -172,8 +182,8 @@ function Timetable({ timetable }) {
                         <tr key={index} className="hover:bg-gray-300 transition-all duration-500">
                             <td className="p-2 border border-gray-400">{entry.date}</td>
                             <td className="p-2 border border-gray-400">{entry.subject}</td>
-                            <td className="p-2 border border-gray-400">{entry.startTime}</td>
-                            <td className="p-2 border border-gray-400">{entry.endTime}</td>
+                            <td className="p-2 border border-gray-400">{entry.start_time}</td>
+                            <td className="p-2 border border-gray-400">{entry.end_time}</td>
                         </tr>
                     ))}
                 </tbody>
