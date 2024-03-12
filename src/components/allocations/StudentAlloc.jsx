@@ -57,7 +57,7 @@ function GenSalloc() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const defaultStrength = 50; // Default strength for all classes
+            const defaultStrength = 30; // Default strength for all classes
 
             const updatedFormData = {
                 reqAll: [
