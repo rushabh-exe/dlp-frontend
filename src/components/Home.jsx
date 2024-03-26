@@ -15,7 +15,6 @@ function Home() {
         <NavLink to="/gensalloc">Generate Student Allocation</NavLink>
         <NavLink to="/Uploadpaper">Upload paper</NavLink>
         <NavLink to="/ImportStudentdata">Import Student data</NavLink>
-
       </div>
       <Routes>
         <Route path="/" exact element={<HomeComponent/>} />
@@ -24,7 +23,6 @@ function Home() {
         <Route path="/Uploadpaper" element={<Uploadpaper/>} />
         <Route path="/ttgen" element={<Ttgeneration/>} />
         <Route path="/gensalloc" element={<GenSalloc/>} />
-
       </Routes>
     </>
   );
