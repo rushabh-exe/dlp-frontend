@@ -2,7 +2,20 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function Gettt() {
-    const [timetables, setTimetables] = useState({});
+    const [timetables, setTimetables] = useState({
+        2022: [
+            { date: '2022-01-01', subject: 'Math', start_time: '09:00 AM', end_time: '10:30 AM' },
+            { date: '2022-01-02', subject: 'Science', start_time: '10:00 AM', end_time: '11:30 AM' },
+            
+            // Add more timetable data for the year 2022 if needed
+        ],
+        2023: [
+            { date: '2023-01-01', subject: 'English', start_time: '09:00 AM', end_time: '10:30 AM' },
+            { date: '2023-01-02', subject: 'History', start_time: '10:00 AM', end_time: '11:30 AM' },
+            // Add more timetable data for the year 2023 if needed
+        ],
+        // Add more years and timetable data as needed
+    });
 
     useEffect(() => {
         const fetchTimetables = async () => {
