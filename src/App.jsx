@@ -23,7 +23,6 @@ import {
 } from "react-icons/ri";
 import Home from "./components/Home";
 import TeacherAlloc from "./components/allocations/TeacherAlloc";
-import imageSrc from "./assets/svg.jpg";
 import userImg from './assets/user-126.png';
 import ClassroomAlloc from "./components/allocations/ClassroomAlloc";
 import Settings from "./components/Settings";
@@ -34,7 +33,6 @@ import Gettt from "./components/allocations/Gettt";
 import Login from "./components/Login";
 import { gapi } from "gapi-script";
 import Logout from "./components/Logout";
-import Report from "./components/printables/Report";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -69,7 +67,6 @@ function App() {
           <Navigation setIsLoggedIn={setIsLoggedIn} />
           <div className="dashboard p-4 mx-auto flex-1">
             <Routes>
-              <Route path="*" element={<Home />} />
               <Route path="/teacherAlloc" element={<TeacherAlloc />} />
               <Route path="/classroomAlloc" element={<ClassroomAlloc />} />
               <Route path="/takeattendance" element={<TakeAttendance />} />
@@ -77,10 +74,11 @@ function App() {
               <Route path="/signup" element={<Snlin />} />
               <Route path="/studentalloc" element={<StudentAlloc />} />
               <Route path="/gettt" element={<Gettt />} />
-              <Route path="/reports" element={<Report />} /> 
+              <Route path="*" element={<Home />} />
             </Routes>
+
           </div>
-          
+
         </main>
       )}
     </Router>
@@ -94,10 +92,10 @@ function Navigation({ setIsLoggedIn }) {
     <div className="navigation-sidebar flex bg-white">
       <div className="flex w-full justify-start gap-5">
         <div className="flex justify-center gap-2 p-2 items-center">
-        <img src={userImg} alt="SVG" className=" w-8 h-8 " />
-        <p className="text-center text-sm py-2">
-          WELCOME USER
-        </p>
+          <img src={userImg} alt="SVG" className=" w-8 h-8 " />
+          <p className="text-center text-sm py-2">
+            WELCOME USER
+          </p>
         </div>
         <div className="flex p-2">
           <CustomNavLink
@@ -142,13 +140,7 @@ function Navigation({ setIsLoggedIn }) {
           >
             Get TimeTable
           </CustomNavLink>
-          <CustomNavLink
-            to="/reports"
-            currentPath={location.pathname}
-            icon={<RiGitRepositoryLine />}
-          >
-            Reports
-          </CustomNavLink>
+          
         </div>
       </div>
       <div>
@@ -176,9 +168,8 @@ function CustomNavLink({ to, currentPath, icon, children }) {
   return (
     <NavLink
       to={to}
-      className={`route flex items-center ${
-        isActive ? "bg-red-800 text-white" : "text-gray-700 hover:bg-slate-200"
-      } py-2 px-4`}
+      className={`route flex items-center ${isActive ? "bg-red-800 text-white" : "text-gray-700 hover:bg-slate-200"
+        } py-2 px-4`}
       activeClassName="bg-red-400 text-white"
     >
       {icon && <span className="mr-2">{icon}</span>}
