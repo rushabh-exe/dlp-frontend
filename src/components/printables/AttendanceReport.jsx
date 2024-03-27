@@ -44,34 +44,87 @@ function AttendanceReport() {
       remark: "",
     },
   ];
+  // const printTable = () => {
+  //   const style = document.createElement("style");
+  //   style.type = "text/css";
+  //   style.media = "print";
+
+  //   style.appendChild(
+  //     document.createTextNode(`
+  //     body * {
+  //       visibility: hidden;
+  //     }
+  //     .atnreport, .atnreport * {
+  //       visibility: visible;
+  //     }
+  //     .transcripts{
+  //       display: flex;
+  //     }
+  //     .pntbtn {
+  //       display: none;
+  //     }
+  //   `)
+  //   );
+  //   document.head.appendChild(style);
+  //   window.print();
+  //   document.head.removeChild(style);
+  // };
+
+  // const printTable = () => {
+  //   const style = document.createElement("style");
+  //   style.type = "text/css";
+  //   style.media = "print";
+  //   style.appendChild(
+  //     document.createTextNode(`
+  //     @media print {
+  //       /* Sets print view with media query */
+
+  //         body * {
+  //           display: none;
+  //         }
+  //         /* Sets body and elements in it to not display */
+
+  //         .atnreport, .atnreport * {
+  //           display: block;
+  //         }
+  //         /* Sets print area element and all its content to display */
+  //       }
+  //        `)
+  //   );
+  //   document.head.appendChild(style);
+  //   window.print();
+  //   document.head.removeChild(style);
+  // };
+
   const printTable = () => {
+    const printcontent = document.getElementById("atnreport").innerHTML;
+    const fullcontent = document.body.innerHTML;
+    document.body.innerHTML = printcontent;
     const style = document.createElement("style");
     style.type = "text/css";
     style.media = "print";
-    
     style.appendChild(
       document.createTextNode(`
-      body * {
-        visibility: hidden;
-      }
-      .atnreport, .atnreport * {
-        visibility: visible;
-      }
-      .transcripts{
-        display: flex;
-      }
-      .pntbtn {
-        display: none;
-      }
-    `)
+            .atnreport, .atnreport * {
+                visibility: visible;
+            }
+            .transcripts{
+                display: flex;
+            }
+            .pntbtn {
+                display: none;
+            }
+        `)
     );
     document.head.appendChild(style);
     window.print();
+    location.reload(); //making the page reload
     document.head.removeChild(style);
+    document.body.innerHTML = fullcontent;
   };
 
   return (
-    <div className="atnreport flex flex-col gap-3 p-2">
+    <div id="atnreport" className="atnreport flex flex-col gap-3 p-2">
       <button className="pntbtn bg-red-800 text-white" onClick={printTable}>
         Print Sheet
       </button>
@@ -154,7 +207,6 @@ function AttendanceReport() {
           <p>Dr. Jayashree Kanapuri </p>
         </div>
       </div>
-      
     </div>
   );
 }

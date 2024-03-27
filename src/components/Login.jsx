@@ -8,7 +8,7 @@ import {
 } from "react-icons/ri";
 import imageSrc from "../assets/svg.jpg";
 
-const Login = ({ setIsLoggedIn }) => {
+const Login = ({ setIsLoggedIn, setUser, setUserImg }) => {
   const divStyle = {
     background: "rgb(255,255,255)",
     backgroundImage:
@@ -16,7 +16,11 @@ const Login = ({ setIsLoggedIn }) => {
   };
   const responseGoogle = (response) => {
     console.log(response);
+    const userName = response.profileObj.name;
+    const userImg = response.profileObj.imageUrl;
     setIsLoggedIn(true);
+    setUser(userName);
+    setUserImg(userImg);
   };
 
   const onFailure = (error) => {
