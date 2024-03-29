@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Uploadpaper() {
+function UploadPaper() {
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
   const [questionFile, setQuestionFile] = useState(null);
@@ -86,4 +86,4 @@ function Uploadpaper() {
   );
 }
 
-export default Uploadpaper;
+export default UploadPaper;

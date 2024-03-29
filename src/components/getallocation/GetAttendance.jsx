@@ -1,6 +1,6 @@
 import React from "react";
 
-function AttendanceReport() {
+function GetAttendance() {
   // Dummy data for 10 students
   const students = [
     { rollNo: 1, name: "John Doe", sign: "", supplement: "", remark: "" },
@@ -211,4 +211,4 @@ function AttendanceReport() {
   );
 }
 
-export default AttendanceReport;
+export default GetAttendance;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function TeacherAlloc() {
+function TeachersAlloc() {
   const [allocations, setAllocations] = useState([]);
 
   useEffect(() => {
@@ -81,14 +81,14 @@ function TeacherAlloc() {
   );
 }
 
-export default TeacherAlloc;
+export default TeachersAlloc;
 
   // import React, { useState, useEffect } from 'react';
   // import * as XLSX from 'xlsx';
   // import * as XlsxPopulate from 'xlsx-populate/browser/xlsx-populate';
 
 
-  // function TeacherAlloc() {
+  // function TeachersAlloc() {
   //   const [allocations, setAllocations] = useState([]);
 
   //   useEffect(() => {
@@ -241,7 +241,7 @@ export default TeacherAlloc;
   //   );
   // }
 
-  // export default TeacherAlloc;
+  // export default TeachersAlloc;
 
 //   import React, { useState, useEffect } from 'react';
 // import * as XLSX from 'xlsx';
@@ -252,7 +252,7 @@ export default TeacherAlloc;
 //   window.Buffer = window.Buffer || require('buffer').Buffer;
 // }
 
-// function TeacherAlloc() {
+// function TeachersAlloc() {
 //   const [allocations, setAllocations] = useState([]);
 
 //   useEffect(() => {
@@ -369,4 +369,4 @@ export default TeacherAlloc;
 //   );
 // }
 
-// export default TeacherAlloc;
+// export default TeachersAlloc;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function Ttgeneration() {
+function GenExamtt() {
     const [selectedYear, setSelectedYear] = useState('SY');
     const [newEntry, setNewEntry] = useState({
         date: '',
@@ -192,4 +192,4 @@ function Timetable({ timetable }) {
     );
 }
 
-export default Ttgeneration;
+export default GenExamtt;
