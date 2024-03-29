@@ -35,7 +35,7 @@ const AllocationTable = ({ data }) => {
   );
 };
 
-const GenerateAlloc = () => {
+const MailAllocTeachers = () => {
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
@@ -85,4 +85,4 @@ const GenerateAlloc = () => {
   );
 };
 
-export default GenerateAlloc;
+export default MailAllocTeachers;

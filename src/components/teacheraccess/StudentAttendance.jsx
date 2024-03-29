@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function TakeAttendance() {
+function StudentAttendance() {
   const [data, setData] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState("");
@@ -168,4 +168,4 @@ function TakeAttendance() {
   );
 }
 
-export default TakeAttendance;
+export default StudentAttendance;

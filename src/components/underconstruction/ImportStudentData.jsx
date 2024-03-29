@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ImportSdata() {
+function ImportStudentData() {
   return (
     <div>
       import csv file here
@@ -8,4 +8,4 @@ function ImportSdata() {
   )
 }
 
-export default ImportSdata
+export default ImportStudentData

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function Gettt() {
+function GetExamtt() {
     const [timetables, setTimetables] = useState({
         2022: [
             { date: '2022-01-01', subject: 'Math', start_time: '09:00 AM', end_time: '10:30 AM' },
@@ -71,4 +71,4 @@ function Gettt() {
     );
 }
 
-export default Gettt;
+export default GetExamtt;

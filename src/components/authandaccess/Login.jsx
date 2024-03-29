@@ -6,7 +6,7 @@ import {
   RiLinkedinBoxFill,
   RiTwitterFill,
 } from "react-icons/ri";
-import imageSrc from "../assets/svg.jpg";
+import { Footer } from "../static/Footer";
 
 const Login = ({ setIsLoggedIn, setUser, setUserImg }) => {
   const divStyle = {
@@ -114,33 +114,7 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg }) => {
           </div>
         </div>
       </div>
-      <footer className="bg-blue-900 text-white flex text-center justify-between">
-        <div className="p-4">
-          <div className="flex justify-center items-center mb-4">
-            <p>Company Details</p>
-          </div>
-          <div>
-            <ul className="flex justify-center">
-              <li className="mr-4">
-                <a href="#" className="hover:text-gray-300">
-                  Facebook
-                </a>
-              </li>
-              <li className="mr-4">
-                <a href="#" className="hover:text-gray-300">
-                  Twitter
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-gray-300">
-                  Instagram
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <img src={imageSrc} alt="SVG" className=" object-contain w-96 m-2" />
-      </footer>
+      <Footer/>
     </>
   );
 };

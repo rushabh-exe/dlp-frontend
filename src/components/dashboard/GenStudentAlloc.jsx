@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function GenSalloc() {
+function GenStudentAlloc() {
     const [formData, setFormData] = useState({
         reqAll: [
             {
@@ -136,4 +136,4 @@ function GenSalloc() {
     );
 }
 
-export default GenSalloc;
+export default GenStudentAlloc;
