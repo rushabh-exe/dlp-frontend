@@ -248,3 +248,57 @@ export default Excelexport;
 // }
 
 // export default App;
+
+
+// printatbles
+  // const printTable = () => {
+  //   const style = document.createElement("style");
+  //   style.type = "text/css";
+  //   style.media = "print";
+
+  //   style.appendChild(
+  //     document.createTextNode(`
+  //     body * {
+  //       visibility: hidden;
+  //     }
+  //     .atnreport, .atnreport * {
+  //       visibility: visible;
+  //     }
+  //     .transcripts{
+  //       display: flex;
+  //     }
+  //     .pntbtn {
+  //       display: none;
+  //     }
+  //   `)
+  //   );
+  //   document.head.appendChild(style);
+  //   window.print();
+  //   document.head.removeChild(style);
+  // };
+
+  // const printTable = () => {
+  //   const style = document.createElement("style");
+  //   style.type = "text/css";
+  //   style.media = "print";
+  //   style.appendChild(
+  //     document.createTextNode(`
+  //     @media print {
+  //       /* Sets print view with media query */
+
+  //         body * {
+  //           display: none;
+  //         }
+  //         /* Sets body and elements in it to not display */
+
+  //         .atnreport, .atnreport * {
+  //           display: block;
+  //         }
+  //         /* Sets print area element and all its content to display */
+  //       }
+  //        `)
+  //   );
+  //   document.head.appendChild(style);
+  //   window.print();
+  //   document.head.removeChild(style);
+  // };

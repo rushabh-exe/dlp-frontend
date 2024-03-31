@@ -1,5 +1,5 @@
 import React from "react";
-
+import PrintButton from "../utils/PrintButton";
 function GetAttendance() {
   // Dummy data for 10 students
   const students = [
@@ -11,123 +11,14 @@ function GetAttendance() {
     { rollNo: 6, name: "Michael Brown", sign: "", supplement: "", remark: "" },
     { rollNo: 7, name: "Olivia Wilson", sign: "", supplement: "", remark: "" },
     { rollNo: 8, name: "James Taylor", sign: "", supplement: "", remark: "" },
-    {
-      rollNo: 9,
-      name: "Sophia Martinez",
-      sign: "",
-      supplement: "",
-      remark: "",
-    },
-    {
-      rollNo: 10,
-      name: "William Anderson",
-      sign: "",
-      supplement: "",
-      remark: "",
-    },
     { rollNo: 5, name: "Emily Davis", sign: "", supplement: "", remark: "" },
     { rollNo: 6, name: "Michael Brown", sign: "", supplement: "", remark: "" },
-    { rollNo: 7, name: "Olivia Wilson", sign: "", supplement: "", remark: "" },
-    { rollNo: 8, name: "James Taylor", sign: "", supplement: "", remark: "" },
-    {
-      rollNo: 9,
-      name: "Sophia Martinez",
-      sign: "",
-      supplement: "",
-      remark: "",
-    },
-    {
-      rollNo: 10,
-      name: "William Anderson",
-      sign: "",
-      supplement: "",
-      remark: "",
-    },
+    { rollNo: 7, name: "Olivia Wilson", sign: "", supplement: "", remark: "" },   
   ];
-  // const printTable = () => {
-  //   const style = document.createElement("style");
-  //   style.type = "text/css";
-  //   style.media = "print";
-
-  //   style.appendChild(
-  //     document.createTextNode(`
-  //     body * {
-  //       visibility: hidden;
-  //     }
-  //     .atnreport, .atnreport * {
-  //       visibility: visible;
-  //     }
-  //     .transcripts{
-  //       display: flex;
-  //     }
-  //     .pntbtn {
-  //       display: none;
-  //     }
-  //   `)
-  //   );
-  //   document.head.appendChild(style);
-  //   window.print();
-  //   document.head.removeChild(style);
-  // };
-
-  // const printTable = () => {
-  //   const style = document.createElement("style");
-  //   style.type = "text/css";
-  //   style.media = "print";
-  //   style.appendChild(
-  //     document.createTextNode(`
-  //     @media print {
-  //       /* Sets print view with media query */
-
-  //         body * {
-  //           display: none;
-  //         }
-  //         /* Sets body and elements in it to not display */
-
-  //         .atnreport, .atnreport * {
-  //           display: block;
-  //         }
-  //         /* Sets print area element and all its content to display */
-  //       }
-  //        `)
-  //   );
-  //   document.head.appendChild(style);
-  //   window.print();
-  //   document.head.removeChild(style);
-  // };
-
-  const printTable = () => {
-    const printcontent = document.getElementById("atnreport").innerHTML;
-    const fullcontent = document.body.innerHTML;
-    document.body.innerHTML = printcontent;
-    const style = document.createElement("style");
-    style.type = "text/css";
-    style.media = "print";
-    style.appendChild(
-      document.createTextNode(`
-            .atnreport, .atnreport * {
-                visibility: visible;
-            }
-            .transcripts{
-                display: flex;
-            }
-            .pntbtn {
-                display: none;
-            }
-        `)
-    );
-    document.head.appendChild(style);
-    window.print();
-    location.reload(); //making the page reload
-    document.head.removeChild(style);
-    document.body.innerHTML = fullcontent;
-  };
 
   return (
     <div id="atnreport" className="atnreport flex flex-col gap-3 p-2">
-      <button className="pntbtn bg-red-800 text-white" onClick={printTable}>
-        Print Sheet
-      </button>
+      <PrintButton contentId='atnreport'/>
       <div className="transcripts hidden flex-col items-center">
         <h2>KJ Somaiya Institure of Technology, Sion Mumbai - 400022</h2>
         <h2>Department of Electronics and Telecommunication Engineering</h2>

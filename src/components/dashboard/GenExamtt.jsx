@@ -10,7 +10,6 @@ function GenExamtt() {
         endTime_time: ''
     });
 
-    // Separate state variables for each year's timetable
     const [timetableSY, setTimetableSY] = useState([]);
     const [timetableTY, setTimetableTY] = useState([]);
     const [timetableLY, setTimetableLY] = useState([]);
@@ -19,7 +18,7 @@ function GenExamtt() {
         setSelectedYear(year);
         setNewEntry(prevEntry => ({
             ...prevEntry,
-            year: year // Set the selected year in the new entry
+            year: year 
         }));
     };
 
@@ -32,27 +31,48 @@ function GenExamtt() {
     };
 
     const handleUpdate = () => {
-        // Check if any of the fields are empty
         if (!newEntry.date || !newEntry.subject || !newEntry.start_time || !newEntry.end_time) {
             alert('Please fill in all fields');
-            return; // Exit function if any field is empty
+            return; 
         }
-
-        // Update the timetable based on the selected year
+    
+        const startTime = new Date(`2022-01-01T${newEntry.start_time}`);
+        const formattedStartTime = startTime.toLocaleString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true
+        });
+        const endTime = new Date(`2022-01-01T${newEntry.end_time}`);
+        const formattedEndTime = endTime.toLocaleString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true
+        });
         switch (selectedYear) {
             case 'SY':
-                setTimetableSY(prevTimetable => [...prevTimetable, newEntry]);
+                setTimetableSY(prevTimetable => [...prevTimetable, {
+                    ...newEntry,
+                    start_time: formattedStartTime,
+                    end_time: formattedEndTime
+                }]);
                 break;
             case 'TY':
-                setTimetableTY(prevTimetable => [...prevTimetable, newEntry]);
+                setTimetableTY(prevTimetable => [...prevTimetable, {
+                    ...newEntry,
+                    start_time: formattedStartTime,
+                    end_time: formattedEndTime
+                }]);
                 break;
             case 'LY':
-                setTimetableLY(prevTimetable => [...prevTimetable, newEntry]);
+                setTimetableLY(prevTimetable => [...prevTimetable, {
+                    ...newEntry,
+                    start_time: formattedStartTime,
+                    end_time: formattedEndTime
+                }]);
                 break;
             default:
                 break;
         }
-        // Reset the new entry form fields
         setNewEntry({
             date: '',
             subject: '',
@@ -60,43 +80,41 @@ function GenExamtt() {
             end_time: ''
         });
     };
+    
 
 
     const handleReset = () => {
-        // Reset the new entry form fields
+        switch (selectedYear) {
+            case 'SY':
+                setTimetableSY(prevTimetable => prevTimetable.slice(0, -1));
+                break;
+            case 'TY':
+                setTimetableTY(prevTimetable => prevTimetable.slice(0, -1)); 
+                break;
+            case 'LY':
+                setTimetableLY(prevTimetable => prevTimetable.slice(0, -1)); 
+                break;
+            default:
+                break;
+        }
+    
         setNewEntry({
             date: '',
             subject: '',
             start_time: '',
             end_time: ''
         });
-
-        // Reset the corresponding timetable based on the selected year
-        switch (selectedYear) {
-            case 'SY':
-                setTimetableSY([]);
-                break;
-            case 'TY':
-                setTimetableTY([]);
-                break;
-            case 'LY':
-                setTimetableLY([]);
-                break;
-            default:
-                break;
-        }
     };
+    
 
 
     const handleSubmit = async () => {
         try {
             let requestBody;
-            // Add the selected year to the new entry
             setNewEntry(prevEntry => ({
                 ...prevEntry,
                 year: selectedYear
             }));
-            // Determine the timetable based on the selected year
             switch (selectedYear) {
                 case 'SY':
                     requestBody = { reqAll: timetableSY, year: selectedYear };
@@ -110,9 +128,7 @@ function GenExamtt() {
                 default:
                     break;
             }
-            // Log the request body
             console.log('Post Request Body:', requestBody);
-            // Make the axios post request
             const response = await axios.post('http://localhost:9876/createTT', requestBody);
             console.log(response.data);
         } catch (error) {
@@ -123,7 +139,6 @@ function GenExamtt() {
 
 
     let selectedTimetable;
-    // Select the timetable based on the selected year
     switch (selectedYear) {
         case 'SY':
             selectedTimetable = timetableSY;
@@ -159,6 +174,7 @@ function GenExamtt() {
 
                 </div>
                 <Timetable timetable={selectedTimetable} />
+                
             </div>
         </div>
 
@@ -188,6 +204,7 @@ function Timetable({ timetable }) {
                     ))}
                 </tbody>
             </table>
+            
         </section>
     );
 }

@@ -12,7 +12,8 @@ import TeachersAlloc from './components/getallocation/TeachersAlloc';
 import Home from './components/dashboard/Home';
 import Settings from './components/authandaccess/Settings';
 import Login from './components/authandaccess/Login';
-import { Footer } from "./components/static/Footer";
+import Loader from "./components/utils/Loader";
+import Timetable from "./components/getallocation/Timetable";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,6 +21,7 @@ function App() {
   const [userImg, setUserImg] = useState('');
   const clientId ="152111620630-d01stikjdcthgcfrjhhmpuetctpnqs61.apps.googleusercontent.com";
   const scope = "profile email";
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const initClient = async () => {
@@ -27,14 +29,27 @@ function App() {
         await gapi.client.init({clientId,scope,});
       } catch (error) {
         console.error("Error initializing Google API client:", error);
+      } finally {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 2000);
       }
     };
 
-    if (!window.gapi.client) {window.gapi.load("client:auth2", initClient);} 
-    else {
+    if (!window.gapi.client) {
+      window.gapi.load("client:auth2", initClient);
+    } else {
       initClient();
     }
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className=" flex justify-center items-center w-screen h-screen">
+        <Loader/>
+      </div>
+    );
+  }
 
   return (
     <Router>
@@ -44,6 +59,7 @@ function App() {
           <Navigation userName={userName} userImg={userImg} setIsLoggedIn={setIsLoggedIn} />
           <div className="dashboard p-4 mx-auto flex-1">
             <Routes>
+              <Route path="/tt" element={<Timetable/>}/>
               <Route path="/ClassroomAlloc" element={<ClassroomAlloc />} />
               <Route path="/GetAttendance" element={<GetAttendance />} />
               <Route path="/GetExamtt" element={<GetExamtt />} />
@@ -61,4 +77,3 @@ function App() {
 }
 
 export default App;
-
