@@ -32,7 +32,7 @@ function App() {
       } finally {
         setTimeout(() => {
           setIsLoading(false);
-        }, 2000);
+        }, 1800);
       }
     };
 
