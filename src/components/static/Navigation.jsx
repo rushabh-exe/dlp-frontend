@@ -24,6 +24,7 @@ function Navigation({ setIsLoggedIn, userName, userImg }) {
           <CustomNavLink to="/GetSupervision" currentPath={location.pathname} icon={<RiUserLine />}>GetSupervision</CustomNavLink>
           <CustomNavLink to="/StudentAlloc" currentPath={location.pathname} icon={<RiUserSettingsLine />} >StudentAlloc</CustomNavLink>
           <CustomNavLink to="/TeachersAlloc" currentPath={location.pathname} icon={<RiUserLine />}>TeachersAlloc</CustomNavLink>
+          <CustomNavLink to="/teacher" currentPath={location.pathname} icon={<RiUserLine />}>Teacher</CustomNavLink>
         </div>
       </div>
       <div>

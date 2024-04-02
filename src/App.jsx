@@ -14,6 +14,8 @@ import Settings from './components/authandaccess/Settings';
 import Login from './components/authandaccess/Login';
 import Loader from "./components/utils/Loader";
 import Timetable from "./components/getallocation/Timetable";
+import Teacher from "./components/getallocation/Teacher";
+import T_Alloc from "./components/getallocation/T_Alloc";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -66,6 +68,8 @@ function App() {
               <Route path="/GetSupervision" element={<GetSupervision />} />
               <Route path="/StudentAlloc" element={<StudentAlloc />} />
               <Route path="/TeachersAlloc" element={<TeachersAlloc />} />
+              <Route path="/teacher" element={<Teacher />}></Route>
+              <Route path="/teacher/allocation" element={<T_Alloc />}></Route>
               <Route path="/Settings" element={<Settings />} />
               <Route path="/*" element={<Home />} />
             </Routes>

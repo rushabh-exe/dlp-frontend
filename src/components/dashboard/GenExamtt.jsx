@@ -210,3 +210,6 @@ function Timetable({ timetable }) {
 }
 
 export default GenExamtt;
+
+
+
