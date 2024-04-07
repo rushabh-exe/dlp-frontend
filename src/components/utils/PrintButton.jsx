@@ -30,7 +30,7 @@ function PrintButton({ contentId }) {
   };
 
   return (
-    <button className="pntbtn bg-red-800 text-white" onClick={printTable}>
+    <button className="pntbtn bg-red-800 text-white w-fit p-2" onClick={printTable}>
       Print Sheet
     </button>
   );

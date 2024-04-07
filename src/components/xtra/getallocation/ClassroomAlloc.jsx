@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import PrintButton from '../utils/PrintButton';
+import PrintButton from '../../utils/PrintButton';
 
 function ClassroomAlloc() {
   const [allocations, setallocations] = useState([

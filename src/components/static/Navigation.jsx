@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { RiBox2Line, RiDashboardLine, RiLoginBoxLine, RiSettings3Line, RiTable2, RiUserLine, RiUserSettingsLine } from "react-icons/ri";
+import { RiLoginBoxLine, RiSettings3Line, RiUser2Line,} from "react-icons/ri";
 import Logout from '../authandaccess/Logout';
 
 function Navigation({ setIsLoggedIn, userName, userImg }) {
@@ -17,14 +17,10 @@ function Navigation({ setIsLoggedIn, userName, userImg }) {
           </p>
         </div>
         <div className="flex p-2">
-          <CustomNavLink to="/" currentPath={location.pathname} icon={<RiDashboardLine />}>Dashboard</CustomNavLink>
-          <CustomNavLink to="/ClassroomAlloc" currentPath={location.pathname} icon={<RiUserLine />}>ClassroomAlloc</CustomNavLink>
-          <CustomNavLink to="/GetAttendance" currentPath={location.pathname} icon={<RiBox2Line />}>GetAttendance</CustomNavLink>
-          <CustomNavLink to="/GetExamtt" currentPath={location.pathname} icon={<RiTable2 />} >GetExamtt</CustomNavLink>
-          <CustomNavLink to="/GetSupervision" currentPath={location.pathname} icon={<RiUserLine />}>GetSupervision</CustomNavLink>
-          <CustomNavLink to="/StudentAlloc" currentPath={location.pathname} icon={<RiUserSettingsLine />} >StudentAlloc</CustomNavLink>
-          <CustomNavLink to="/TeachersAlloc" currentPath={location.pathname} icon={<RiUserLine />}>TeachersAlloc</CustomNavLink>
-          <CustomNavLink to="/teacher" currentPath={location.pathname} icon={<RiUserLine />}>Teacher</CustomNavLink>
+          <CustomNavLink to="/admin/teacher" currentPath={location.pathname} icon={<RiUser2Line />}>Teacher</CustomNavLink>
+          <CustomNavLink to="/admin/student" currentPath={location.pathname} icon={<RiUser2Line />}>Student</CustomNavLink>
+          <CustomNavLink to="/admin/student/Allocation" currentPath={location.pathname} icon={<RiUser2Line />}>Student Allocation</CustomNavLink>
+          <CustomNavLink to="/admin/utils" currentPath={location.pathname} icon={<RiUser2Line />}>Utils</CustomNavLink>
         </div>
       </div>
       <div>
