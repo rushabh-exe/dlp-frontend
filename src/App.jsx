@@ -1,40 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { gapi } from "gapi-script";
-import Navigation from './components/static/Navigation';
 
-import ClassroomAlloc from './components/getallocation/ClassroomAlloc';
-import GetAttendance from './components/getallocation/GetAttendance';
-import GetExamtt from './components/getallocation/GetExamtt';
-import GetSupervision from './components/getallocation/GetSupervision';
-import StudentAlloc from './components/getallocation/StudentAlloc';
-import TeachersAlloc from './components/getallocation/TeachersAlloc';
-import Home from './components/dashboard/Home';
-import Settings from './components/authandaccess/Settings';
-import Login from './components/authandaccess/Login';
+import Navigation from "./components/static/Navigation";
+import Login from "./components/authandaccess/Login";
 import Loader from "./components/utils/Loader";
-import Timetable from "./components/getallocation/Timetable";
-import Teacher from "./components/getallocation/Teacher";
-import T_Alloc from "./components/getallocation/T_Alloc";
+import Admin from "./components/admin/Admin";
+import Teacher from "./components/admin/teacher/Teacher";
+import Student from "./components/admin/student/Student";
+import Utils from "./components/admin/utils/Utils";
+import TeacherAllocation from "./components/admin/teacher/TeacherAllocation";
+import CreateTeacherAllocation from "./components/admin/teacher/CreateTeacherAllocation";
+import StudentAllocation from "./components/admin/student/StudentAllocation";
+import SubjectUtils from "./components/admin/utils/SubjectUtils";
+import TeacherUtils from "./components/admin/utils/TeacherUtils";
+import CreateSingleAllocation from "./components/admin/student/sAllocation/CreateSingleAllocation";
+import CreateDualAllocation from "./components/admin/student/sAllocation/CreateDualAllocation";
+import GetAllocation from "./components/admin/student/sAllocation/GetAllocation";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState('');
-  const [userImg, setUserImg] = useState('');
-  const clientId ="152111620630-d01stikjdcthgcfrjhhmpuetctpnqs61.apps.googleusercontent.com";
+  const [userName, setUserName] = useState("");
+  const [userImg, setUserImg] = useState("");
+  const clientId =
+    "152111620630-d01stikjdcthgcfrjhhmpuetctpnqs61.apps.googleusercontent.com";
   const scope = "profile email";
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const initClient = async () => {
       try {
-        await gapi.client.init({clientId,scope,});
+        await gapi.client.init({ clientId, scope });
       } catch (error) {
         console.error("Error initializing Google API client:", error);
       } finally {
         setTimeout(() => {
           setIsLoading(false);
-        }, 1800);
+        }, 1500); //1800
       }
     };
 
@@ -48,36 +50,66 @@ function App() {
   if (isLoading) {
     return (
       <div className=" flex justify-center items-center w-screen h-screen">
-        <Loader/>
+        <Loader />
       </div>
     );
   }
 
   return (
     <Router>
-      {!isLoggedIn && <Login setUser={setUserName} setIsLoggedIn={setIsLoggedIn} setUserImg={setUserImg} />}
+      {!isLoggedIn && (
+        <Login
+          setUser={setUserName}
+          setIsLoggedIn={setIsLoggedIn}
+          setUserImg={setUserImg}
+        />
+      )}
       {isLoggedIn && (
         <main className="bg-slate-300 min-h-screen flex flex-col gap-1 ">
-          <Navigation userName={userName} userImg={userImg} setIsLoggedIn={setIsLoggedIn} />
-          <div className="dashboard p-4 mx-auto flex-1">
+          <Navigation
+            userName={userName}
+            userImg={userImg}
+            setIsLoggedIn={setIsLoggedIn}
+          />
+          <div className="dashboard p-4 w-full mx-auto flex-1">
             <Routes>
-              <Route path="/tt" element={<Timetable/>}/>
-              <Route path="/ClassroomAlloc" element={<ClassroomAlloc />} />
-              <Route path="/GetAttendance" element={<GetAttendance />} />
-              <Route path="/GetExamtt" element={<GetExamtt />} />
-              <Route path="/GetSupervision" element={<GetSupervision />} />
-              <Route path="/StudentAlloc" element={<StudentAlloc />} />
-              <Route path="/TeachersAlloc" element={<TeachersAlloc />} />
-              <Route path="/teacher" element={<Teacher />}></Route>
-              <Route path="/teacher/allocation" element={<T_Alloc />}></Route>
-              <Route path="/Settings" element={<Settings />} />
-              <Route path="/*" element={<Home />} />
+              <Route path="/admin/utils/*" element={<Utils />}>
+                <Route path="Subject" element={<SubjectUtils />} />
+                <Route path="Teacher" element={<TeacherUtils />} />
+              </Route>
+              <Route
+                path="/admin/student/Allocation"
+                element={<StudentAllocation />}
+              >
+                <Route
+                  path="createSingle"
+                  element={<CreateSingleAllocation />}
+                />
+                <Route path="createDual" element={<CreateDualAllocation />} />
+                <Route path="getAllocation" element={<GetAllocation />} />
+              </Route>
+              <Route path="/admin/student/*" element={<Student />}></Route>
+              <Route path="/admin/teacher/*" element={<Teacher />}>
+                <Route path="Allocation" element={<TeacherAllocation />} />
+                <Route
+                  path="createAllocation"
+                  element={<CreateTeacherAllocation />}
+                />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+              <Route path="admin" element={<Admin />} />
             </Routes>
           </div>
         </main>
       )}
     </Router>
   );
+}
+
+function NotFound() {
+  return <div>
+    Welcome Admin Route for Other Components
+  </div>;
 }
 
 export default App;

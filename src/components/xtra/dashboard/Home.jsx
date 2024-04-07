@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import NavLink from '../utils/Navlink'; // Import the NavLink component
 import GenExamtt from './GenExamtt';
 import MailAllocTeachers from './MailAllocTeachers';
 import GenStudentAlloc from './GenStudentAlloc';
@@ -35,17 +36,6 @@ function HomeComponent() {
   return (
     <div className='flex-1 bg-white'>
     </div>
-  );
-}
-
-function NavLink({ to, children }) {
-  const { pathname } = useLocation();
-  const isActive = pathname === to;
-
-  return (
-    <Link to={to} className={` ${isActive ? 'text-red-800 bg-slate-200 p-2 border-r-2 border-gray-200' : 'hover:bg-slate-200 p-2 border-r-2 border-gray-200'}`} >
-      {children}
-    </Link>
   );
 }
 

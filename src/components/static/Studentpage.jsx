@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import ClassroomAlloc from '../getallocation/ClassroomAlloc';
-import GetExamtt from '../getallocation/GetExamtt';
-import StudentAlloc from '../getallocation/StudentAlloc';
+import ClassroomAlloc from '../xtra/getallocation/ClassroomAlloc';
+import GetExamtt from '../xtra/getallocation/GetExamtt';
+import StudentAlloc from '../xtra/getallocation/StudentAlloc';
 
 function StudentPage() {
   const [selectedComponent, setSelectedComponent] = useState(<Studentcompo/>);

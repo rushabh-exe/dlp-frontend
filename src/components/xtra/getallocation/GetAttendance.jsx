@@ -1,5 +1,5 @@
 import React from "react";
-import PrintButton from "../utils/PrintButton";
+import PrintButton from "../../utils/PrintButton";
 function GetAttendance() {
   // Dummy data for 10 students
   const students = [

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 
-const T_Alloc = () => {
+const TeacherAllocation = () => {
   const [scheduleData, setScheduleData] = useState([]);
 
   useEffect(() => {
     axios.get('http://localhost:3001/admin/get/teacher/allocation')
-      .then((response) => setScheduleData(response.data))
+      .then((response) => setScheduleData(response.data.reqAll))
       .catch((error) => console.error('Error fetching schedule data:', error));
   }, []);
-
+ 
   return (
     <div className="container mx-auto">
       <table className="table-auto w-full border-collapse border border-red-500">
@@ -26,12 +26,12 @@ const T_Alloc = () => {
         <tbody>
           {scheduleData.map((item) => (
             <tr key={item.ID} className="bg-white text-red-500">
-              <td className="border border-red-500 px-4 py-2">{item.classroom}</td>
-              <td className="border border-red-500 px-4 py-2">{item.date}</td>
-              <td className="border border-red-500 px-4 py-2">{item.start_time}</td>
-              <td className="border border-red-500 px-4 py-2">{item.end_time}</td>
-              <td className="border border-red-500 px-4 py-2">{item.main_teacher}</td>
-              <td className="border border-red-500 px-4 py-2">{item.co_teacher}</td>
+              <td className="border border-red-500 px-4 py-2">{item.Classroom}</td>
+              <td className="border border-red-500 px-4 py-2">{item.Date}</td>
+              <td className="border border-red-500 px-4 py-2">{item.Start_Time}</td>
+              <td className="border border-red-500 px-4 py-2">{item.End_Time}</td>
+              <td className="border border-red-500 px-4 py-2">{item.Main_Teacher}</td>
+              <td className="border border-red-500 px-4 py-2">{item.Co_Teacher}</td>
             </tr>
           ))}
         </tbody>
@@ -40,4 +40,4 @@ const T_Alloc = () => {
   );
 };
 
-export default T_Alloc;
+export default TeacherAllocation;
