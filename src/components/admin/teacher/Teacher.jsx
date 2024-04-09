@@ -6,10 +6,9 @@ function Teacher() {
   return (
     <div>
       <div className='bg-white flex flex-wrap w-fit'>
-        <CNavlink to='/admin/teacher/Allocation'>Allocation</CNavlink>
-        <CNavlink to='/admin/teacher/createAllocation'>Create</CNavlink>
+      <CNavlink to='/admin/teacher/Allocation'>Allocation</CNavlink>
       </div>
-      <div className=' w-fit mx-auto mt-5'>
+      <div className=' w-fit mt-5'>
       <Outlet/>
       </div>
     </div>
