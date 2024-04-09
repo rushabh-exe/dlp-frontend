@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route ,Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { gapi } from "gapi-script";
 import Cookies from "js-cookie";
 import Navigation from "./components/static/Navigation";
@@ -16,6 +16,9 @@ import TeacherUtils from "./components/admin/utils/TeacherUtils";
 import CreateSingleAllocation from "./components/admin/student/sAllocation/CreateSingleAllocation";
 import CreateDualAllocation from "./components/admin/student/sAllocation/CreateDualAllocation";
 import GetAllocation from "./components/admin/student/sAllocation/GetAllocation";
+import GetAttendance from "./components/teacher/GetAttendance";
+import TakeAttendance from "./components/teacher/TakeAttendance";
+import Settings from "./components/authandaccess/Settings";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,7 +35,7 @@ function App() {
   useEffect(() => {
     const isLoggedInCookie = Cookies.get('isLoggedIn');
     const method = Cookies.get('loginMethod');
-    
+
     if (isLoggedInCookie === 'true' && method) {
       setLoginMethod(method);
     }
@@ -77,7 +80,7 @@ function App() {
           setLoginMethod={setLoginMethod}
         />
       )}
-      {isLoggedIn && (
+      {isLoggedIn && loginMethod === 'Admin' && (
         <main className="bg-slate-300 min-h-screen flex flex-col gap-1 ">
           <Navigation
             userName={userName}
@@ -113,6 +116,26 @@ function App() {
           </div>
         </main>
       )}
+      {isLoggedIn && loginMethod === 'Teacher' && (
+        <main className="bg-slate-300 min-h-screen flex flex-col gap-1 ">
+          <Navigation
+            userName={userName}
+            userImg={userImg}
+            setIsLoggedIn={setIsLoggedIn}
+            loginMethod={loginMethod}
+          />
+          <div className="dashboard p-4 w-full mx-auto flex-1">
+            <Routes>
+              <Route path="Settings" element={<Settings />} />
+              <Route path="teacher/getAttendance" element={<GetAttendance />} />
+              <Route path="teacher/takeAttendance" element={<TakeAttendance />} />
+              <Route path="teacher/*" element={<NotFound />} />
+              <Route path="*" element={<Navigate to="teacher" />} />
+              <Route path="teacher" element={<TeacherComponent />} />
+            </Routes>
+          </div>
+        </main>
+      )}
     </Router>
   );
 }
@@ -122,5 +145,12 @@ function NotFound() {
     Welcome Admin Route for Other Components
   </div>;
 }
+
+function TeacherComponent() {
+  return (
+    <div>App</div>
+  )
+}
+
 
 export default App;
