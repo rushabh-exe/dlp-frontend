@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import PrintButton from '../../utils/PrintButton';
 
 const TeacherAllocation = () => {
   const [scheduleData, setScheduleData] = useState([]);
@@ -48,7 +49,8 @@ const TeacherAllocation = () => {
         ) : error ? (
           <div>Error: {error}</div>
         ) : (
-          <table className="table-auto w-full border-collapse border border-red-500">
+          <div>
+            <table className="table-auto w-full border-collapse border border-red-500">
             <thead>
               <tr className="bg-red-500 text-white">
                 <th className="border border-red-500 px-4 py-2">Classroom</th>
@@ -72,6 +74,8 @@ const TeacherAllocation = () => {
               ))}
             </tbody>
           </table>
+          <PrintButton contentId='table-auto'/>
+          </div>
         )}
       </div>
     </div>

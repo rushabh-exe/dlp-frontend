@@ -85,7 +85,7 @@ function TeacherUtils() {
 
       <div>
         <h3 className="text-xl font-bold mb-4">Teacher Data</h3>
-        <table className="w-full border-collapse mb-4">
+        <table className="w-full border-collapse mb-4 bg-white">
           <thead>
             <tr>
               <th className="border border-gray-400 p-2">ID</th>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import PrintButton from '../../utils/PrintButton';
 
 function TimeTable({ year }) {
   const [showGetTimetable, setShowGetTimetable] = useState(null);
@@ -101,6 +102,7 @@ export function GetTimeTable({ year }) {
         <button className='bg-white p-1' onClick={handleDeleteYearTimetable}>Delete Timetable for Selected Year</button>
       </div>
       <section className="table_body bg-gray-100 max-w-2xl mx-auto">
+        <PrintButton contentId='table_body'/>
         <table className="w-full">
           <thead>
             <tr>

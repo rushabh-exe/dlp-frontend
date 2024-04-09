@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import PrintButton from '../../../utils/PrintButton';
 
 function GetAllocation() {
   const [studentAllocations, setStudentAllocations] = useState([]);
@@ -15,7 +16,8 @@ function GetAllocation() {
   }, []);
 
   return (
-    <div className="table mx-auto bg-white shadow-md rounded-lg max-w-4xl w-full overflow-hidden">
+    <div className="tableee mx-auto bg-white shadow-md rounded-lg max-w-4xl w-full overflow-hidden">
+      <PrintButton contentId='tableee'/>
       <section className="table_header bg-red-700 text-white  text-xl text-center py-3">
         <h1>Student Allocation SY</h1>
       </section>

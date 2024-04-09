@@ -112,6 +112,7 @@
 // export default StudentAttendance;
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import PrintButton from '../../utils/PrintButton';
 
 function StudentAttendance({ year }) {
   const [subject, setSubject] = useState('');
@@ -186,7 +187,7 @@ function StudentAttendance({ year }) {
           <button className='w-full bg-white' onClick={handleDeleteRequest}>Delete Data</button>
         </div> 
       </div>
-      <div>
+      <div className='atn-btn'>
         <h2>Attendance Data</h2>
         <table>
           <thead className='bg-red-700 text-white'>
@@ -210,6 +211,7 @@ function StudentAttendance({ year }) {
             ))}
           </tbody>
         </table>
+        <PrintButton contentId='atn-btn'/>
       </div>
     </div>
   );

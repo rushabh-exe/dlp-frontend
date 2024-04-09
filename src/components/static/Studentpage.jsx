@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ClassroomAlloc from '../xtra/getallocation/ClassroomAlloc';
 import GetAllocation from '../admin/student/sAllocation/GetAllocation';
 import { GetTimeTable } from '../admin/student/Timetable';
 
@@ -8,9 +7,6 @@ function StudentPage() {
   const handleDropdownChange = (event) => {
     const selectedValue = event.target.value;
     switch (selectedValue) {
-      case 'classroomAlloc':
-        setSelectedComponent(<ClassroomAlloc />);
-        break;
       case 'getExamtt':
         setSelectedComponent(<GetTimeTable />);
         break;
@@ -27,7 +23,6 @@ function StudentPage() {
     <div className="p-2">
       <select className='my-2 border-2 border-black' onChange={handleDropdownChange}>
         <option value="">Looking for</option>
-        <option value="classroomAlloc">Classroom Allocation</option>
         <option value="getExamtt">Get Exam Timetable</option>
         <option value="studentAlloc">Student Allocation</option>
       </select>
