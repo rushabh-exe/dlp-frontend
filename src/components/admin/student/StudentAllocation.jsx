@@ -10,7 +10,7 @@ function StudentAllocation() {
         <CNavlink to='/admin/student/Allocation/createDual'>Dual Allocation</CNavlink>
         <CNavlink to='/admin/student/Allocation/getAllocation'>Get Allocation</CNavlink>
       </div>
-      <div className=' w-fit mx-auto mt-5'>
+      <div className='mt-5'>
       <Outlet/>
       </div>
     </div>

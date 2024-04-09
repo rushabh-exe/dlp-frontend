@@ -8,7 +8,7 @@ import About from '../static/About';
 import Event from '../static/Event';
 import Studentpage from '../static/Studentpage';
 
-const Login = ({ setIsLoggedIn, setUser, setUserImg }) => {
+const Login = ({ setIsLoggedIn, setUser, setUserImg , setLoginMethod  }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -20,6 +20,8 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg }) => {
       setIsLoggedIn(true);
       setUser(userCookie);
       setUserImg(userImgCookie);
+      // Set login method based on saved cookie
+      setLoginMethod(Cookies.get("loginMethod"));
     }
   }, []);
 
@@ -29,14 +31,17 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg }) => {
       setIsLoggedIn(true);
       setUser("ADMIN");
       setUserImg('https://pic.onlinewebfonts.com/thumbnails/icons_325791.svg');
-      // Save login session in cookies
+      // Save login session and login method in cookies
       Cookies.set("isLoggedIn", true);
       Cookies.set("user", "ADMIN");
       Cookies.set("userImg", 'https://pic.onlinewebfonts.com/thumbnails/icons_325791.svg');
+      Cookies.set("loginMethod", "Admin"); // Set login method to "generic" for username/password login
+      setLoginMethod("Admin"); // Set login method in the App component
     } else {
       alert("Invalid username or password. Please try again.");
     }
   };
+  
 
   const divStyle = {
     background: "rgb(255,255,255)",
@@ -51,10 +56,12 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg }) => {
     setIsLoggedIn(true);
     setUser(userName);
     setUserImg(userImg);
-    // Save login session in cookies
+    // Save login session and login method in cookies
     Cookies.set("isLoggedIn", true);
     Cookies.set("user", userName);
     Cookies.set("userImg", userImg);
+    Cookies.set("loginMethod", "Teacher"); // Set login method to "Google" for Google login
+    setLoginMethod("Teacher"); // Set login method in the App component
   };
 
   const onFailure = (error) => {
@@ -97,7 +104,7 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg }) => {
             >
               <div className="bg-white pt-0 border-gray-200 rounded-lg border-2 max-[1024px]:min-w-72 max-[490px]:w-10/12 max-[490px]:flex max-[490px]:flex-col max-[490px]:items-center">
                 <p className="bg-red-800 rounded-t-lg p-2 w-full text-white text-center">
-                  Teacher Login
+                  Admin Login
                 </p>
                 <form className="w-96 m-10 mb-5 max-[490px]:w-10/12 max-[490px]:m-3" onSubmit={handleSubmit}>
                   <input
@@ -121,7 +128,7 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg }) => {
                     Login
                   </button>
                 </form>
-                <div className="text-center">Or</div>
+                <div className="text-center">Teacher Login</div>
                 <GoogleLogin
                   clientId="152111620630-d01stikjdcthgcfrjhhmpuetctpnqs61.apps.googleusercontent.com"
                   buttonText="Login with Google"

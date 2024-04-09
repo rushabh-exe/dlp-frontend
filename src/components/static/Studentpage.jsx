@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ClassroomAlloc from '../xtra/getallocation/ClassroomAlloc';
-import GetExamtt from '../xtra/getallocation/GetExamtt';
-import StudentAlloc from '../xtra/getallocation/StudentAlloc';
+import GetAllocation from '../admin/student/sAllocation/GetAllocation';
+import { GetTimeTable } from '../admin/student/Timetable';
 
 function StudentPage() {
   const [selectedComponent, setSelectedComponent] = useState(<Studentcompo/>);
@@ -12,10 +12,10 @@ function StudentPage() {
         setSelectedComponent(<ClassroomAlloc />);
         break;
       case 'getExamtt':
-        setSelectedComponent(<GetExamtt />);
+        setSelectedComponent(<GetTimeTable />);
         break;
       case 'studentAlloc':
-        setSelectedComponent(<StudentAlloc />);
+        setSelectedComponent(<GetAllocation />);
         break;
       default :
         setSelectedComponent(<Studentcompo/>);

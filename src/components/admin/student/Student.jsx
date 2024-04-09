@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StudentAttendance from "./StudentAttendance";
 import Timetable from "./Timetable";
-import GetTimeTable from "./sAllocation/GetTimeTable";
 
 function Student() {
   const [Year, setYear] = useState(null);
@@ -21,39 +20,39 @@ function Student() {
   };
 
   return (
-    <div>
+    <div className="flex">
       {!Year && (
-        <div className="flex h-96 w-full justify-center gap-8 items-center">
+        <div className="flex flex-col h-96 w-40 justify-start items-start">
           <button
-            className="bg-white w-fit h-fit rounded-2xl shadow-md p-16 text-4xl hover:bg-red-400"
+            className="bg-white w-full h-fit shadow-md p-2 text-lg hover:bg-red-400"
             onClick={() => handleButtonClick("sy")}
           >
-            sy
+            Extc 2nd Year
           </button>
           <button
-            className="bg-white w-fit h-fit rounded-2xl shadow-md p-16 text-4xl hover:bg-red-400"
+            className="bg-white w-full h-fit shadow-md p-2 text-lg hover:bg-red-400"
             onClick={() => handleButtonClick("ty")}
           >
-            ty
+            Extc 3rd Year
           </button>
           <button
-            className="bg-white w-fit h-fit rounded-2xl shadow-md p-16 text-4xl hover:bg-red-400"
+            className="bg-white w-full h-fit shadow-md p-2 text-lg hover:bg-red-400"
             onClick={() => handleButtonClick("ly")}
           >
-            ly
+            Extc 4th Year
           </button>
         </div>
       )}
       {Year && (
-        <>
-          <div className="w-full flex flex-col gap-5">
+        <div className="w-full flex gap-5">
+          <div className="flex flex-col gap-2 w-52">
             <button
-              className="bg-red-700 text-white p-2 mr-3 w-fit"
+              className="bg-red-700 text-white p-2 w-full"
               onClick={() => setYear(null)}
             >
               Back
             </button>
-            <div className="bg-white flex flex-wrap w-fit">
+            <div className="bg-white flex w-full flex-col">
               <button
                 className="hover:border-2 border-2 border-white hover:border-gray-400 p-1"
                 onClick={() =>
@@ -76,27 +75,16 @@ function Student() {
               >
                 Timetable
               </button>
-              <button
-                className="hover:border-2 border-2 border-white hover:border-gray-400 p-1"
-                onClick={() =>
-                  handleNavLinkClick({
-                    link: "GetTimeTable",
-                    component: "GetTimeTable",
-                  })
-                }
-              >
-                GETimetable
-              </button>
-            </div>
-            <div className="component-render">
-              {selectedComponent === "StudentAttendance" && (
-                <StudentAttendance year={Year} />
-              )}
-              {selectedComponent === "Timetable" && <Timetable year={Year} />}
-              {selectedComponent === "GetTimeTable" && <GetTimeTable year={Year} />}
+              
             </div>
           </div>
-        </>
+          <div className="component-render">
+            {selectedComponent === "StudentAttendance" && (
+              <StudentAttendance year={Year} />
+            )}
+            {selectedComponent === "Timetable" && <Timetable year={Year} />}
+          </div>
+        </div>
       )}
     </div>
   );
