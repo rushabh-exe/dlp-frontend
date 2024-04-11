@@ -1,27 +1,21 @@
+import React from 'react'
+import CNavlink from '../../utils/CNavlink'
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PrintButton from '../../utils/PrintButton';
 
-const TeacherAllocation = () => {
-  const [scheduleData, setScheduleData] = useState([]);
+function TeacherAllocation() {
+  return (
+    <div className='flex flex-wrap w-fit gap-5'>
+      <CNavlink to='/admin/teacher/Allocation/createAllocation'>createAllocation</CNavlink>
+      <CNavlink to='/admin/teacher/Allocation/getAllocation'>getAllocation</CNavlink>
+    </div>
+  )
+}
+export function CreateTeacherAllocation() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    setIsLoading(true);
-    try {
-      const response = await axios.get('http://localhost:3001/admin/get/teacher/allocation');
-      setScheduleData(response.data.reqAll);
-    } catch (error) {
-      setError('Error fetching schedule data: ' + error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleCreateAllocation = async () => {
     setIsLoading(true);
@@ -34,53 +28,96 @@ const TeacherAllocation = () => {
       setIsLoading(false);
     }
   };
-
   return (
-    <div className="container w-full flex gap-4">
-      <div className="flex max-w-60">
-        <div className="bg-white text-black p-2 rounded-lg shadow-lg cursor-pointer h-fit" onClick={handleCreateAllocation}>
-          <h2 className="text-2xl font-bold">Create Allocation</h2>
-          <p>This creates teacher allocation</p>
-        </div>
-      </div>
-      <div>
+    <div className='flex flex-col gap-5'>
+      <div className=' bg-yellow-200 p-1'>
         {isLoading ? (
           <div>Loading...</div>
         ) : error ? (
           <div>Error: {error}</div>
         ) : (
-          <div>
-            <table className="table-auto w-full border-collapse border border-red-500">
-            <thead>
-              <tr className="bg-red-500 text-white">
-                <th className="border border-red-500 px-4 py-2">Classroom</th>
-                <th className="border border-red-500 px-4 py-2">Date</th>
-                <th className="border border-red-500 px-4 py-2">Start Time</th>
-                <th className="border border-red-500 px-4 py-2">End Time</th>
-                <th className="border border-red-500 px-4 py-2">Main Teacher</th>
-                <th className="border border-red-500 px-4 py-2">Co-Teacher</th>
-              </tr>
-            </thead>
-            <tbody>
-              {scheduleData && scheduleData.map((item) => (
-                <tr key={item?.ID} className="bg-white text-red-500">
-                  <td className="border border-red-500 px-4 py-2">{item?.Classroom}</td>
-                  <td className="border border-red-500 px-4 py-2">{item?.Date}</td>
-                  <td className="border border-red-500 px-4 py-2">{item?.Start_Time}</td>
-                  <td className="border border-red-500 px-4 py-2">{item?.End_Time}</td>
-                  <td className="border border-red-500 px-4 py-2">{item?.Main_Teacher}</td>
-                  <td className="border border-red-500 px-4 py-2">{item?.Co_Teacher}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <PrintButton contentId='table-auto'/>
-          </div>
+          <>Click Create Allocation</>
         )}
       </div>
+    <div className="bg-white text-black p-2 rounded-lg shadow-lg cursor-pointer h-fit" onClick={handleCreateAllocation}>
+      <h2 className="text-2xl font-bold">Create Allocation</h2>
+      <p>This creates teacher allocation</p>
+    </div>
+    </div>
+  )
+}
+export function GetTeacherAllocation() {
+  const [scheduleData, setScheduleData] = useState([
+    {
+      ID: 1,
+      Classroom: "Room A",
+      Date: "2024-04-12",
+      Start_Time: "09:00 AM",
+      End_Time: "11:00 AM",
+      Main_Teacher: "John Doe",
+      Co_Teacher: "Jane Smith"
+    },
+    {
+      ID: 2,
+      Classroom: "Room B",
+      Date: "2024-04-12",
+      Start_Time: "10:00 AM",
+      End_Time: "12:00 PM",
+      Main_Teacher: "Alice Johnson",
+      Co_Teacher: "Bob Anderson"
+    },
+    // Add more dummy data here
+  ]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get('http://localhost:3001/admin/get/teacher/allocation');
+      setScheduleData(response.data.reqAll || []);
+    } catch (error) {
+      setError('Error fetching schedule data: ' + error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="table-auto w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <thead>
+          <tr className="bg-white">
+            <th className="px-4 py-2">Classroom</th>
+            <th className="px-4 py-2">Date</th>
+            <th className="px-4 py-2">Start Time</th>
+            <th className="px-4 py-2">End Time</th>
+            <th className="px-4 py-2">Main Teacher</th>
+            <th className="px-4 py-2">Co-Teacher</th>
+          </tr>
+        </thead>
+        <tbody>
+          {scheduleData.map((item, index) => (
+            <tr key={index} className="bg-white">
+              <td className="px-4 text-center py-2">{item?.Classroom}</td>
+              <td className="px-4 text-center py-2">{item?.Date}</td>
+              <td className="px-4 text-center py-2">{item?.Start_Time}</td>
+              <td className="px-4 text-center py-2">{item?.End_Time}</td>
+              <td className="px-4 text-center py-2">{item?.Main_Teacher}</td>
+              <td className="px-4 text-center py-2">{item?.Co_Teacher}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {isLoading && <div>Loading...</div>}
+      {error && <div>Error: {error}</div>}
     </div>
   );
-
-};
+}
 
 export default TeacherAllocation;
+

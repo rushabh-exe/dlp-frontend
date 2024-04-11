@@ -1,16 +1,12 @@
 import { Outlet } from 'react-router-dom';
-import CNavlink from '../../utils/CNavlink';
 import React from 'react';
+import CNavlink from '../../utils/CNavlink';
 
 function StudentAllocation() {
   return (
-    <div>
-      <div className='bg-white flex flex-wrap w-fit'>
-        <CNavlink to='/admin/student/Allocation/createSingle'>Single Allocation</CNavlink>
-        <CNavlink to='/admin/student/Allocation/createDual'>Dual Allocation</CNavlink>
-        <CNavlink to='/admin/student/Allocation/getAllocation'>Get Allocation</CNavlink>
-      </div>
-      <div className='mt-5'>
+    <div className='flex flex-col w-full pt-5 gap-5'>
+      <div><CNavlink to="/admin/student/">back</CNavlink></div>
+      <div className='w-full flex justify-center items-center'>
       <Outlet/>
       </div>
     </div>
