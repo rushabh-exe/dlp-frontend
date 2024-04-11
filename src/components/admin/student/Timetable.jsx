@@ -6,7 +6,7 @@ function TimeTable({ year }) {
   const [showGetTimetable, setShowGetTimetable] = useState(null);
 
   useEffect(() => {
-    setShowGetTimetable(null);
+    setShowGetTimetable(true);
   }, []);
 
   const handleGetTimetable = () => {
@@ -19,20 +19,15 @@ function TimeTable({ year }) {
 
   return (
     <div className='flex gap-5 w-full'>
-      <div className='w-52 flex flex-col'>
-        <button className="btn w-full bg-white p-2" onClick={handleGetTimetable}>Get Timetable</button>
-        <button className="btn w-full bg-white p-2" onClick={handleCreateTimetable}>Create Timetable</button>
+      <div className='flex flex-col gap-3'>
+        <button  className='px-4 text-nowrap py-2 border-2 border-gray-200 rounded-full bg-white text-xl font-bold text-gray-800 hover:bg-slate-300 hover:text-red-900 transition duration-300' onClick={handleGetTimetable}>Get Timetable {year}</button>
+        <button  className='px-4 text-nowrap py-2 border-2 border-gray-200 rounded-full bg-white text-xl font-bold text-gray-800 hover:bg-slate-300 hover:text-red-900 transition duration-300' onClick={handleCreateTimetable}>Create Timetable {year}</button>
       </div>
       {showGetTimetable === true && (
         <GetTimeTable year={year} />
       )}
       {showGetTimetable === false && (
         <CreateTimeTable year={year} />
-      )}
-      {showGetTimetable === null && (
-        <div>
-          Click Button
-        </div>
       )}
     </div>
   );
@@ -43,33 +38,33 @@ export function GetTimeTable({ year }) {
   const [fetchedTimetables, setFetchedTimetables] = useState([]);
   const [selectYear, setSelectYear] = useState(year); // Default value for selectYear
   const [selectSem, setSelectSem] = useState("null"); // Default value for selectSem
-
+  const [semesters, setSemesters] = useState([]);
   // Function to fetch timetables from the backend
   const fetchTimetables = async () => {
     try {
       const response = await axios.get(`http://localhost:3001/admin/get/timetable/${selectYear}`);
-      setFetchedTimetables(response.data.timetables);
-      console.log(response.data.timetables);
+      const fetchedTimetables = response.data.timetables;
+      const semesters = fetchedTimetables.map(entry => entry.sem); // Extract semesters from fetched data
+      setFetchedTimetables(fetchedTimetables);
+      setSemesters([...new Set(semesters)]); // Remove duplicates using Set and spread operator
+      console.log(fetchedTimetables);
     } catch (error) {
       console.error('Error fetching timetables:', error);
     }
   };
+
 
   // Use useEffect to fetch timetables when the component mounts or when selectYear or selectSem changes
   useEffect(() => {
     fetchTimetables();
   }, [selectYear, selectSem]);
 
-  const handleSelectYearChange = (e) => {
-    setSelectYear(e.target.value);
-  };
-
   const handleSelectSemChange = (e) => {
     setSelectSem(e.target.value);
   };
   const handleDeleteYearTimetable = async () => {
     try {
-      await axios.delete(`http://localhost:3001/admin/delete/timetable/${selectYear}`);
+      await axios.delete(`http://localhost:3001/admin/get/timetable/${selectYear}`);
       // Clear the fetched timetables for the selected year
       setFetchedTimetables([]);
     } catch (error) {
@@ -79,31 +74,20 @@ export function GetTimeTable({ year }) {
 
   // Filter the fetched timetables based on the selected semester
   const filteredTimetables = fetchedTimetables.filter(entry => entry.sem === selectSem);
-  // console.log(fetchedTimetables)
 
   return (
-    <div className='flex flex-col gap-5'>
+    <div className='flex flex-col w-full gap-5'>
       <div className='flex gap-2'>
-        <select className='p-2 w-fit' name="selectYear" id="selectYear" value={selectYear} onChange={handleSelectYearChange}>
-          <option value="SY">year sy</option>
-          <option value="TY">year ty</option>
-          <option value="LY">year ly</option>
+        <select className='p-2 w-fit rounded-xl' name="selectSem" id="selectSem" value={selectSem} onChange={handleSelectSemChange} >
+          {semesters.map((semester, index) => (
+            <option key={index} value={semester}>{`Sem ${semester}`}</option>
+          ))}
         </select>
-        <select className='p-2 w-fit' name="selectSem" id="selectSem" value={selectSem} onChange={handleSelectSemChange} >
-          <option value="1">Sem 1</option>
-          <option value="2">Sem 2</option>
-          <option value="3">Sem 3</option>
-          <option value="4">Sem 4</option>
-          <option value="5">Sem 5</option>
-          <option value="6">Sem 6</option>
-          <option value="7">Sem 7</option>
-          <option value="8">Sem 8</option>
-        </select>
-        <button className='bg-white p-1' onClick={handleDeleteYearTimetable}>Delete Timetable for Selected Year</button>
+        <button className='bg-white rounded-xl active:bg-red-200 p-1' onClick={handleDeleteYearTimetable}>Delete {year} Timetable</button>
       </div>
-      <section className="table_body bg-gray-100 max-w-2xl mx-auto">
-        <PrintButton contentId='table_body'/>
-        <table className="w-full">
+      <PrintButton contentId='table_body' />
+      <section className="table_body w-1/2">
+        <table className="w-full bg-white">
           <thead>
             <tr>
               <th className="p-2 border border-gray-400">Date</th>
@@ -113,7 +97,7 @@ export function GetTimeTable({ year }) {
             </tr>
           </thead>
           <tbody>
-            {filteredTimetables.map((entry, index) => (
+            {fetchedTimetables.map((entry, index) => (
               <tr key={index} className="hover:bg-gray-300 transition-all duration-500">
                 <td className="p-2 border border-gray-400">{entry.date}</td>
                 <td className="p-2 border border-gray-400">{entry.subject}</td>
@@ -198,6 +182,22 @@ function CreateTimeTable({ year }) {
     setSelectedTimetable(prevTimetable => prevTimetable.filter((_, i) => i !== index));
   };
 
+  const [subjects, setSubjects] = useState([]);
+  const fetchSubjectData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3001/admin/create/vitals/${year}`);
+      console.log('Response:', response.data);
+      setSubjects(response.data);
+    } catch (error) {
+      console.error('Error fetching subject data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSubjectData();
+  }, [year]);
+  console.log(subjects.map((subject) => subject.name));
+
   const handleSubmit = async () => {
     try {
       const formattedTimetable = selectedTimetable.map(entry => ({
@@ -236,7 +236,12 @@ function CreateTimeTable({ year }) {
       <div className=' my-2'>
         <div className='inputbox flex mb-5 gap-2'>
           <input type="date" name="date" value={newEntry.date} onChange={handleInputChange} placeholder='Date' />
-          <input type="text" name="subject" value={newEntry.subject} onChange={handleInputChange} placeholder='Subject' />
+          <select name="subject" value={newEntry.subject} onChange={handleInputChange}>
+            <option value="" disabled>Select Subject</option>
+            {subjects.map((subject, index) => (
+              <option key={index} value={subject.name}>{subject.name}</option>
+            ))}
+          </select>
           <input type="time" name="start_time" value={newEntry.start_time} onChange={handleInputChange} placeholder='Start Time' />
           <input type="time" name="end_time" value={newEntry.end_time} onChange={handleInputChange} placeholder='End Time' />
           <div className=" ml-5">

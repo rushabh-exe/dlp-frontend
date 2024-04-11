@@ -8,7 +8,7 @@ import About from '../static/About';
 import Event from '../static/Event';
 import Studentpage from '../static/Studentpage';
 
-const Login = ({ setIsLoggedIn, setUser, setUserImg , setLoginMethod  }) => {
+const Login = ({ setIsLoggedIn, setUser, setUserImg, setLoginMethod }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -41,7 +41,7 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg , setLoginMethod  }) => {
       alert("Invalid username or password. Please try again.");
     }
   };
-  
+
 
   const divStyle = {
     background: "rgb(255,255,255)",
@@ -49,20 +49,53 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg , setLoginMethod  }) => {
       "linear-gradient(250deg, rgba(255,255,255,1) 49%, rgba(153,27,27,1) 52%)",
   };
 
-  const responseGoogle = (response) => {
-    console.log(response);
-    const userName = response.profileObj.name;
-    const userImg = response.profileObj.imageUrl;
-    setIsLoggedIn(true);
-    setUser(userName);
-    setUserImg(userImg);
-    // Save login session and login method in cookies
-    Cookies.set("isLoggedIn", true);
-    Cookies.set("user", userName);
-    Cookies.set("userImg", userImg);
-    Cookies.set("loginMethod", "Teacher"); // Set login method to "Google" for Google login
-    setLoginMethod("Teacher"); // Set login method in the App component
+  // const responseGoogle = (response) => {
+  //   console.log(response);
+  //   const userName = response.profileObj.name;
+  //   const userImg = response.profileObj.imageUrl;
+  //   setIsLoggedIn(true);
+  //   setUser(userName);
+  //   setUserImg(userImg);
+  //   // Save login session and login method in cookies
+  //   Cookies.set("isLoggedIn", true);
+  //   Cookies.set("user", userName);
+  //   Cookies.set("userImg", userImg);
+  //   Cookies.set("loginMethod", "Teacher"); // Set login method to "Google" for Google login
+  //   setLoginMethod("Teacher"); // Set login method in the App component
+  // };
+  const responseGoogle = async (response) => {
+    try {
+      const userEmail = response.profileObj.email;
+      const res = await fetch("http://localhost:3001/teacher/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: userEmail }),
+      });
+      const data = await res.json();
+      console.log(data);
+      if (res.ok) {
+        setIsLoggedIn(true);
+        const userName = response.profileObj.name;
+        const userImg = response.profileObj.imageUrl;
+        setUser(userName);
+        setUserImg(userImg);
+        Cookies.set("isLoggedIn", true);
+        Cookies.set("user", userName);
+        Cookies.set("userImg", userImg);
+        Cookies.set("loginMethod", "Teacher");
+        Cookies.set("backendToken", data.teacherData);
+        setLoginMethod("Teacher");
+      } else {
+        console.error("Google login failed:", data.error);
+        alert(data.error);
+      }
+    } catch (error) {
+      console.error("Google login failed:", error);
+    }
   };
+
 
   const onFailure = (error) => {
     console.error("Google login failed:", error);

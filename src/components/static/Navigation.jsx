@@ -7,34 +7,39 @@ function Navigation({ setIsLoggedIn, userName, userImg, loginMethod }) {
   const location = useLocation();
 
   return (
-    <div className="navigation-sidebar flex justify-between flex-wrap bg-white">
-      <div className="flex w-fit justify-start gap-5 max-[600px]:gap-2 max-[600px]:justify-between max-[600px]:w-full">
-        <div className="flex justify-center gap-2 p-2 items-center max-[600px]:p-2 max-[600px]:block">
-          <img src={userImg} alt="Profile" className="w-12 h-12 rounded-full" />
-          <p className="text-center flex gap-1 text-sm py-2 uppercase">
-            <span>WELCOME,</span>
-            <span className=" font-bold">{userName ? userName : 'USER'}</span>
-            {/* {loginMethod && <span className="text-xs text-gray-500">({loginMethod})</span>} */}
-          </p>
+    <div className="navigation-sidebar flex justify-between bg-white max-[600px]:mb-16">
+      <div className="flex w-fit justify-start gap-5 max-[600px]:w-full  ">
+        <div className="flex justify-center gap-2 p-2 items-center max-[600px]:flex w-full max-[600px]:justify-between">
+          <div className="flex gap-2 items-center"><img src={userImg} alt="Profile" className="w-12 h-12 rounded-full" />
+            <p className="text-center flex gap-1 text-sm py-2 uppercase">
+              <span className="max-[600px]:hidden">WELCOME,</span>
+              <span className=" font-bold">{userName ? userName : 'USER'}</span>
+              {/* {loginMethod && <span className="text-xs text-gray-500">({loginMethod})</span>} */}
+            </p></div>
+          <div className=" hidden max-[600px]:block"><CustomNavLink currentPath={location.pathname} icon={<RiLoginBoxLine />}><Logout setIsLoggedIn={setIsLoggedIn} /></CustomNavLink></div>
         </div>
         {loginMethod === 'Admin' && (
           <div className="flex p-2">
             <CustomNavLink to="/admin/teacher" currentPath={location.pathname} icon={<RiUser2Line />}>Teacher</CustomNavLink>
             <CustomNavLink to="/admin/student" currentPath={location.pathname} icon={<RiUser2Line />}>Student</CustomNavLink>
-            <CustomNavLink to="/admin/student/Allocation" currentPath={location.pathname} icon={<RiUser2Line />}>Student Allocation</CustomNavLink>
             <CustomNavLink to="/admin/utils" currentPath={location.pathname} icon={<RiUser2Line />}>Utils</CustomNavLink>
           </div>
         )}
         {loginMethod === 'Teacher' && (
-          <div className="flex p-2 max-[600px]:flex-wrap max-[600px]:block">
-            <CustomNavLink to="/teacher/getAttendance" currentPath={location.pathname} icon={<RiUser2Line />}>get Attendance</CustomNavLink>
-            <CustomNavLink to="/teacher/takeAttendance" currentPath={location.pathname} icon={<RiUser2Line />}>take Attendance</CustomNavLink>
+          <div className="flex p-2 max-[600px]:flex-wrap max-[600px]:hidden">
+            {/* <CustomNavLink to="/teacher/getAttendance" currentPath={location.pathname} icon={<RiUser2Line />}>get Attendance</CustomNavLink>
+            <CustomNavLink to="/teacher/takeAttendance" currentPath={location.pathname} icon={<RiUser2Line />}>take Attendance</CustomNavLink> */}
+            <CustomNavLink to="/teacher" currentPath={location.pathname} icon={<RiUser2Line />}>Attendance</CustomNavLink>
           </div>
         )}
       </div>
-      <div>
+      <div className="max-[600px]:hidden">
         <CustomNavLink to="/Settings" currentPath={location.pathname} icon={<RiSettings3Line />}>Settings</CustomNavLink>
         <CustomNavLink currentPath={location.pathname} icon={<RiLoginBoxLine />}><Logout setIsLoggedIn={setIsLoggedIn} /></CustomNavLink>
+      </div>
+      <div className="absolute top-20 max-[600px]:flex gap-2 flex-wrap hidden bg-white w-full p-2 ">
+        <CustomNavLink to="/teacher" currentPath={location.pathname} icon={<RiUser2Line />}>Attendance</CustomNavLink>
+        <CustomNavLink to="/teacher" currentPath={location.pathname} icon={<RiUser2Line />}>Attendance</CustomNavLink>
       </div>
     </div>
   );

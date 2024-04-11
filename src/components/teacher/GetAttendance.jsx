@@ -7,12 +7,23 @@ function GetAttendance() {
   const [selectedTeacher, setSelectedTeacher] = useState("");
   const [classrooms, setClassrooms] = useState([]);
   const [students, setStudents] = useState([]);
-
+  const [ testdata , setTestdata] = useState([]);
   useEffect(() => {
     axios
       .get("http://localhost:9876/lol")//http://localhost:3001/teacher/getAttendence //get post put
       .then((response) => {
         setData(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/teacher/getAttendence")//http://localhost:3001/teacher/getAttendence //get post put
+      .then((response) => {
+        setTestdata(response.data);
+        console.log(testdata)
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -67,7 +78,7 @@ function GetAttendance() {
 
   return (
     <>
-      <div className="container mx-auto p-4">
+      <div className="container p-4">
         <div className="mb-4">
           <select
             className="p-2 border border-gray-300 rounded"

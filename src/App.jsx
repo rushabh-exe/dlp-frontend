@@ -1,24 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, NavLink } from "react-router-dom";
 import { gapi } from "gapi-script";
 import Cookies from "js-cookie";
+
 import Navigation from "./components/static/Navigation";
+
 import Login from "./components/authandaccess/Login";
+import Settings from "./components/authandaccess/Settings";
+
 import Loader from "./components/utils/Loader";
+
 import Admin from "./components/admin/Admin";
+
 import Teacher from "./components/admin/teacher/Teacher";
+import TeacherAllocation, { CreateTeacherAllocation, GetTeacherAllocation } from "./components/admin/teacher/TeacherAllocation";
+
 import Student from "./components/admin/student/Student";
-import Utils from "./components/admin/utils/Utils";
-import TeacherAllocation from "./components/admin/teacher/TeacherAllocation";
 import StudentAllocation from "./components/admin/student/StudentAllocation";
+
+import Utils from "./components/admin/utils/Utils";
 import SubjectUtils from "./components/admin/utils/SubjectUtils";
 import TeacherUtils from "./components/admin/utils/TeacherUtils";
+
 import CreateSingleAllocation from "./components/admin/student/sAllocation/CreateSingleAllocation";
 import CreateDualAllocation from "./components/admin/student/sAllocation/CreateDualAllocation";
 import GetAllocation from "./components/admin/student/sAllocation/GetAllocation";
+
 import GetAttendance from "./components/teacher/GetAttendance";
 import TakeAttendance from "./components/teacher/TakeAttendance";
-import Settings from "./components/authandaccess/Settings";
+import CNavlink from "./components/utils/CNavlink";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -90,28 +100,26 @@ function App() {
           />
           <div className="dashboard p-4 w-full mx-auto flex-1">
             <Routes>
-              <Route path="/admin/utils/*" element={<Utils />}>
-                <Route path="Subject" element={<SubjectUtils />} />
-                <Route path="Teacher" element={<TeacherUtils />} />
-              </Route>
-              <Route
-                path="/admin/student/Allocation"
-                element={<StudentAllocation />}
-              >
-                <Route
-                  path="createSingle"
-                  element={<CreateSingleAllocation />}
-                />
+              //utils
+              <Route path="/admin/utils/Subject" element={<SubjectUtils />} />
+              <Route path="/admin/utils/Teacher" element={<TeacherUtils />} />
+              <Route path="/admin/utils/*" element={<Utils />}/>
+              //students
+              <Route path="/admin/student/Allocation" element={<StudentAllocation />}>
+                <Route path="createSingle" element={<CreateSingleAllocation />} />
                 <Route path="createDual" element={<CreateDualAllocation />} />
                 <Route path="getAllocation" element={<GetAllocation />} />
               </Route>
-              <Route path="/admin/student/*" element={<Student />}></Route>
-              <Route path="/admin/teacher/*" element={<Teacher />}>
-                <Route path="Allocation" element={<TeacherAllocation />} />
-              </Route>
+              <Route path="/admin/student/*" element={<Student />} />
+              //admin teacher routes
+              <Route path="/admin/teacher/Allocation/createAllocation" element={<CreateTeacherAllocation />} />
+              <Route path="/admin/teacher/Allocation/getAllocation" element={<GetTeacherAllocation />} />
+              <Route path="/admin/teacher/Allocation" element={<TeacherAllocation />} />
+              <Route path="/admin/teacher/*" element={<Teacher />} />
+              //admin routes
               <Route path="admin/*" element={<NotFound />} />
-              <Route path="*" element={<Navigate to="admin" />} />
               <Route path="admin" element={<Admin />} />
+              <Route path="*" element={<Navigate to="admin" />} />
             </Routes>
           </div>
         </main>
@@ -124,7 +132,7 @@ function App() {
             setIsLoggedIn={setIsLoggedIn}
             loginMethod={loginMethod}
           />
-          <div className="dashboard p-4 w-full mx-auto flex-1">
+          <div className="dashboard p-4 w-full flex-1">
             <Routes>
               <Route path="Settings" element={<Settings />} />
               <Route path="teacher/getAttendance" element={<GetAttendance />} />
@@ -148,7 +156,10 @@ function NotFound() {
 
 function TeacherComponent() {
   return (
-    <div>App</div>
+    <div className=" flex">
+      {/* <CNavlink to="getAttendance">Take Attendence</CNavlink> */}
+      <NavLink className='px-4 py-2 border-2 border-gray-200 rounded-full bg-white text-xl font-bold text-gray-800 hover:bg-slate-300 hover:text-red-900 transition duration-300' to="getAttendance">Take Attendence</NavLink>
+    </div>
   )
 }
 
