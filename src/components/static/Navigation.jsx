@@ -30,6 +30,7 @@ function Navigation({ setIsLoggedIn, userName, userImg, loginMethod }) {
             {/* <CustomNavLink to="/teacher/getAttendance" currentPath={location.pathname} icon={<RiUser2Line />}>get Attendance</CustomNavLink>
             <CustomNavLink to="/teacher/takeAttendance" currentPath={location.pathname} icon={<RiUser2Line />}>take Attendance</CustomNavLink> */}
             <CustomNavLink to="/teacher" currentPath={location.pathname} icon={<RiUser2Line />}>Attendance</CustomNavLink>
+            <CustomNavLink to="/teacher/papers" currentPath={location.pathname} icon={<RiUser2Line />}>Papers</CustomNavLink>
           </div>
         )}
       </div>

@@ -29,6 +29,7 @@ import GetAllocation from "./components/admin/student/sAllocation/GetAllocation"
 import GetAttendance from "./components/teacher/GetAttendance";
 import TakeAttendance from "./components/teacher/TakeAttendance";
 import CNavlink from "./components/utils/CNavlink";
+import Papers from "./components/teacher/Papers";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -140,6 +141,7 @@ function App() {
               <Route path="teacher/*" element={<NotFound />} />
               <Route path="*" element={<Navigate to="teacher" />} />
               <Route path="teacher" element={<TeacherComponent />} />
+              <Route path="teacher/papers" element={<Papers />} />
             </Routes>
           </div>
         </main>
