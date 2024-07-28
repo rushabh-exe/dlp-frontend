@@ -7,23 +7,12 @@ function GetAttendance() {
   const [selectedTeacher, setSelectedTeacher] = useState("");
   const [classrooms, setClassrooms] = useState([]);
   const [students, setStudents] = useState([]);
-  const [ testdata , setTestdata] = useState([]);
+
   useEffect(() => {
     axios
-      .get("http://localhost:3001/teacher/getAttendence")//http://localhost:3001/teacher/getAttendence //get post put
+      .get("http://localhost:3001/teacher/getAttendence")
       .then((response) => {
         setData(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/teacher/getAttendence")//http://localhost:3001/teacher/getAttendence //get post put
-      .then((response) => {
-        setTestdata(response.data);
-        console.log(testdata)
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -33,13 +22,12 @@ function GetAttendance() {
   useEffect(() => {
     if (selectedTeacher) {
       const teacherData = data
-        .find((d) => d.Subject === selectedSubject)
-        .Teacher.find((t) => t.Main_Teacher === selectedTeacher);
+        .find((d) => d.student_data.some((sd) => sd.subject === selectedSubject) && d.m_teacher === selectedTeacher);
       if (teacherData) {
-        setClassrooms(teacherData.Out);
+        setClassrooms([teacherData]);
         let allStudents = [];
-        teacherData.Out.forEach((classroom) => {
-          allStudents = [...allStudents, ...classroom.Students];
+        teacherData.student_data.forEach((subjectData) => {
+          allStudents = [...allStudents, ...subjectData.Students];
         });
         setStudents(allStudents.map((student) => ({ ...student, isPresent: true })));
       }
@@ -60,12 +48,14 @@ function GetAttendance() {
       const Data = classrooms.map((classroom) => ({
         subject: selectedSubject,
         mainTeacher: selectedTeacher,
-        className: classroom.Class_Name,
-        attendance: classroom.Students.map((student) => ({
-          rollNo: student.Rollno,
-          name: student.Name,
-          isPresent: student.isPresent,
-        })),
+        className: classroom.class_room,
+        attendance: classroom.student_data.flatMap((subjectData) =>
+          subjectData.Students.map((student) => ({
+            rollNo: student.Rollno,
+            name: student.Name,
+            isPresent: student.isPresent,
+          }))
+        ),
       }));
       console.log(Data);
       const response = await axios.post("http://localhost:3001/teacher/getAttendence", Data);
@@ -74,7 +64,6 @@ function GetAttendance() {
       console.error("Error sending attendance:", error);
     }
   };
-  
 
   return (
     <>
@@ -86,13 +75,13 @@ function GetAttendance() {
             value={selectedSubject}
           >
             <option value="">Select Subject</option>
-            {data.map((allocation) =>
+            {data.flatMap((allocation) =>
               allocation.student_data.map((subject, idx) => (
                 <option key={idx} value={subject.subject}>
                   {subject.subject}
                 </option>
-            ))
-          )}
+              ))
+            )}
           </select>
           {selectedSubject && (
             <select
@@ -102,10 +91,10 @@ function GetAttendance() {
             >
               <option value="">Select Teacher</option>
               {data
-                .find((d) => d.Subject === selectedSubject)
-                .Teacher.map((teacher, index) => (
-                  <option key={index} value={teacher.Main_Teacher}>
-                    {teacher.Main_Teacher}
+                .filter((d) => d.student_data.some((sd) => sd.subject === selectedSubject))
+                .map((d, index) => (
+                  <option key={index} value={d.m_teacher}>
+                    {d.m_teacher}
                   </option>
                 ))}
             </select>
@@ -119,63 +108,63 @@ function GetAttendance() {
                   <tr key={index}>
                     <td className="p-2 border border-gray-300">
                       <th className="p-2 border border-gray-300">Classroom</th>
-                      {classroom.Class_Room}
-                    </td>
-                    <td className="p-2 border border-gray-300">
-                      <th className="p-2 border border-gray-300">Class Name</th>
-                      {classroom.Class_Name}
+                      {classroom.class_room}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
             {classrooms.map((classroom, index) => (
-              <div className=" overflow-y-scroll h-52 mb-2" key={index}>
+              <div className="overflow-y-scroll h-52 mb-2" key={index}>
                 <h3 className="text-lg font-bold">
-                  {classroom.Class_Name} Students
+                  {classroom.class_room} Students
                 </h3>
-                <table className="w-full  border-collapse border border-gray-300 mb-4">
+                <table className="w-full border-collapse border border-gray-300 mb-4">
                   <thead>
-                    <tr className=" bg-red-700 text-white">
+                    <tr className="bg-red-700 text-white">
                       <th className="p-2 border border-gray-300">Roll No.</th>
                       <th className="p-2 border border-gray-300">Name</th>
                       <th className="p-2 border border-gray-300">IsPresent</th>
                     </tr>
                   </thead>
-                  <tbody className=" bg-white">
-                    {classroom.Students.map((student, index) => (
-                      <tr key={index}>
-                        <td className="p-2 border border-gray-300">
-                          {student.Rollno}
-                        </td>
-                        <td className="p-2 border border-gray-300">
-                          {student.Name}
-                        </td>
-                        <td className="p-2 border border-gray-300">
-                          <input
-                            type="checkbox"
-                            defaultChecked={true}
-                            onChange={(e) => {
-                              const isChecked = e.target.checked;
-                              setStudents((prevStudents) =>
-                                prevStudents.map((prevStudent) =>
-                                  prevStudent.Rollno === student.Rollno
-                                    ? { ...prevStudent, isPresent: isChecked }
-                                    : prevStudent
-                                )
-                              );
-                            }}
-                          />
-                        </td>
-                      </tr>
-                    ))}
+                  <tbody className="bg-white">
+                    {classroom.student_data.flatMap((subjectData) =>
+                      subjectData.Students.map((student, index) => (
+                        <tr key={index}>
+                          <td className="p-2 border border-gray-300">
+                            {student.Rollno}
+                          </td>
+                          <td className="p-2 border border-gray-300">
+                            {student.Name}
+                          </td>
+                          <td className="p-2 border border-gray-300">
+                            <input
+                              type="checkbox"
+                              defaultChecked={true}
+                              onChange={(e) => {
+                                const isChecked = e.target.checked;
+                                setStudents((prevStudents) =>
+                                  prevStudents.map((prevStudent) =>
+                                    prevStudent.Rollno === student.Rollno
+                                      ? { ...prevStudent, isPresent: isChecked }
+                                      : prevStudent
+                                  )
+                                );
+                              }}
+                            />
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
             ))}
           </div>
         )}
-        <button className=" bg-red-700 px-4 text-white mt-2" onClick={handleSendAttendance}>Send</button>
+        <button className="bg-red-700 px-4 text-white mt-2" onClick={handleSendAttendance}>
+          Send
+        </button>
       </div>
     </>
   );
