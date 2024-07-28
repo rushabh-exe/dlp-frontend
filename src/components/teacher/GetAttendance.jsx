@@ -10,7 +10,7 @@ function GetAttendance() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/teacher/getAttendence")
+      .get("http://localhost:9876/lol")//http://localhost:3001/teacher/getAttendence //get post put
       .then((response) => {
         setData(response.data);
       })
@@ -75,13 +75,11 @@ function GetAttendance() {
             value={selectedSubject}
           >
             <option value="">Select Subject</option>
-            {data.flatMap((allocation) =>
-              allocation.student_data.map((subject, idx) => (
-                <option key={idx} value={subject.subject}>
-                  {subject.subject}
-                </option>
-              ))
-            )}
+            {data.map((subject, index) => (
+              <option key={index} value={subject.Subject}>
+                {subject.Subject}
+              </option>
+            ))}
           </select>
           {selectedSubject && (
             <select
