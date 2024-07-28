@@ -10,7 +10,7 @@ function GetAttendance() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:9876/lol")//http://localhost:3001/teacher/getAttendence //get post put
+      .get("http://localhost:3001/teacher/getAttendence")
       .then((response) => {
         setData(response.data);
       })
