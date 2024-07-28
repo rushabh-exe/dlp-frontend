@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function TeacherUtils() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [phno, setPhone] = useState('');
   const [type, setType] = useState('');
   const [teachers, setTeachers] = useState([]);
 
@@ -18,7 +18,7 @@ function TeacherUtils() {
       const response = await axios.post('http://localhost:3001/admin/create/vitals/createTeacher', {
         name,
         email,
-        phone,
+        phno,
         type
       });
       console.log('Success:', response.data);
@@ -32,9 +32,9 @@ function TeacherUtils() {
   const handleDelete = async (type, email) => {
     try {
       if (type === "Teaching") {
-        var type = "teachingStaff";
+        type = "teachingStaff";
       } else {
-        var type = "nonteachingStaff";
+        type = "nonteachingStaff";
       }
       console.log(type);
       const response = await axios.delete(`http://localhost:3001/admin/create/vitals/teachers/${type}/${email}`);
@@ -50,18 +50,18 @@ function TeacherUtils() {
     setEditingTeacher(teacher);
     setName(teacher.Name);
     setEmail(teacher.Email);
-    setPhone(teacher.Phone);
+    setPhone(teacher.phno);
     setType(teacher.Type);
   };
 
   const handleSave = async () => {
     try {
       let updatedType = editingTeacher.Type === "Teaching" ? "teachingStaff" : "nonteachingStaff";
-      const response = await axios.put(`http://localhost:3001/admin/update/teacher/${updatedType}`, {
+      const response = await axios.put(`http://localhost:3001/admin/vitals/teachers/${updatedType}`, {
         teachers: [{
           email: editingTeacher.Email,
           name,
-          phone,
+          phno,
           type: editingTeacher.Type // Send the original type value
         }]
       });
@@ -80,7 +80,7 @@ function TeacherUtils() {
   const fetchTeachers = async () => {
     try {
       const teachingResponse = await axios.get('http://localhost:3001/admin/create/vitals/teachers/teachingStaff');
-      const nonTeachingResponse = await axios.get('http://localhost:3001/admin/create/vitals/teachers/nonteachingStaff');
+      // const nonTeachingResponse = await axios.get('http://localhost:3001/admin/create/vitals/teachers/nonteachingStaff');
       // const nonTeachingResponse=[
       //   {
       //     ID: 1001,
@@ -98,15 +98,15 @@ function TeacherUtils() {
         Type: "Teaching"
       }));
 
-      const mappedNonTeachingData = nonTeachingResponse.data.map((teacher) => ({
-        ID: teacher.ID,
-        Name: teacher.name,
-        Email: teacher.email,
-        Phone: teacher.phno,
-        Type: "Non Teaching"
-      }));
+      // const mappedNonTeachingData = nonTeachingResponse.data.map((teacher) => ({
+      //   ID: teacher.ID,
+      //   Name: teacher.name,
+      //   Email: teacher.email,
+      //   Phone: teacher.phno,
+      //   Type: "Non Teaching"
+      // }));
       // Merge teaching and non-teaching staff into a single array
-      const allTeachers = [...mappedTeachingData, ...mappedNonTeachingData];
+      const allTeachers = [...mappedTeachingData];
       console.log('Response:', allTeachers);
       setTeachers(allTeachers);
     } catch (error) {
@@ -171,7 +171,7 @@ function TeacherUtils() {
                   {editingTeacher && editingTeacher.ID === teacher.ID ? (
                     <input
                       type="text"
-                      value={phone}
+                      value={phno}
                       onChange={(e) => setPhone(e.target.value)}
                       className="p-2 rounded border border-gray-300"
                     />
@@ -263,7 +263,7 @@ function TeacherUtils() {
                   <input
                     type="text"
                     id="phone"
-                    value={phone}
+                    value={phno}
                     onChange={(e) => setPhone(e.target.value)}
                     className="mt-1 p-2 w-full rounded border border-gray-300 focus:outline-none focus:border-blue-500"
                   />
