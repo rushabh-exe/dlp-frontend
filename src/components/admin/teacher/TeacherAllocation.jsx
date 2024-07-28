@@ -79,7 +79,7 @@ export function GetTeacherAllocation() {
     setIsLoading(true);
     try {
       const response = await axios.get('http://localhost:3001/admin/get/teacher/allocation');
-      setScheduleData(response.data.reqAll || []);
+      setScheduleData(response.data || []);
     } catch (error) {
       setError('Error fetching schedule data: ' + error.message);
     } finally {
@@ -103,12 +103,12 @@ export function GetTeacherAllocation() {
         <tbody>
           {scheduleData.map((item, index) => (
             <tr key={index} className="bg-white">
-              <td className="px-4 text-center py-2">{item?.Classroom}</td>
-              <td className="px-4 text-center py-2">{item?.Date}</td>
-              <td className="px-4 text-center py-2">{item?.Start_Time}</td>
-              <td className="px-4 text-center py-2">{item?.End_Time}</td>
-              <td className="px-4 text-center py-2">{item?.Main_Teacher}</td>
-              <td className="px-4 text-center py-2">{item?.Co_Teacher}</td>
+              <td className="px-4 text-center py-2">{item?.classroom}</td>
+              <td className="px-4 text-center py-2">{item?.date}</td>
+              <td className="px-4 text-center py-2">{item?.start_time}</td>
+              <td className="px-4 text-center py-2">{item?.end_time}</td>
+              <td className="px-4 text-center py-2">{item?.main_teacher}</td>
+              <td className="px-4 text-center py-2">{item?.co_teacher}</td>
             </tr>
           ))}
         </tbody>

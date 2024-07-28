@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 function GetAttendance() {
@@ -10,7 +10,7 @@ function GetAttendance() {
   const [ testdata , setTestdata] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost:9876/lol")//http://localhost:3001/teacher/getAttendence //get post put
+      .get("http://localhost:3001/teacher/getAttendence")//http://localhost:3001/teacher/getAttendence //get post put
       .then((response) => {
         setData(response.data);
       })
@@ -68,7 +68,7 @@ function GetAttendance() {
         })),
       }));
       console.log(Data);
-      const response = await axios.post("http://localhost:9876/createAttend", Data);
+      const response = await axios.post("http://localhost:3001/teacher/getAttendence", Data);
       console.log(response.data);
     } catch (error) {
       console.error("Error sending attendance:", error);
@@ -86,11 +86,13 @@ function GetAttendance() {
             value={selectedSubject}
           >
             <option value="">Select Subject</option>
-            {data.map((subject, index) => (
-              <option key={index} value={subject.Subject}>
-                {subject.Subject}
-              </option>
-            ))}
+            {data.map((allocation) =>
+              allocation.student_data.map((subject, idx) => (
+                <option key={idx} value={subject.subject}>
+                  {subject.subject}
+                </option>
+            ))
+          )}
           </select>
           {selectedSubject && (
             <select
