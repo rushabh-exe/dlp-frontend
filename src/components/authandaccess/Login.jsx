@@ -37,12 +37,20 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg, setLoginMethod }) => {
       Cookies.set("userImg", 'https://pic.onlinewebfonts.com/thumbnails/icons_325791.svg');
       Cookies.set("loginMethod", "Admin"); // Set login method to "generic" for username/password login
       setLoginMethod("Admin"); // Set login method in the App component
+    } else if (username === "dqc" && password === "dqc") {
+      setIsLoggedIn(true);
+      setUser("DQC");
+      setUserImg('https://pic.onlinewebfonts.com/thumbnails/icons_325791.svg');
+      // Save login session and login method in cookies
+      Cookies.set("isLoggedIn", true);
+      Cookies.set("user", "DQC");
+      Cookies.set("userImg", 'https://pic.onlinewebfonts.com/thumbnails/icons_325791.svg');
+      Cookies.set("loginMethod", "Dqc"); // Set login method to "generic" for username/password login
+      setLoginMethod("Dqc"); // Set login method in the App component
     } else {
       alert("Invalid username or password. Please try again.");
     }
   };
-
-
   const divStyle = {
     background: "rgb(255,255,255)",
     backgroundImage:
