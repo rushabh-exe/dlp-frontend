@@ -32,6 +32,13 @@ function Navigation({ setIsLoggedIn, userName, userImg, loginMethod }) {
             <CustomNavLink to="/teacher" currentPath={location.pathname} icon={<RiUser2Line />}>Attendance</CustomNavLink>
           </div>
         )}
+         {loginMethod === 'Dqc' && (
+          <div className="flex p-2 max-[600px]:flex-wrap max-[600px]:hidden">
+            {/* <CustomNavLink to="/teacher/getAttendance" currentPath={location.pathname} icon={<RiUser2Line />}>get Attendance</CustomNavLink>
+            <CustomNavLink to="/teacher/takeAttendance" currentPath={location.pathname} icon={<RiUser2Line />}>take Attendance</CustomNavLink> */}
+            <CustomNavLink to="/dqc" currentPath={location.pathname} icon={<RiUser2Line />}>dqc</CustomNavLink>
+          </div>
+        )}
       </div>
       <div className="max-[600px]:hidden">
         <CustomNavLink to="/Settings" currentPath={location.pathname} icon={<RiSettings3Line />}>Settings</CustomNavLink>

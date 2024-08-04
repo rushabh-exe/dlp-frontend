@@ -29,6 +29,7 @@ import GetAllocation from "./components/admin/student/sAllocation/GetAllocation"
 import GetAttendance from "./components/teacher/GetAttendance";
 import TakeAttendance from "./components/teacher/TakeAttendance";
 import CNavlink from "./components/utils/CNavlink";
+import DquBoard from "./components/dqc/DquBoard";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -140,6 +141,22 @@ function App() {
               <Route path="teacher/*" element={<NotFound />} />
               <Route path="*" element={<Navigate to="teacher" />} />
               <Route path="teacher" element={<TeacherComponent />} />
+            </Routes>
+          </div>
+        </main>
+      )}
+      {isLoggedIn && loginMethod === 'Dqc' && (
+        <main className="bg-slate-300 min-h-screen flex flex-col gap-1 ">
+          <Navigation
+            userName={userName}
+            userImg={userImg}
+            setIsLoggedIn={setIsLoggedIn}
+            loginMethod={loginMethod}
+          />
+          <div className="dashboard p-4 w-full flex-1">
+            <Routes>
+              <Route path="dqc" element={<DquBoard />} />
+              <Route path="*" element={<Navigate to="dqc" />} />
             </Routes>
           </div>
         </main>
