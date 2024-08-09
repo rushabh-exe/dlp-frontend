@@ -13,13 +13,14 @@ export function StudentAttendance({ firstSelect, secondSelect, thirdSelect,fourt
   const [subject, setSubject] = useState('');
   const [classRoom, setClassRoom] = useState('');
   const [attendanceData, setAttendanceData] = useState([]);
+  const apikey = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     fetchAttendanceData();
   }, [secondSelect]);
   const fetchAttendanceData = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/admin/${secondSelect}/${thirdSelect}/${fourthSelect}`);
+      const response = await axios.get(`${apikey}/admin/${secondSelect}/${thirdSelect}/${fourthSelect}`);
       console.log('GET Response:', response.data);
       setAttendanceData(response.data);
     } catch (error) {
@@ -31,7 +32,7 @@ export function StudentAttendance({ firstSelect, secondSelect, thirdSelect,fourt
 
   const handleGetRequest = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/admin/${secondSelect}/${thirdSelect}/${fourthSelect}`);
+      const response = await axios.get(`${apikey}admin/${secondSelect}/${thirdSelect}/${fourthSelect}`);
       console.log('GET Response:', response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -40,7 +41,7 @@ export function StudentAttendance({ firstSelect, secondSelect, thirdSelect,fourt
 
   const handlePutRequest = async () => {
     try {
-      const response = await axios.put(`http://localhost:3001/admin/${secondSelect}/${thirdSelect}/${fourthSelect}`);
+      const response = await axios.put(`${apikey}admin/${secondSelect}/${thirdSelect}/${fourthSelect}`);
       console.log('PUT Response:', response.data);
     } catch (error) {
       console.error('Error updating data:', error);
@@ -49,7 +50,7 @@ export function StudentAttendance({ firstSelect, secondSelect, thirdSelect,fourt
 
   const handleDeleteRequest = async () => {
     try {
-      const response = await axios.delete(`http://localhost:3001/admin/${secondSelect}/${thirdSelect}/${fourthSelect}`);
+      const response = await axios.delete(`${apikey}admin/${secondSelect}/${thirdSelect}/${fourthSelect}`);
       console.log('DELETE Response:', response.data);
     } catch (error) {
       console.error('Error deleting data:', error);

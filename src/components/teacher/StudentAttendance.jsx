@@ -7,10 +7,11 @@ function StudentAttendance() {
   const [selectedTeacher, setSelectedTeacher] = useState("");
   const [classrooms, setClassrooms] = useState([]);
   const [students, setStudents] = useState([]);
+  const apikey = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     axios
-      .get("http://localhost:9876/lol")
+      .get(`${apikey}lol`)
       .then((response) => {
         setData(response.data);
       })
@@ -57,7 +58,7 @@ function StudentAttendance() {
         })),
       }));
       console.log(Data);
-      const response = await axios.post("http://localhost:9876/createAttend", Data);
+      const response = await axios.post(`${apikey}createAttend`, Data);
       console.log(response.data);
     } catch (error) {
       console.error("Error sending attendance:", error);

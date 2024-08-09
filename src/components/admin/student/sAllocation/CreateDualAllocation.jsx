@@ -7,7 +7,7 @@ function CreateDualAllocation() {
   const [class2Name, setClass2Name] = useState('');
   const [class2Strength, setClass2Strength] = useState('');
   const [rooms, setRooms] = useState([{ room: '', capacity: '' }]);
-
+  const apikey = import.meta.env.VITE_API_URL;
   const handleRoomChange = (index, key, value) => {
     const updatedRooms = [...rooms];
     updatedRooms[index][key] = value;
@@ -35,7 +35,7 @@ function CreateDualAllocation() {
         }))
       }];
       console.log(data);
-      await axios.post('http://localhost:3001/admin/create/student/dualAllocation', data);
+      await axios.post(`${apikey}admin/create/student/dualAllocation`, data);
       console.log('POST request sent successfully');
 
     } catch (error) {

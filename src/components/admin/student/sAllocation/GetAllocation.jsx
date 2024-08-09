@@ -3,13 +3,14 @@ import axios from 'axios';
 
 function GetAllocation() {
   const [studentAllocations, setStudentAllocations] = useState([]);
+  const apikey = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     fetchStudentAllocations();
   }, []);
 
   const fetchStudentAllocations = () => {
-    axios.get('http://localhost:3001/admin/get/student/allocation')
+    axios.get(`${apikey}admin/get/student/allocation`)
       .then(response => {
         setStudentAllocations(response.data);
       })
@@ -19,7 +20,7 @@ function GetAllocation() {
   };
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:3001/admin/get/student/allocation/${id}`)
+    axios.delete(`${apikey}admin/get/student/allocation/${id}`)
       .then(response => {
         console.log('Allocation deleted successfully');
         fetchStudentAllocations(); // Refresh the allocation list

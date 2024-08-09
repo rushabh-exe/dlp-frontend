@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import PrintButton from '../../utils/PrintButton';
 
 function TeacherAllocation() {
+  const apikey = import.meta.env.VITE_API_URL;
+
   return (
     <div className='flex flex-wrap w-fit gap-5'>
       <CNavlink to='/admin/teacher/Allocation/createAllocation'>createAllocation</CNavlink>
@@ -20,7 +22,7 @@ export function CreateTeacherAllocation() {
   const handleCreateAllocation = async () => {
     setIsLoading(true);
     try {
-      await axios.post('http://localhost:3001/admin/create/teacher/allocation');
+      await axios.post(`${apikey}admin/create/teacher/allocation`);
       window.location.href = "/teacher/allocation";
     } catch (error) {
       setError('Error creating teacher allocation: ' + error.message);
@@ -78,7 +80,7 @@ export function GetTeacherAllocation() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get('http://localhost:3001/admin/get/teacher/allocation');
+      const response = await axios.get(`${apikey}admin/get/teacher/allocation`);
       setScheduleData(response.data || []);
     } catch (error) {
       setError('Error fetching schedule data: ' + error.message);

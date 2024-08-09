@@ -72,9 +72,11 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg, setLoginMethod }) => {
   //   setLoginMethod("Teacher"); // Set login method in the App component
   // };
   const responseGoogle = async (response) => {
+    const apikey = import.meta.env.VITE_API_URL;
+
     try {
       const userEmail = response.profileObj.email;
-      const res = await fetch("http://localhost:3001/teacher/login", {
+      const res = await fetch(`${apikey}teacher/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

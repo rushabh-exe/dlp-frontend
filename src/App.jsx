@@ -41,8 +41,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [loginMethod, setLoginMethod] = useState('');
 
-
-
   useEffect(() => {
     const isLoggedInCookie = Cookies.get('isLoggedIn');
     const method = Cookies.get('loginMethod');
@@ -104,7 +102,7 @@ function App() {
               //utils
               <Route path="/admin/utils/Subject" element={<SubjectUtils />} />
               <Route path="/admin/utils/Teacher" element={<TeacherUtils />} />
-              <Route path="/admin/utils/*" element={<Utils />}/>
+              <Route path="/admin/utils/*" element={<Utils />} />
               //students
               <Route path="/admin/student/Allocation" element={<StudentAllocation />}>
                 <Route path="createSingle" element={<CreateSingleAllocation />} />

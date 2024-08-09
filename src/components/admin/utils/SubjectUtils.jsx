@@ -11,7 +11,7 @@
 //     e.preventDefault();
 //     try {
 //       console.log(sem)
-//       const response = await axios.post(`http://localhost:3001/admin/create/vitals/${year}`, {
+//       const response = await axios.post(`${apikey}admin/create/vitals/${year}`, {
 //         year,
 //         sem,
 //         subject
@@ -345,6 +345,7 @@ import axios from 'axios'; // Import axios for HTTP requests
 function SubjectUtils() {
   const [year, setYear] = useState('');
   const [secondSelect, setSecondSelect] = useState('');
+  const apikey = import.meta.env.VITE_API_URL;
 
   return (
     <div>
@@ -366,11 +367,12 @@ export function Addsubject({ yearProp }) { // Rename prop to avoid conflict
   const [sem, setSem] = useState(0);
   const [subject, setSubject] = useState('');
   const [subjects, setSubjects] = useState([]);
+  const apikey = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:3001/admin/create/vitals/${yearProp}`, {
+      const response = await axios.post(`${apikey}admin/create/vitals/${yearProp}`, {
         year: yearProp, // Use prop instead of local state
         sem,
         subject
@@ -385,7 +387,7 @@ export function Addsubject({ yearProp }) { // Rename prop to avoid conflict
 
   const handleDelete = async (subjectname) => {
     try {
-      const response = await axios.delete(`http://localhost:3001/admin/create/vitals/${yearProp}/${subjectname}`);
+      const response = await axios.delete(`${apikey}admin/create/vitals/${yearProp}/${subjectname}`);
       console.log('Deleted:', response.data);
       fetchSubjectData();
     } catch (error) {
@@ -395,7 +397,7 @@ export function Addsubject({ yearProp }) { // Rename prop to avoid conflict
 
   const fetchSubjectData = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/admin/create/vitals/${yearProp}`);
+      const response = await axios.get(`${apikey}admin/create/vitals/${yearProp}`);
       console.log('Response:', response.data);
       setSubjects(response.data);
     } catch (error) {

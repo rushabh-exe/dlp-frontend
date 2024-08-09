@@ -102,6 +102,7 @@ function Student() {
   const [secondSelect, setSecondSelect] = useState('');
   const [thirdSelect, setthirdSelect] = useState('');
   const [fourthSelect, setfourthSelect] = useState('');
+  const apikey = import.meta.env.VITE_API_URL;
 
   const handleBack = () => {
     setSecondSelect('');
@@ -111,7 +112,7 @@ function Student() {
   };
   const fetchSubjectData = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/admin/create/vitals/${secondSelect}`);
+      const response = await axios.get(`${apikey}admin/create/vitals/${secondSelect}`);
       console.log('Response:', response.data);
     } catch (error) {
       console.error('Error fetching subject data:', error);

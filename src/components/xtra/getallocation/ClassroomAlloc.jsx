@@ -8,10 +8,11 @@ function ClassroomAlloc() {
     { class_name: 'Class B', subject: 'Science', main_teacher: 'Ms. Johnson' },
     { class_name: 'Class C', subject: 'English', main_teacher: 'Mr. Brown' },
   ]);
+  const apikey = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     axios
-      .get('http://localhost:9876/getAttend')
+      .get(`${apikey}getAttend`)
       .then((response) => {
         setallocations(response.data);
       })

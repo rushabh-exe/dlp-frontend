@@ -5,9 +5,10 @@ function DquBoard() {
   const [TotalReq, setTotalReq] = useState([]);
   const [error, setError] = useState(null);
   const [selectedReqID, setSelectedReqID] = useState(null);
+  const apikey = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    axios.get('http://localhost:3000/dqc/requests/') 
+    axios.get(`${apikey}/dqc/requests/`) 
       .then(response => {
         setTotalReq(response.data);
       })
@@ -50,9 +51,10 @@ function DquBoard() {
 function ReviewReq({ ReqID }) {
   const [reqDetails, setReqDetails] = useState(null);
   const [error, setError] = useState(null);
+  const apikey = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/dqc/requests/${ReqID}`)
+    axios.get(`${apikey}dqc/requests/${ReqID}`)
       .then(response => {
         setReqDetails(response.data);
       })

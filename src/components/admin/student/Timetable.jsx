@@ -3,6 +3,8 @@ import axios from 'axios';
 import PrintButton from '../../utils/PrintButton';
 
 function TimeTable({ year }) {
+  const apikey = import.meta.env.VITE_API_URL;
+
   const [showGetTimetable, setShowGetTimetable] = useState(null);
 
   useEffect(() => {
@@ -42,7 +44,7 @@ export function GetTimeTable({ year }) {
   // Function to fetch timetables from the backend
   const fetchTimetables = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/admin/get/timetable/${selectYear}`);
+      const response = await axios.get(`${apikey}admin/get/timetable/${selectYear}`);
       const fetchedTimetables = response.data.timetables;
       const semesters = fetchedTimetables.map(entry => entry.sem); // Extract semesters from fetched data
       setFetchedTimetables(fetchedTimetables);
@@ -64,7 +66,7 @@ export function GetTimeTable({ year }) {
   };
   const handleDeleteYearTimetable = async () => {
     try {
-      await axios.delete(`http://localhost:3001/admin/get/timetable/${selectYear}`);
+      await axios.delete(`${apikey}admin/get/timetable/${selectYear}`);
       // Clear the fetched timetables for the selected year
       setFetchedTimetables([]);
     } catch (error) {
@@ -185,7 +187,7 @@ function CreateTimeTable({ year }) {
   const [subjects, setSubjects] = useState([]);
   const fetchSubjectData = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/admin/create/vitals/${year}`);
+      const response = await axios.get(`${apikey}admin/create/vitals/${year}`);
       console.log('Response:', response.data);
       setSubjects(response.data);
     } catch (error) {
@@ -214,7 +216,7 @@ function CreateTimeTable({ year }) {
       }
 
       console.log('Post Request Body:', formattedTimetable);
-      const response = await axios.post(`http://localhost:3001/admin/create/timetable/${year}`, formattedTimetable); // Using dynamic year prop
+      const response = await axios.post(`${apikey}admin/create/timetable/${year}`, formattedTimetable); // Using dynamic year prop
       console.log(response.data);
       setSelectedTimetable([]);
     } catch (error) {

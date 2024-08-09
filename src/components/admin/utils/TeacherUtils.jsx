@@ -7,6 +7,7 @@ function TeacherUtils() {
   const [phno, setPhone] = useState('');
   const [type, setType] = useState('');
   const [teachers, setTeachers] = useState([]);
+  const apikey = import.meta.env.VITE_API_URL;
 
 
   const [isAddTeacherOpen, setIsAddTeacherOpen] = useState(false);
@@ -15,7 +16,7 @@ function TeacherUtils() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/admin/create/vitals/createTeacher', {
+      const response = await axios.post(`${apikey}admin/create/vitals/createTeacher`, {
         name,
         email,
         phno,
@@ -37,7 +38,7 @@ function TeacherUtils() {
         type = "nonteachingStaff";
       }
       console.log(type);
-      const response = await axios.delete(`http://localhost:3001/admin/create/vitals/teachers/${type}/${email}`);
+      const response = await axios.delete(`${apikey}admin/create/vitals/teachers/${type}/${email}`);
       console.log('Deleted:', response.data);
       fetchTeachers();
     } catch (error) {
@@ -57,7 +58,7 @@ function TeacherUtils() {
   const handleSave = async () => {
     try {
       let updatedType = editingTeacher.Type === "Teaching" ? "teachingStaff" : "nonteachingStaff";
-      const response = await axios.put(`http://localhost:3001/admin/vitals/teachers/${updatedType}`, {
+      const response = await axios.put(`${apikey}admin/vitals/teachers/${updatedType}`, {
         teachers: [{
           email: editingTeacher.Email,
           name,
@@ -79,7 +80,7 @@ function TeacherUtils() {
 
   const fetchTeachers = async () => {
     try {
-      const teachingResponse = await axios.get('http://localhost:3001/admin/create/vitals/teachers/teachingStaff');
+      const teachingResponse = await axios.get(`${apikey}admin/create/vitals/teachers/teachingStaff`);
       // const nonTeachingResponse = await axios.get('http://localhost:3001/admin/create/vitals/teachers/nonteachingStaff');
       // const nonTeachingResponse=[
       //   {
