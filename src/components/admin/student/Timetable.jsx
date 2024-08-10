@@ -3,7 +3,6 @@ import axios from 'axios';
 import PrintButton from '../../utils/PrintButton';
 
 function TimeTable({ year }) {
-  const apikey = import.meta.env.VITE_API_URL;
 
   const [showGetTimetable, setShowGetTimetable] = useState(null);
 
@@ -41,6 +40,7 @@ export function GetTimeTable({ year }) {
   const [selectYear, setSelectYear] = useState(year); // Default value for selectYear
   const [selectSem, setSelectSem] = useState("null"); // Default value for selectSem
   const [semesters, setSemesters] = useState([]);
+  const apikey = import.meta.env.VITE_API_URL;
   // Function to fetch timetables from the backend
   const fetchTimetables = async () => {
     try {
@@ -87,7 +87,7 @@ export function GetTimeTable({ year }) {
         </select>
         <button className='bg-white rounded-xl active:bg-red-200 p-1' onClick={handleDeleteYearTimetable}>Delete {year} Timetable</button>
       </div>
-      <PrintButton contentId='table_body' />
+      <PrintButton contentId={'table_body'} />
       <section className="table_body w-1/2">
         <table className="w-full bg-white">
           <thead>
@@ -183,6 +183,7 @@ function CreateTimeTable({ year }) {
   const deleteEntry = (index) => {
     setSelectedTimetable(prevTimetable => prevTimetable.filter((_, i) => i !== index));
   };
+  const apikey = import.meta.env.VITE_API_URL;
 
   const [subjects, setSubjects] = useState([]);
   const fetchSubjectData = async () => {

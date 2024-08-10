@@ -1,38 +1,61 @@
-import React from 'react'
-import CNavlink from '../../utils/CNavlink'
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import CNavlink from '../../utils/CNavlink';
 import PrintButton from '../../utils/PrintButton';
 
-function TeacherAllocation() {
-  const apikey = import.meta.env.VITE_API_URL;
+// Base API URL
+const apikey = import.meta.env.VITE_API_URL;
 
+// Utility hook for API calls
+const useApiCall = (apiUrl, method, data = null) => {
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const result = method === 'GET'
+          ? await axios.get(apiUrl)
+          : await axios.post(apiUrl, data);
+        setResponse(result.data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [apiUrl, method, data]);
+
+  return { response, error, isLoading };
+};
+
+// Main Component
+function TeacherAllocation() {
   return (
     <div className='flex flex-wrap w-fit gap-5'>
-      <CNavlink to='/admin/teacher/Allocation/createAllocation'>createAllocation</CNavlink>
-      <CNavlink to='/admin/teacher/Allocation/getAllocation'>getAllocation</CNavlink>
+      <CNavlink to='/admin/teacher/Allocation/createAllocation'>Create Allocation</CNavlink>
+      <CNavlink to='/admin/teacher/Allocation/getAllocation'>Get Allocation</CNavlink>
     </div>
-  )
+  );
 }
+
+// Create Teacher Allocation Component
 export function CreateTeacherAllocation() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const apiUrl = `${apikey}admin/create/teacher/allocation`;
+  const { response, error, isLoading } = useApiCall(apiUrl, 'POST');
 
-
-  const handleCreateAllocation = async () => {
-    setIsLoading(true);
-    try {
-      await axios.post(`${apikey}admin/create/teacher/allocation`);
+  const handleCreateAllocation = () => {
+    if (!isLoading && !error) {
       window.location.href = "/teacher/allocation";
-    } catch (error) {
-      setError('Error creating teacher allocation: ' + error.message);
-    } finally {
-      setIsLoading(false);
     }
   };
+
   return (
     <div className='flex flex-col gap-5'>
-      <div className=' bg-yellow-200 p-1'>
+      <div className='bg-yellow-200 p-1'>
         {isLoading ? (
           <div>Loading...</div>
         ) : error ? (
@@ -41,59 +64,27 @@ export function CreateTeacherAllocation() {
           <>Click Create Allocation</>
         )}
       </div>
-    <div className="bg-white text-black p-2 rounded-lg shadow-lg cursor-pointer h-fit" onClick={handleCreateAllocation}>
-      <h2 className="text-2xl font-bold">Create Allocation</h2>
-      <p>This creates teacher allocation</p>
+      <div
+        className="bg-white text-black p-2 rounded-lg shadow-lg cursor-pointer h-fit"
+        onClick={handleCreateAllocation}
+      >
+        <h2 className="text-2xl font-bold">Create Allocation</h2>
+        <p>This creates teacher allocation</p>
+      </div>
     </div>
-    </div>
-  )
+  );
 }
+
+// Get Teacher Allocation Component
 export function GetTeacherAllocation() {
-  const [scheduleData, setScheduleData] = useState([
-    {
-      ID: 1,
-      Classroom: "Room A",
-      Date: "2024-04-12",
-      Start_Time: "09:00 AM",
-      End_Time: "11:00 AM",
-      Main_Teacher: "John Doe",
-      Co_Teacher: "Jane Smith"
-    },
-    {
-      ID: 2,
-      Classroom: "Room B",
-      Date: "2024-04-12",
-      Start_Time: "10:00 AM",
-      End_Time: "12:00 PM",
-      Main_Teacher: "Alice Johnson",
-      Co_Teacher: "Bob Anderson"
-    },
-    // Add more dummy data here
-  ]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    setIsLoading(true);
-    try {
-      const response = await axios.get(`${apikey}admin/get/teacher/allocation`);
-      setScheduleData(response.data || []);
-    } catch (error) {
-      setError('Error fetching schedule data: ' + error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const apiUrl = `${apikey}admin/get/teacher/allocation`;
+  const { response, error, isLoading } = useApiCall(apiUrl, 'GET');
 
   return (
     <div className="overflow-x-auto">
       <table className="table-auto w-full bg-white shadow-md rounded-lg overflow-hidden">
         <thead>
-          <tr className="bg-white">
+          <tr className="bg-gray-100">
             <th className="px-4 py-2">Classroom</th>
             <th className="px-4 py-2">Date</th>
             <th className="px-4 py-2">Start Time</th>
@@ -103,7 +94,7 @@ export function GetTeacherAllocation() {
           </tr>
         </thead>
         <tbody>
-          {scheduleData.map((item, index) => (
+          {response?.map((item, index) => (
             <tr key={index} className="bg-white">
               <td className="px-4 text-center py-2">{item?.classroom}</td>
               <td className="px-4 text-center py-2">{item?.date}</td>
@@ -122,4 +113,3 @@ export function GetTeacherAllocation() {
 }
 
 export default TeacherAllocation;
-
