@@ -88,7 +88,7 @@ export function GetTimeTable({ year }) {
         <button className='bg-white rounded-xl active:bg-red-200 p-1' onClick={handleDeleteYearTimetable}>Delete {year} Timetable</button>
       </div>
       <PrintButton contentId={'table_body'} />
-      <section className="table_body w-1/2">
+      <section id='table_body' className="table_body w-1/2">
         <table className="w-full bg-white">
           <thead>
             <tr>
