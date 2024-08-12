@@ -43,7 +43,7 @@ function GetAllocation() {
               <th className="p-2 border border-gray-400">Classroom</th>
               <th className="p-2 border border-gray-400">Start RollNo</th>
               <th className="p-2 border border-gray-400">End RollNo</th>
-              <th className="p-2 border border-gray-400">Year</th>
+              <th className="p-2 border border-gray-400">Classname</th>
               <th className="p-2 border border-gray-400">Actions</th>
             </tr>
           </thead>

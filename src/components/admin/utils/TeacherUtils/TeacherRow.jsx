@@ -25,6 +25,7 @@ function TeacherRow({ teacher, onEdit, onDelete, isEditing, formData, onInputCha
             value={formData.email}
             onChange={onInputChange}
             className="p-2 rounded border border-gray-300"
+            disabled
           />
         ) : (
           teacher.Email
@@ -50,6 +51,7 @@ function TeacherRow({ teacher, onEdit, onDelete, isEditing, formData, onInputCha
             value={formData.type}
             onChange={onInputChange}
             className="p-2 rounded border border-gray-300"
+            disabled
           >
             <option value="Teaching">Teaching</option>
             <option value="Non Teaching">Non Teaching</option>

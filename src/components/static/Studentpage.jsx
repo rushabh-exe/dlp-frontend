@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import GetAllocation from '../admin/student/sAllocation/GetAllocation';
-import { GetTimeTable } from '../admin/student/Timetable';
+import GetTimeTable  from '../admin/student/Timetable/GetTimetable';
 
 // Main StudentPage Component
 function StudentPage() {

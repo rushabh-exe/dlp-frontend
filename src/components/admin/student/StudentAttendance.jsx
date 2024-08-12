@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export function StudentAttendance({ firstSelect, secondSelect, thirdSelect,fourthSelect, onBack }) {
+export function StudentAttendance({ firstSelect, secondSelect, thirdSelect, fourthSelect, onBack }) {
   // return (
   //   <div>
   //     <button onClick={() => onBack()}>Back</button>
@@ -56,6 +56,8 @@ export function StudentAttendance({ firstSelect, secondSelect, thirdSelect,fourt
       console.error('Error deleting data:', error);
     }
   };
+
+
 
   return (
     <div className='flex gap-5'>
@@ -114,4 +116,35 @@ export function StudentAttendance({ firstSelect, secondSelect, thirdSelect,fourt
       </div> */}
     </div>
   );
+}
+function StudentAttendanece({year}) {
+
+  const apikey = import.meta.env.VITE_API_URL;
+
+
+  const [subjects, setSubjects] = useState([]);
+  const fetchSubjectData = async () => {
+    try {
+      const response = await axios.get(`${apikey}admin/create/vitals/${year}`);
+      console.log('Response:', response.data);
+      setSubjects(response.data);
+    } catch (error) {
+      console.error('Error fetching subject data:', error);
+    }
+  };
+  useEffect(() => {
+    fetchSubjectData();
+  }, [year]);
+  console.log(subjects.map((subject) => subject.name));
+
+  return (
+    <div>
+      <select name="subject" value={newEntry.subject} onChange={handleInputChange}>
+        <option value="" disabled>Select Subject</option>
+        {subjects.map((subject, index) => (
+          <option key={index} value={subject.name}>{subject.name}</option>
+        ))}
+      </select>
+    </div>
+  )
 }

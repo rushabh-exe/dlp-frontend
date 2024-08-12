@@ -12,7 +12,8 @@ import TeacherUtils from "../../components/admin/utils/TeacherUtils/TeacherUtils
 import CreateSingleAllocation from "../../components/admin/student/sAllocation/CreateSingleAllocation";
 import CreateDualAllocation from "../../components/admin/student/sAllocation/CreateDualAllocation";
 import GetAllocation from "../../components/admin/student/sAllocation/GetAllocation";
-import { AuthContext } from "../../App"; 
+import { AuthContext } from "../../App";
+import GetteacherPaper from "../admin/teacher/GetteacherPaper";
 
 const AdminRoutes = () => {
     const { authState, setAuthState } = useContext(AuthContext);
@@ -37,14 +38,14 @@ const AdminRoutes = () => {
                     <Route path="/admin/student/Allocation" element={<StudentAllocation />}>
                         <Route path="createSingle" element={<CreateSingleAllocation />} />
                         <Route path="createDual" element={<CreateDualAllocation />} />
-                        <Route path="get" element={<GetAllocation />} />
+                        <Route path="getAllocation" element={<GetAllocation />} />
                     </Route>
                     <Route path="/admin/student" element={<Student />} />
                     <Route path="/admin/teacher" element={<Teacher />} />
-                    <Route path="/admin/teacher/Allocation" element={<TeacherAllocation />}>
-                        <Route path="create" element={<CreateTeacherAllocation />} />
-                        <Route path="get" element={<GetTeacherAllocation />} />
-                    </Route>
+                    <Route path="/admin/teacher/Allocation" element={<TeacherAllocation />} />
+                    <Route path="/admin/teacher/Papers" element={<GetteacherPaper />} />
+                    <Route path="/admin/teacher/Allocation/createAllocation" element={<CreateTeacherAllocation />} />
+                    <Route path="/admin/teacher/Allocation/getAllocation" element={<GetTeacherAllocation />} />
                     <Route path="*" element={<Navigate to="/admin" />} />
                     <Route path="/admin" element={<Admin />} />
                 </Routes>

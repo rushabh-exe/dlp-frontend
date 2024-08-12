@@ -5,6 +5,8 @@ import Settings from "../authandaccess/Settings";
 import GetAttendance from "../teacher/GetAttendance";
 import TakeAttendance from "../teacher/TakeAttendance";
 import { AuthContext } from '../../App';
+import PaperReq from "../teacher/PaperReq";
+import DqcReq from "../teacher/DqcReq";
 
 const TeacherRoutes = () => {
   const { authState, setAuthState } = useContext(AuthContext);
@@ -26,6 +28,8 @@ const TeacherRoutes = () => {
           <Route path="Settings" element={<Settings />} />
           <Route path="teacher/getAttendance" element={<GetAttendance />} />
           <Route path="teacher/takeAttendance" element={<TakeAttendance />} />
+          <Route path="teacher/Paperreq" element={<PaperReq />} />
+          <Route path="teacher/Dqcreq" element={<DqcReq />} />
           <Route path="teacher/*" element={<NotFound />} />
           <Route path="*" element={<Navigate to="teacher" />} />
           <Route path="teacher" element={<TeacherComponent />} />
@@ -40,9 +44,15 @@ const NotFound = () => <div>Route not found. Please check your URL.</div>;
 
 // Teacher Component
 const TeacherComponent = () => (
-  <div className="flex">
+  <div className="flex gap-5">
     <NavLink className="px-4 py-2 border-2 border-gray-200 rounded-full bg-white text-xl font-bold text-gray-800 hover:bg-slate-300 hover:text-red-900 transition duration-300" to="getAttendance">
       Take Attendance
+    </NavLink>
+    <NavLink className="px-4 py-2 border-2 border-gray-200 rounded-full bg-white text-xl font-bold text-gray-800 hover:bg-slate-300 hover:text-red-900 transition duration-300" to="Paperreq">
+      Papers Req
+    </NavLink>
+    <NavLink className="px-4 py-2 border-2 border-gray-200 rounded-full bg-white text-xl font-bold text-gray-800 hover:bg-slate-300 hover:text-red-900 transition duration-300" to="Dqcreq">
+      Dqc Req
     </NavLink>
   </div>
 );

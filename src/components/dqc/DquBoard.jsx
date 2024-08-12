@@ -15,7 +15,7 @@ function DquBoard() {
   // Fetch requests from API
   const fetchRequests = useCallback(async () => {
     try {
-      const response = await axios.get(`${apikey}/dqc/requests/`);
+      const response = await axios.get(`${apikey}dqc/requests/`,{ withCredentials: true });
       setTotalReq(response.data);
       setLoading(false);
     } catch (err) {
@@ -91,7 +91,7 @@ function ReviewReq({ reqID }) {
   // Fetch request details from API
   const fetchRequestDetails = useCallback(async () => {
     try {
-      const response = await axios.get(`${apikey}/dqc/requests/${reqID}`);
+      const response = await axios.get(`${apikey}dqc/requests/${reqID}`,{ withCredentials: true });
       setReqDetails(response.data);
       setLoading(false);
     } catch (err) {

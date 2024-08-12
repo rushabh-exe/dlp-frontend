@@ -13,20 +13,32 @@ function TeacherUtils() {
 
   const fetchTeachers = useCallback(async () => {
     try {
-      const response = await axios.get(`${apikey}admin/create/vitals/teachers/teachingStaff`);
-      const mappedData = response.data.map(teacher => ({
+      const teachingResponse = await axios.get(`${apikey}admin/create/vitals/teachers/teachingStaff`);
+      const nonTeachingResponse = await axios.get(`${apikey}admin/create/vitals/teachers/nonteachingStaff`);
+      
+      const teachingData = teachingResponse.data.map(teacher => ({
         ID: teacher.ID,
         Name: teacher.name,
         Email: teacher.email,
         Phone: teacher.phno,
-        Type: "Teaching"
+        Type: "teachingStaff"
       }));
-      setTeachers(mappedData);
+
+      const nonTeachingData = nonTeachingResponse.data.map(teacher => ({
+        ID: teacher.ID,
+        Name: teacher.name,
+        Email: teacher.email,
+        Phone: teacher.phno,
+        Type: "nonteachingStaff"
+      }));
+
+      setTeachers([...teachingData, ...nonTeachingData]);
     } catch (err) {
       console.error("Error fetching teachers:", err);
       setError("Failed to fetch teachers.");
     }
   }, [apikey]);
+
 
   useEffect(() => {
     fetchTeachers();
@@ -73,9 +85,12 @@ function TeacherUtils() {
 
   const handleSave = async () => {
     try {
-      const updatedType = editingTeacher.Type === "Teaching" ? "teachingStaff" : "nonteachingStaff";
-      await axios.put(`${apikey}admin/vitals/teachers/${updatedType}`, {
-        teachers: [{ ...formData, email: editingTeacher.Email }]
+      const updatedType = editingTeacher.Type === "teachingStaff" ? "teachingStaff" : "nonteachingStaff";
+      await axios.put(`${apikey}admin/create/vitals/teachers/${updatedType}`, {
+        name: formData.name,
+        email: formData.email,  // Use the email from formData, not editingTeacher.Email
+        phno: formData.phno,
+        type: formData.type
       });
       console.log('Teacher updated successfully');
       fetchTeachers();
@@ -86,6 +101,7 @@ function TeacherUtils() {
       setError("Failed to update teacher.");
     }
   };
+  
 
   const clearForm = () => {
     setFormData({ name: '', email: '', phno: '', type: '' });

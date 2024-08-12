@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CNavlink from '../../utils/CNavlink';
-import PrintButton from '../../utils/PrintButton';
 
 // Base API URL
 const apikey = import.meta.env.VITE_API_URL;
@@ -49,7 +48,7 @@ export function CreateTeacherAllocation() {
 
   const handleCreateAllocation = () => {
     if (!isLoading && !error) {
-      window.location.href = "/teacher/allocation";
+      window.location.href = "/admin/teacher/Allocation/getAllocation";
     }
   };
 
@@ -75,10 +74,24 @@ export function CreateTeacherAllocation() {
   );
 }
 
-// Get Teacher Allocation Component
+// Get Teacher Allocation Component with Delete functionality
 export function GetTeacherAllocation() {
   const apiUrl = `${apikey}admin/get/teacher/allocation`;
   const { response, error, isLoading } = useApiCall(apiUrl, 'GET');
+  const [deleteError, setDeleteError] = useState(null);
+
+  // Function to delete a teacher allocation
+  const deleteTeacherAllocation = async (id) => {
+    
+      try {
+        await axios.delete(`${apikey}admin/get/teacher/allocation/${id}`);
+        // Refresh the list after deletion
+        window.location.reload();
+        setDeleteError(null);
+      } catch (err) {
+        setDeleteError('Failed to delete teacher allocation');
+      } 
+  };
 
   return (
     <div className="overflow-x-auto">
@@ -91,6 +104,7 @@ export function GetTeacherAllocation() {
             <th className="px-4 py-2">End Time</th>
             <th className="px-4 py-2">Main Teacher</th>
             <th className="px-4 py-2">Co-Teacher</th>
+            <th className="px-4 py-2">Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -102,12 +116,21 @@ export function GetTeacherAllocation() {
               <td className="px-4 text-center py-2">{item?.end_time}</td>
               <td className="px-4 text-center py-2">{item?.main_teacher}</td>
               <td className="px-4 text-center py-2">{item?.co_teacher}</td>
+              <td className="p-2 border">
+                <button
+                  onClick={() => deleteTeacherAllocation(item?.ID)}
+                  className="bg-red-500 text-white py-1 px-2 rounded"
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
       {isLoading && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
+      {deleteError && <div>Error: {deleteError}</div>}
     </div>
   );
 }

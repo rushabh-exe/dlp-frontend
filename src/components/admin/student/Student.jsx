@@ -2,7 +2,7 @@ import CNavlink from '../../utils/CNavlink';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { StudentAttendance } from './StudentAttendance';
-import TimeTable from './Timetable';
+import TimeTable from './Timetable/TimeTable';
 function Student() {
   const [firstSelect, setFirstSelect] = useState('');
   const [secondSelect, setSecondSelect] = useState('');

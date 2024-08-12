@@ -35,7 +35,7 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg, setLoginMethod }) => {
     let userType = "";
     let userImg = 'https://pic.onlinewebfonts.com/thumbnails/icons_325791.svg';
 
-    switch (username) {
+    switch (username && password) {
       case "admin":
         userType = "ADMIN";
         setLoginMethod("Admin");
