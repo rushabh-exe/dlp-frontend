@@ -68,21 +68,40 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg, setLoginMethod }) => {
   const handleGoogleResponse = async (response) => {
     try {
       const userEmail = response.profileObj.email;
+      const userName = response.profileObj.name;
+      const userImg = response.profileObj.imageUrl;
+  
+      // Send the Google user data to your backend
       const res = await fetch(`${API_URL}teacher/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: userEmail }),
+        
+        credentials: "include", // Ensure cookies are included in requests
       });
+  
       const data = await res.json();
+  
       if (res.ok) {
+        // Handle successful login
         setIsLoggedIn(true);
-        setUser(response.profileObj.name);
-        setUserImg(response.profileObj.imageUrl);
+        setUser(userName);
+        setUserImg(userImg);
+  
+        // Store necessary data in cookies
         Cookies.set("isLoggedIn", "true");
-        Cookies.set("user", response.profileObj.name);
-        Cookies.set("userImg", response.profileObj.imageUrl);
+        Cookies.set("user", userName);
+        Cookies.set("userImg", userImg);
         Cookies.set("loginMethod", "Teacher");
-        Cookies.set("backendToken", data.teacherData);
+  
+        // Set backend token from response
+        Cookies.set("backendToken", data.teacherData,{
+          expires: 7,
+          path: "/",
+          secure: true,
+          sameSite: "Lax"
+        });
+  
         setLoginMethod("Teacher");
       } else {
         console.error("Google login failed:", data.error);
@@ -90,8 +109,10 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg, setLoginMethod }) => {
       }
     } catch (error) {
       console.error("Google login failed:", error);
+      alert("An error occurred. Please try again.");
     }
   };
+  
 
   const handleGoogleFailure = (error) => {
     console.error("Google login failed:", error);

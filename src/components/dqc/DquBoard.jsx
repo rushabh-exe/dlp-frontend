@@ -15,7 +15,7 @@ function DquBoard() {
   // Fetch requests from API
   const fetchRequests = useCallback(async () => {
     try {
-      const response = await axios.get(`${apikey}dqc/requests/`,{ withCredentials: true });
+      const response = await axios.get(`${apikey}dqc/requests`,{ withCredentials: true });
       setTotalReq(response.data);
       setLoading(false);
     } catch (err) {
@@ -41,6 +41,7 @@ function DquBoard() {
   if (loading) {
     return <div>Loading requests...</div>;
   }
+  
 
   return (
     <div className='p-2 rounded-md'>
@@ -60,14 +61,18 @@ function DquBoard() {
  * Displays a single request item with its details and a button to view more.
  */
 function RequestItem({ req, onSelect }) {
+  var dateConv = (date) => {
+    const newDate = new Date(date);
+    return newDate.toLocaleString();
+  };
   return (
     <li className='bg-white p-2 rounded-md mt-4 flex items-center justify-between gap-4'>
       <div className='flex justify-start gap-4 text-lg font-mono'>
         <span>Subject: {req.subject}</span>
         <span>Semester: {req.semester}</span>
-        <span>Time: {req.CreatedAt}</span>
-        <span>Status: {req.status}</span>
-        <span>Reviewed: {req.request}</span>
+        <span>Time: {dateConv(req.CreatedAt)}</span>
+        <span>Status: {req.status ? "Yes" : "No"}</span>
+        <span>Reviewed: {req.request ? "Yes" : "No"}</span>
       </div>
       <button 
         onClick={() => onSelect(req.ID)} 
@@ -116,6 +121,10 @@ function ReviewReq({ reqID }) {
   if (!reqDetails) {
     return null;
   }
+  var dateConv = (date) => {
+    const newDate = new Date(date);
+    return newDate.toLocaleString();
+  };
 
   return (
     <div className='p-2'>
@@ -127,13 +136,15 @@ function ReviewReq({ reqID }) {
           <span>Semester: {reqDetails.semester}</span>
         </div>
         <div className='text-lg font-mono'>
-          <span>Time: {reqDetails.CreatedAt}</span>
+          <span>Time:{dateConv(reqDetails.CreatedAt)}</span>
+          
         </div>
         <div className='text-lg font-mono'>
-          <span>Status: {reqDetails.status}</span>
+          <span>Status:{ reqDetails.status ? "Yes" : "No" } 
+          </span>
         </div>
         <div className='text-lg font-mono'>
-          <span>Reviewed: {reqDetails.request}</span>
+          <span>Reviewed: {reqDetails.request ? "Yes" : "No"}</span>
         </div>
       </div>
     </div>

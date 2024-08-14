@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function GetteacherPaper() {
+function GetPapers() {
   const [papers, setPapers] = useState([]);
   const apikey = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    axios.get(`${apikey}admin/get/teacher/papers`,{withCredentials:true})
+    axios.get(`${apikey}dqc/requests`,{withCredentials:true})
       .then(response => {
         setPapers(response.data);
         console.log(response.data);
@@ -31,26 +31,34 @@ function GetteacherPaper() {
           <thead>
             <tr>
               <th className="px-4 py-2 border-b">Teacher Name</th>
-              <th className="px-4 py-2 border-b">Description</th>
-              <th className="px-4 py-2 border-b">Request</th>
-              <th className="px-4 py-2 border-b">Status</th>
-              <th className="px-4 py-2 border-b">Created At</th>
+              <th className="px-4 py-2 border-b">subject</th>
+              <th className="px-4 py-2 border-b">year</th>
+              <th className="px-4 py-2 border-b">semester</th>
+              <th className="px-4 py-2 border-b">CreatedAt</th>
+              <th className="px-4 py-2 border-b">qplink</th>
+              <th className="px-4 py-2 border-b">aplink</th>
+              <th className="px-4 py-2 border-b">request</th>
+              <th className="px-4 py-2 border-b">status</th>
+              <th className="px-4 py-2 border-b">approver</th>
             </tr>
           </thead>
           <tbody>
             {papers.map(paper => (
               <tr key={paper.ID} className="hover:bg-gray-100">
-                <td className="px-4 py-2 border-b">{paper.teacher_name}</td>
-                <td className="px-4 py-2 border-b">{paper.description}</td>
+                <td className="px-4 py-2 border-b">{paper.name}</td>
+                <td className="px-4 py-2 border-b">{paper.subject}</td>
+                <td className="px-4 py-2 border-b">{paper.year}</td>
+                <td className="px-4 py-2 border-b">{paper.semester}</td>
+                <td className="px-4 py-2 border-b">{dateConv(paper.CreatedAt)}</td>
+                <td className="px-4 py-2 border-b">{paper.qplink}</td>
+                <td className="px-4 py-2 border-b">{paper.aplink}</td>
                 <td className="px-4 py-2 border-b text-center text-black">
                   { paper.request ? "Yes" : "No" } 
                 </td>
                 <td className="px-4 py-2 border-b text-center">
                   {paper.status ? "Yes" : "No" }
                 </td>
-                <td className="px-4 py-2 border-b text-center">
-                  {dateConv(paper.CreatedAt)}
-                </td>
+                <td className="px-4 py-2 border-b">{paper.approver === "" ? "None" : paper.approver}</td>
               </tr>
             ))}
           </tbody>
@@ -60,4 +68,4 @@ function GetteacherPaper() {
   );
 }
 
-export default GetteacherPaper;
+export default GetPapers;

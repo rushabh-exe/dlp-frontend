@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Navigation from "../../components/static/Navigation";
-import DquBoard from "../../components/dqc/DquBoard";
 import { AuthContext } from '../../App';
-
+import Dqc from "../../components/dqc/Dqc"
+import GetPapers from "../dqc/GetPapers";
+import PostPapers from "../dqc/PostPapers";
 const DqcRoutes = () => {
     const { authState, setAuthState } = useContext(AuthContext);
 
@@ -21,7 +22,9 @@ const DqcRoutes = () => {
             />
             <div className="dashboard p-4 w-full flex-1">
                 <Routes>
-                    <Route path="dqc" element={<DquBoard />} />
+                    <Route path="dqc" element={<Dqc/>} />
+                    <Route path="/dqc/getPapers" element={<GetPapers/>} />
+                    <Route path="/dqc/postPapers" element={<PostPapers/>} />
                     <Route path="*" element={<Navigate to="dqc" />} />
                 </Routes>
             </div>
