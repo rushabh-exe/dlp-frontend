@@ -1,0 +1,162 @@
+.paper-form {
+    background-color: #ffe6e6; 
+    border: 1px solid #ffcccc; 
+    border-radius: 8px; 
+    padding: 20px; 
+    max-width: 100%;
+    margin: auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .paper-form p {
+    font-size: 18px; 
+    color: #a60000; 
+    margin-bottom: 10px; 
+  }
+  
+  .paper-form input {
+    width: 97%; 
+    padding: 10px; 
+    border: 1px solid #000000; 
+    border-radius: 4px;
+    font-size: 16px;
+    height: 20%;
+  }
+  
+  .paper-form button {
+    margin: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #e24a4a;
+    border-radius: 5px;
+  }
+  
+  .paper-form button:hover {
+    background-color: #ff8c8c;
+  }
+  
+  .btnc {
+    align-content: space-between;
+  }
+  
+  .create-btn {
+    padding: 20px 40px;
+    border-radius: 8px;
+    background-color: #ff7070;
+    font-size: x-large;
+    margin: 20px;
+  }
+  
+  .create-btn:hover {
+    background-color: #ff0000;
+    color: white;
+  }
+  
+  .Overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .Modal {
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border-radius: 5px;
+    padding: 15px;
+    width: 80%;
+    max-width: 100%;
+    max-height: 80%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
+    position: relative;
+    font-size: larger;
+  }
+  .request-container {
+    padding: 15px;
+    max-width: 100%;
+  }
+  
+  .request-in {
+    background-color: white;
+    margin: 10px auto;
+    width: 100%;
+    max-width: 95%;
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid #000000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    line-height: 1.5;
+  }
+  
+  .request-ts {
+    font-size: larger;
+    line-height: 1.2;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .request-ts p {
+    margin: 5px 0;
+  }
+  
+  .request-status {
+    text-align: center;
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    margin-top: 10px;
+  }
+  
+  .request-desc {
+    font-size: x-large;
+  }
+  
+  @media (max-width: 768px) {
+    .request-container {
+      padding: 10px;
+    }
+  
+    .request-in {
+      padding: 15px;
+      max-width: 100%;
+    }
+  
+    .request-ts {
+      flex-direction: column;
+      align-items: flex-start;
+      font-size: medium;
+    }
+  
+    .request-status {
+      padding: 10px;
+      font-size: larger;
+    }
+    .request-desc {
+      font-size: large;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .request-in {
+      padding: 10px;
+    }
+  
+    .request-ts {
+      font-size: small;
+    }
+  
+    .request-status {
+      padding: 8px;
+      font-size: medium;
+    }
+  
+    .request-desc {
+      font-size: medium;
+    }
+  }
