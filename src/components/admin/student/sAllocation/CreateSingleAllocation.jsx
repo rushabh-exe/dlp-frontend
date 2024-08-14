@@ -5,6 +5,7 @@ function CreateSingleAllocation() {
     const [class1Name, setClass1Name] = useState('');
     const [class1Strength, setClass1Strength] = useState('');
     const [rooms, setRooms] = useState([{ room: '', capacity: '' }]);
+    const apikey = import.meta.env.VITE_API_URL;
 
     const handleRoomChange = (index, key, value) => {
         const updatedRooms = [...rooms];
@@ -32,8 +33,9 @@ function CreateSingleAllocation() {
                 }))
             }];
             console.log(data);
-            await axios.post('http://localhost:3001/admin/create/student/singleAllocation', data);
+            await axios.post(`${apikey}admin/create/student/singleAllocation`, data);
             console.log('POST request sent successfully');
+            alert("Allocation Successfull")
         } catch (error) {
             console.error('Error:', error);
         }

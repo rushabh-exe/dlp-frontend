@@ -37,10 +37,11 @@ const AllocationTable = ({ data }) => {
 
 const MailAllocTeachers = () => {
   const [data, setData] = useState([]);
+  const apikey = import.meta.env.VITE_API_URL;
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/allotment');
+      const response = await fetch(`${apikey}api/allotment`);
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {
@@ -50,7 +51,7 @@ const MailAllocTeachers = () => {
 
   const saveData = async () => {
     try {
-      const response = await fetch('http://localhost:5555/storage', {
+      const response = await fetch(`${apikey}storage`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

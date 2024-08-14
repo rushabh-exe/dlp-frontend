@@ -3,10 +3,11 @@ import axios from 'axios';
 
 function TeachersAlloc() {
   const [allocations, setAllocations] = useState([]);
+  const apikey = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     axios
-      .get('http://localhost:9876/getTeacherAlloc')
+      .get(`${apikey}getTeacherAlloc`)
       .then((response) => {
         setAllocations(response.data);
       })

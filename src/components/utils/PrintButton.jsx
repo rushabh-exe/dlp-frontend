@@ -2,7 +2,7 @@ import React from "react";
 
 function PrintButton({ contentId }) {
   const printTable = () => {
-    const printContent = document.getElementById(contentId).innerHTML;
+    const printContent = document.getElementById(contentId).innerHTML || document.getElementsByClassName(contentId).innerHTML;
     const fullContent = document.body.innerHTML;
     document.body.innerHTML = printContent;
     const style = document.createElement("style");
