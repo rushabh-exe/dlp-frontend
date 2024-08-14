@@ -1,150 +1,148 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export function StudentAttendance({ firstSelect, secondSelect, thirdSelect, fourthSelect, onBack }) {
-  // return (
-  //   <div>
-  //     <button onClick={() => onBack()}>Back</button>
-  //     <div>
-  //       This is your selected {firstSelect} and {secondSelect} and {thirdSelect}
-  //     </div>
-  //   </div>
-  // );
-  const [subject, setSubject] = useState('');
-  const [classRoom, setClassRoom] = useState('');
-  const [attendanceData, setAttendanceData] = useState([]);
-  const apikey = import.meta.env.VITE_API_URL;
+const StudentAttendance = () => {
+    const [year, setYear] = useState('SY');
+    const [subjects, setSubjects] = useState([]);
+    const [selectedSubject, setSelectedSubject] = useState('');
+    const [selectedClass, setSelectedClass] = useState('SYA');
+    const [attendanceData, setAttendanceData] = useState([]);
+    const [editMode, setEditMode] = useState(false);
+    const [selectedStudent, setSelectedStudent] = useState(null);
 
-  useEffect(() => {
-    fetchAttendanceData();
-  }, [secondSelect]);
-  const fetchAttendanceData = async () => {
-    try {
-      const response = await axios.get(`${apikey}/admin/${secondSelect}/${thirdSelect}/${fourthSelect}`);
-      console.log('GET Response:', response.data);
-      setAttendanceData(response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-  const subjects = ['Math', 'Science', 'History'];
-  const classrooms = ['Class A', 'Class B', 'Class C'];
+    useEffect(() => {
+        // Fetch subjects based on the selected year
+        const fetchSubjects = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5051/admin/create/vitals/${year}`);
+                setSubjects(response.data || []);  // assuming the API returns an array of subjects
+                setSelectedSubject('');  // Reset subject selection
+            } catch (error) {
+                console.error('Error fetching subjects:', error);
+            }
+        };
 
-  const handleGetRequest = async () => {
-    try {
-      const response = await axios.get(`${apikey}admin/${secondSelect}/${thirdSelect}/${fourthSelect}`);
-      console.log('GET Response:', response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+        fetchSubjects();
+    }, [year]);
 
-  const handlePutRequest = async () => {
-    try {
-      const response = await axios.put(`${apikey}admin/${secondSelect}/${thirdSelect}/${fourthSelect}`);
-      console.log('PUT Response:', response.data);
-    } catch (error) {
-      console.error('Error updating data:', error);
-    }
-  };
+    const handleFetchAttendance = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5051/admin/${year}/${selectedSubject}/${selectedClass}`);
+            setAttendanceData(response.data.response);
+        } catch (error) {
+            console.error('Error fetching attendance:', error);
+        }
+    };
 
-  const handleDeleteRequest = async () => {
-    try {
-      const response = await axios.delete(`${apikey}admin/${secondSelect}/${thirdSelect}/${fourthSelect}`);
-      console.log('DELETE Response:', response.data);
-    } catch (error) {
-      console.error('Error deleting data:', error);
-    }
-  };
+    const handleEditAttendance = (student) => {
+        setEditMode(true);
+        setSelectedStudent({ ...student });
+    };
 
+    const handleSaveAttendance = async () => {
+        try {
+            await axios.put(`http://localhost:5051/admin/${year}/${selectedSubject}/${selectedClass}`, [selectedStudent]);
+            // Update the attendance data after saving
+            setAttendanceData((prev) =>
+                prev.map((item) => (item.ID === selectedStudent.ID ? selectedStudent : item))
+            );
+            setEditMode(false);
+            setSelectedStudent(null);
+        } catch (error) {
+            console.error('Error saving attendance:', error);
+        }
+    };
 
+    const handleDeleteClass = async () => {
+        try {
+            await axios.delete(`http://localhost:5051/admin/${year}/${selectedSubject}/${selectedClass}`);
+            // Clear the attendance data after deletion
+            setAttendanceData([]);
+        } catch (error) {
+            console.error('Error deleting class data:', error);
+        }
+    };
 
-  return (
-    <div className='flex gap-5'>
-      <button onClick={() => onBack()}>Back</button>
-      <div>
-        This is your selected {firstSelect} and {secondSelect} and {thirdSelect} and {fourthSelect}
-      </div>
-      {/* <div className='w-66 p-1 flex flex-col gap-1 bg-gray-50'>
-        <h2 className='w-full'>Select Subject and Class</h2>
-        <div className='w-full'>
-          <select className='w-full' id="subject" value={subject} onChange={(e) => setSubject(e.target.value)}>
-            <option value="">Select Subject</option>
-            {subjects.map((subject, index) => (
-              <option key={index} value={subject}>{subject}</option>
-            ))}
-          </select>
+    return (
+        <div className="container">
+            <div className="selection">
+                <label>
+                    Select Year:
+                    <select value={year} onChange={(e) => setYear(e.target.value)}>
+                        <option value="SY">SY</option>
+                        <option value="TY">TY</option>
+                        <option value="LY">LY</option>
+                    </select>
+                </label>
+
+                <label>
+                    Select Subject:
+                    <select value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)}>
+                        <option value="">Select a Subject</option>
+                        {subjects.map((subject) => (
+                            <option key={subject.ID} value={subject.name}>
+                                {subject.name}
+                            </option>
+                        ))}
+                    </select>
+                </label>
+
+                <label>
+                    Select Class:
+                    <select value={selectedClass} onChange={(e) => setSelectedClass(e.target.value)}>
+                        <option value={`${year}A`}>{`${year}A`}</option>
+                        <option value={`${year}B`}>{`${year}B`}</option>
+                    </select>
+                </label>
+
+                <button onClick={handleFetchAttendance}>Fetch Attendance</button>
+                <button onClick={handleDeleteClass}>Delete Class Data</button>
+            </div>
+
+            <div className="attendance-data">
+                <h3>Attendance Data:</h3>
+                {attendanceData.length > 0 ? (
+                    <ul>
+                        {attendanceData.map((entry) => (
+                            <li key={entry.ID}>
+                                {editMode && selectedStudent?.ID === entry.ID ? (
+                                    <div>
+                                        <input
+                                            type="text"
+                                            value={selectedStudent.name}
+                                            onChange={(e) =>
+                                                setSelectedStudent((prev) => ({ ...prev, name: e.target.value }))
+                                            }
+                                        />
+                                        <select
+                                            value={selectedStudent.is_present}
+                                            onChange={(e) =>
+                                                setSelectedStudent((prev) => ({
+                                                    ...prev,
+                                                    is_present: e.target.value === 'true',
+                                                }))
+                                            }
+                                        >
+                                            <option value="true">Present</option>
+                                            <option value="false">Absent</option>
+                                        </select>
+                                        <button onClick={handleSaveAttendance}>Save</button>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        {entry.name} ({entry.roll_no}) - {entry.is_present ? 'Present' : 'Absent'}
+                                        <button onClick={() => handleEditAttendance(entry)}>Edit</button>
+                                    </div>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No data available.</p>
+                )}
+            </div>
         </div>
-        <div className='w-full'>
-          <select className='w-full' id="class" value={classRoom} onChange={(e) => setClassRoom(e.target.value)}>
-            <option value="">Select Class</option>
-            {classrooms.map((classRoom, index) => (
-              <option key={index} value={classRoom}>{classRoom}</option>
-            ))}
-          </select>
-        </div>
-        <div className='w-full flex flex-col gap-1'>
-          <button className='w-full bg-white' onClick={handleGetRequest}>Get Data</button>
-          <button className='w-full bg-white' onClick={handlePutRequest}>Update Data</button>
-          <button className='w-full bg-white' onClick={handleDeleteRequest}>Delete Data</button>
-        </div>
-      </div>
-      <div className='atn-btn'>
-        <h2>Attendance Data</h2>
-        <table>
-          <thead className='bg-red-700 text-white'>
-            <tr>
-              <th className='p-1 border-red-800 border-2'>Date</th>
-              <th className='p-1 border-red-800 border-2'>Name</th>
-              <th className='p-1 border-red-800 border-2'>Roll No</th>
-              <th className='p-1 border-red-800 border-2'>Class</th>
-              <th className='p-1 border-red-800 border-2'>Present</th>
-            </tr>
-          </thead>
-          <tbody className='bg-white text-white'>
-            {attendanceData.map((data, index) => (
-              <tr key={index}>
-                <td className='p-1 border-2' >{data.Date}</td>
-                <td className='p-1 border-2'>{data.Name}</td>
-                <td className='p-1 border-2'>{data.RollNo}</td>
-                <td className='p-1 border-2'>{data.Class}</td>
-                <td className='p-1 border-2'>{data.IsPresent ? 'Yes' : 'No'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div> */}
-    </div>
-  );
-}
-function StudentAttendanece({year}) {
+    );
+};
 
-  const apikey = import.meta.env.VITE_API_URL;
-
-
-  const [subjects, setSubjects] = useState([]);
-  const fetchSubjectData = async () => {
-    try {
-      const response = await axios.get(`${apikey}admin/create/vitals/${year}`);
-      console.log('Response:', response.data);
-      setSubjects(response.data);
-    } catch (error) {
-      console.error('Error fetching subject data:', error);
-    }
-  };
-  useEffect(() => {
-    fetchSubjectData();
-  }, [year]);
-  console.log(subjects.map((subject) => subject.name));
-
-  return (
-    <div>
-      <select name="subject" value={newEntry.subject} onChange={handleInputChange}>
-        <option value="" disabled>Select Subject</option>
-        {subjects.map((subject, index) => (
-          <option key={index} value={subject.name}>{subject.name}</option>
-        ))}
-      </select>
-    </div>
-  )
-}
+export default StudentAttendance;
