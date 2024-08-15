@@ -11,7 +11,7 @@ function SubjectUtils() {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container">
       <h1 className="text-2xl font-bold mb-4">Subject Management</h1>
       {error && <div className='text-red-500 mb-4'>{error}</div>}
       {!year ? (

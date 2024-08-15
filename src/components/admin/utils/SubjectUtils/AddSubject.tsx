@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import SubjectRow from './SubjectRow';
+import toast, { Toaster } from 'react-hot-toast';
 
 interface AddSubjectProps {
   yearProp: string;
@@ -20,6 +21,7 @@ function AddSubject({ yearProp, onError }: AddSubjectProps) {
     } catch (error) {
       console.error('Error fetching subject data:', error);
       onError('Failed to fetch subjects.');
+      toast.error("failed to fetch subjects",{position:"bottom-right"})
     }
   }, [apikey, yearProp, onError]);
 
@@ -29,8 +31,11 @@ function AddSubject({ yearProp, onError }: AddSubjectProps) {
       await axios.post(`${apikey}admin/create/vitals/${yearProp}`, { year: yearProp, sem, subject });
       setSubject('');
       fetchSubjectData();
+      toast.success("Subject Added Successfully",{position:"bottom-right"})
+
     } catch (error) {
       console.error('Error adding subject:', error);
+      toast.error("Error adding subject",{position:"bottom-right"})
       onError('Failed to add subject.');
     }
   };
@@ -39,9 +44,13 @@ function AddSubject({ yearProp, onError }: AddSubjectProps) {
     try {
       await axios.delete(`${apikey}admin/create/vitals/${yearProp}/${subjectName}`);
       fetchSubjectData();
+      toast.success("Subject Deleted Successfully",{position:"bottom-right"})
+
     } catch (error) {
       console.error('Error deleting subject:', error);
       onError('Failed to delete subject.');
+      toast.error("Error deleting subject",{position:"bottom-right"})
+
     }
   };
 
@@ -51,6 +60,7 @@ function AddSubject({ yearProp, onError }: AddSubjectProps) {
 
   return (
     <div>
+      <Toaster/>
       <div className='flex flex-wrap gap-5'>
         {subjects.map((subject, index) => (
           <SubjectRow

@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 function PostPaper() {
   const [papers, setPapers] = useState([]);
   const apikey = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
+  // Function to fetch papers
+  const fetchPapers = () => {
     axios
       .get(`${apikey}admin/get/teacher/papers/request`, { withCredentials: true })
       .then((response) => {
@@ -14,42 +16,39 @@ function PostPaper() {
       .catch((error) => {
         console.error("Error fetching papers:", error);
       });
+  };
+
+  // Fetch papers on component mount
+  useEffect(() => {
+    fetchPapers();
   }, [apikey]);
 
   const handleApprove = (paper) => {
     axios
-      .post(`${apikey}admin/create/teacher/papers/${paper.ID}/${true}`, {
+      .post(`${apikey}admin/create/teacher/papers/${paper.ID}/true`, {
         withCredentials: true,
       })
-      alert("Reviewed")
       .then(() => {
-        setPapers(
-          papers.map((p) =>
-            p.ID === paper.ID ? { ...p, request: true, status: true } : p
-          )
-        );
+        toast.success("Approved Successfully", { position: 'bottom-right' });
+        fetchPapers(); // Refresh the list after approval
       })
       .catch((error) => {
-        alert("Error")
+        toast.error("Error occurred Approving", { position: 'bottom-right' });
         console.error("Error approving paper:", error);
       });
   };
 
   const handleReject = (paper) => {
     axios
-      .post(`${apikey}admin/create/teacher/papers/${paper.ID}/${false}`, {
+      .post(`${apikey}admin/create/teacher/papers/${paper.ID}/false`, {
         withCredentials: true,
       })
-      alert("Reviewed")
       .then(() => {
-        setPapers(
-          papers.map((p) =>
-            p.ID === paper.ID ? { ...p, request: false, status: false } : p
-          )
-        );
+        toast.success("Rejected Successfully", { position: 'bottom-right' });
+        fetchPapers(); // Refresh the list after rejection
       })
       .catch((error) => {
-        alert("Error rejecting paper:", error)
+        toast.error("Error occurred Rejecting", { position: 'bottom-right' });
         console.error("Error rejecting paper:", error);
       });
   };
@@ -61,6 +60,7 @@ function PostPaper() {
 
   return (
     <div className="container mx-auto p-4">
+      <Toaster />
       <h1 className="text-2xl font-bold mb-4">Teacher Papers</h1>
       {papers.length === 0 ? (
         <p className="text-gray-500">No papers found.</p>

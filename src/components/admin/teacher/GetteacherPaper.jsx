@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import PrintButton from '../../utils/PrintButton';
 
 function GetteacherPaper() {
   const [papers, setPapers] = useState([]);
@@ -22,7 +23,7 @@ function GetteacherPaper() {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div id='table_body' className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Teacher Papers</h1>
       {papers.length === 0 ? (
         <p className="text-gray-500">No papers found.</p>
@@ -40,8 +41,8 @@ function GetteacherPaper() {
           <tbody>
             {papers.map(paper => (
               <tr key={paper.ID} className="hover:bg-gray-100">
-                <td className="px-4 py-2 border-b">{paper.teacher_name}</td>
-                <td className="px-4 py-2 border-b">{paper.description}</td>
+                <td className="px-4 text-center py-2 border-b">{paper.teacher_name}</td>
+                <td className="px-4 text-center py-2 border-b">{paper.description}</td>
                 <td className="px-4 py-2 border-b text-center text-black">
                   { paper.request ? "Yes" : "No" } 
                 </td>
@@ -56,6 +57,7 @@ function GetteacherPaper() {
           </tbody>
         </table>
       )}
+      <PrintButton contentId={'table_body'}/>
     </div>
   );
 }

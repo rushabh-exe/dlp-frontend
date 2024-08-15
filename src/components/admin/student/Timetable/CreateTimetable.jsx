@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TimetableC from './TimetableC';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 function CreateTimeTable({ year }) {
     const [selectedTimetable, setSelectedTimetable] = useState([]);
   
@@ -98,6 +99,7 @@ function CreateTimeTable({ year }) {
         }));
         if (formattedTimetable.length === 0) {
           console.error('No entries to submit.');
+          toast.error("No entries to submit",{position: "bottom-right"})
           return;
         }
   
@@ -105,11 +107,13 @@ function CreateTimeTable({ year }) {
         const response = await axios.post(`${apikey}admin/create/timetable/${year}/${sem}`, formattedTimetable); // Using dynamic year prop
         console.log(response.data);
         setSelectedTimetable([]);
+        toast.success("Time Table Created Successfully",{position: "bottom-right"})
       } catch (error) {
         console.error('Error:', error);
       }
     }; return (
       <div>
+        <Toaster/>
         <select className='p-2' value={sem} onChange={(e) => setSem(e.target.value)}>
           <option value="null" defaultValue={setSem} disabled >Choose Sem</option>
           <option value="1">Sem 1</option>

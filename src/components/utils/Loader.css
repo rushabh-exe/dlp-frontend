@@ -20,7 +20,7 @@
  
  .spinner::after {
   margin: 8px;
-  animation-duration: 3s;
+  animation-duration: 1s;
  }
  
  @keyframes spinner-a4dj62 {

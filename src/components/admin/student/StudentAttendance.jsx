@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 
 const StudentAttendance = () => {
     const [year, setYear] = useState('SY');
@@ -29,8 +30,16 @@ const StudentAttendance = () => {
         try {
             const response = await axios.get(`http://localhost:5051/admin/${year}/${selectedSubject}/${selectedClass}`);
             setAttendanceData(response.data.response);
+            console.log(response.data.response);
+            if (response.data.response.length === 0) {
+                toast.success("No data",{position: "bottom-right"})
+            } else {
+                toast.success("fetch successfully",{position: "bottom-right"})
+            }
         } catch (error) {
             console.error('Error fetching attendance:', error);
+            toast.error("error fetching attendance",{position: "bottom-right"})
+
         }
     };
 
@@ -48,8 +57,11 @@ const StudentAttendance = () => {
             );
             setEditMode(false);
             setSelectedStudent(null);
+            toast.success("Attendance Updated Successfully",{position: "bottom-right"})
         } catch (error) {
             console.error('Error saving attendance:', error);
+            toast.error("Error saving attendance",{position: "bottom-right"})
+
         }
     };
 
@@ -58,13 +70,16 @@ const StudentAttendance = () => {
             await axios.delete(`http://localhost:5051/admin/${year}/${selectedSubject}/${selectedClass}`);
             // Clear the attendance data after deletion
             setAttendanceData([]);
+            toast.success("attendance Deleted Successfully",{position: "bottom-right"})
         } catch (error) {
             console.error('Error deleting class data:', error);
+            toast.error("Error Deleting attendance",{position: "bottom-right"})
         }
     };
 
     return (
         <div className="container">
+            <Toaster/>
             <div className="selection">
                 <label>
                     Select Year:
