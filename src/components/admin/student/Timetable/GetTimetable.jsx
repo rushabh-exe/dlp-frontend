@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PrintButton from '../../../utils/PrintButton';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 
 function GetTimeTable({ year }) {
   const [fetchedTimetables, setFetchedTimetables] = useState([]);
@@ -21,6 +22,7 @@ function GetTimeTable({ year }) {
       setSemesters(semesters);
     } catch (error) {
       console.error('Error fetching timetables:', error);
+      toast.error("error fetching timetable",{position: "bottom-right"})
     }
   };
 
@@ -36,8 +38,12 @@ function GetTimeTable({ year }) {
     try {
       await axios.delete(`${apikey}admin/get/timetable/${selectYear}`);
       setFetchedTimetables([]);
+      toast.success("Time Table Deleted Successfully",{position: "bottom-right"})
+
     } catch (error) {
       console.error('Error deleting timetable for the selected year:', error);
+      toast.error("error Deleting timetable",{position: "bottom-right"})
+
     }
   };
 
@@ -48,6 +54,7 @@ function GetTimeTable({ year }) {
 
   return (
     <div className='flex flex-col w-full gap-5'>
+      <Toaster/>
       <div className='flex gap-2'>
         <select 
           className='p-2 w-fit rounded-xl' 

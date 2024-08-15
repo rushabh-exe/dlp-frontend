@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CNavlink from '../../utils/CNavlink';
+import toast, { Toaster } from 'react-hot-toast';
+import PrintButton from '../../utils/PrintButton';
 
 // Base API URL
 const apikey = import.meta.env.VITE_API_URL;
@@ -13,6 +15,8 @@ const useApiCall = (apiUrl, method, data = null) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (method === 'POST' && !data) return; // Prevent POST request from being sent automatically
+
       setIsLoading(true);
       try {
         const result = method === 'GET'
@@ -28,7 +32,7 @@ const useApiCall = (apiUrl, method, data = null) => {
     fetchData();
   }, [apiUrl, method, data]);
 
-  return { response, error, isLoading };
+  return { response, error, isLoading, setResponse, setError };
 };
 
 // Main Component
@@ -44,23 +48,33 @@ function TeacherAllocation() {
 // Create Teacher Allocation Component
 export function CreateTeacherAllocation() {
   const apiUrl = `${apikey}admin/create/teacher/allocation`;
-  const { response, error, isLoading } = useApiCall(apiUrl, 'POST');
+  const { response, error, isLoading, setResponse, setError } = useApiCall(apiUrl, 'POST');
 
-  const handleCreateAllocation = () => {
-    if (!isLoading && !error) {
-      window.location.href = "/admin/teacher/Allocation/getAllocation";
+  const handleCreateAllocation = async () => {
+    try {
+      await axios.post(apiUrl);
+      toast.success("Teacher Allocation has been created",{position: 'bottom-right',});
+      setTimeout(() => {
+        window.location.href = "/admin/teacher/Allocation/getAllocation";
+      }, 2000);
+    } catch (err) {
+      setError(err.message);
+      toast.error("Failed to create teacher allocation",{position: 'bottom-right',});
+    } finally {
+      setResponse(null); // Reset response to avoid automatic reload
     }
   };
 
   return (
     <div className='flex flex-col gap-5'>
+      <Toaster />
       <div className='bg-yellow-200 p-1'>
         {isLoading ? (
           <div>Loading...</div>
         ) : error ? (
           <div>Error: {error}</div>
         ) : (
-          <>Click Create Allocation</>
+          <>Click below to Create Allocation</>
         )}
       </div>
       <div
@@ -77,24 +91,26 @@ export function CreateTeacherAllocation() {
 // Get Teacher Allocation Component with Delete functionality
 export function GetTeacherAllocation() {
   const apiUrl = `${apikey}admin/get/teacher/allocation`;
-  const { response, error, isLoading } = useApiCall(apiUrl, 'GET');
+  const { response, error, isLoading, setResponse } = useApiCall(apiUrl, 'GET');
   const [deleteError, setDeleteError] = useState(null);
 
   // Function to delete a teacher allocation
   const deleteTeacherAllocation = async (id) => {
-    
-      try {
-        await axios.delete(`${apikey}admin/get/teacher/allocation/${id}`);
-        // Refresh the list after deletion
-        window.location.reload();
-        setDeleteError(null);
-      } catch (err) {
-        setDeleteError('Failed to delete teacher allocation');
-      } 
+    try {
+      await axios.delete(`${apikey}admin/get/teacher/allocation/${id}`);
+      toast.success("Teacher Allocation has been deleted",{position: 'bottom-right',});
+      // Refresh the list after deletion
+      setResponse(response.filter(item => item.ID !== id));
+      setDeleteError(null);
+    } catch (err) {
+      setDeleteError('Failed to delete teacher allocation',{position: 'bottom-right',});
+      toast.error("Failed to delete teacher allocation");
+    }
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div id='table_body' className="overflow-x-auto">
+      <Toaster />
       <table className="table-auto w-full bg-white shadow-md rounded-lg overflow-hidden">
         <thead>
           <tr className="bg-gray-100">
@@ -131,6 +147,7 @@ export function GetTeacherAllocation() {
       {isLoading && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
       {deleteError && <div>Error: {deleteError}</div>}
+      <PrintButton contentId={'table_body'}/>
     </div>
   );
 }

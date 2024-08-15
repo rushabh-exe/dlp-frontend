@@ -44,7 +44,7 @@ const NotFound = () => <div>Route not found. Please check your URL.</div>;
 
 // Teacher Component
 const TeacherComponent = () => (
-  <div className="flex gap-5">
+  <div className="flex flex-wrap gap-5">
     <NavLink className="px-4 py-2 border-2 border-gray-200 rounded-full bg-white text-xl font-bold text-gray-800 hover:bg-slate-300 hover:text-red-900 transition duration-300" to="getAttendance">
       Take Attendance
     </NavLink>

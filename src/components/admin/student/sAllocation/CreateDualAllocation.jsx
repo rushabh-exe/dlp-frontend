@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 
 function CreateDualAllocation() {
   const [class1Name, setClass1Name] = useState('');
@@ -37,15 +38,21 @@ function CreateDualAllocation() {
       console.log(data);
       await axios.post(`${apikey}admin/create/student/dualAllocation`, data);
       console.log('POST request sent successfully');
-      alert("Allocation Successfull")
-
+      toast.success("Successfully created",{position:"bottom-right"})
+      setClass1Name('');
+      setClass1Strength('');
+      setClass2Name('')
+      setClass2Strength('')
+      setRooms([{ room: '', capacity: '' }]);
     } catch (error) {
       console.error('Error:', error);
+      toast.error("Error occured creating Allocation",{position:"bottom-right"})
     }
   };
 
   return (
     <div className='flex flex-col gap-4 mx-auto bg-gray-100 rounded-lg shadow-lg p-6'>
+      <Toaster/>
       <h2 className="text-2xl font-bold text-center border-b-2 border-red-700 ">Create Dual Allocation</h2>
       <div className='flex w-full gap-3'>
         <div className='flex w-full flex-col gap-2'>

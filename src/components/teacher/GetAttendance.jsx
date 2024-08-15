@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
@@ -18,6 +19,7 @@ const GetAttendance = () => {
         console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
+        toast.error("Error fetching data", {position:"top-center"});
       }
     };
 
@@ -85,21 +87,23 @@ const GetAttendance = () => {
             'Content-Type': 'application/json'
           }
         });
-        alert("Attendance updated successfully");
+        toast.success("Attendance updated successfully", {position:"top-center"});
         closeModal();
       } catch (error) {
         console.error("Error updating attendance:", error);
-        alert("Failed to update attendance");
+        toast.error("Failed to update attendance", {position:"top-center"});
+       
       }
     }
   };
 
   return (
     <div>
+      <Toaster/>
     {data.map((item, index) => (
       <div key={index} className="mb-4">
         <div
-          className="bg-gray-300 text-black rounded-md p-4 w-2/5 cursor-pointer"
+          className="bg-white text-black rounded-md p-4 max-w-2xl cursor-pointer"
           onClick={() => openModal(item)}
         >
           <div className="flex justify-between text-lg mb-2">
@@ -126,7 +130,7 @@ const GetAttendance = () => {
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
       contentLabel="Student Data Modal"
-      className="bg-gray-300 text-black rounded-md p-4 w-2/4 max-w-[80%] max-h-[80%] shadow-lg relative text-lg"
+      className="bg-gray-300 text-black rounded-md p-2 shadow-lg relative text-lg"
       overlayClassName="bg-black bg-opacity-50 fixed top-0 left-0 w-full h-full flex items-center justify-center"
     >
       <h2 className="text-center text-xl font-bold mb-4">Student Attendance</h2>
@@ -183,6 +187,7 @@ const GetAttendance = () => {
                               onChange={(event) =>
                                 handleCheckboxChange(studentIndex, studIndex, event)
                               }
+                              
                             />
                           </td>
                         </tr>
@@ -193,16 +198,16 @@ const GetAttendance = () => {
             </div>
           ))}
       </div>
-      <div className="flex justify-between mt-4">
+      <div className="flex justify-end  gap-3">
         <button
           onClick={closeModal}
-          className="bg-gray-400 text-black rounded-md p-2 transition-all hover:bg-gray-500"
+          className="bg-gray-400 text-black p-2 transition-all hover:bg-gray-500"
         >
           Close
         </button>
         <button
           onClick={handleSubmit}
-          className="bg-red-600 text-white rounded-md p-2 transition-all hover:bg-red-700"
+          className="bg-red-600 text-white  p-2 transition-all hover:bg-red-700"
         >
           Mark
         </button>

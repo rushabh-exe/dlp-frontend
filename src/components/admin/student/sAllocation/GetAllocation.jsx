@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
+import PrintButton from '../../../utils/PrintButton';
 
 function GetAllocation() {
   const [studentAllocations, setStudentAllocations] = useState([]);
@@ -16,6 +18,7 @@ function GetAllocation() {
       })
       .catch(error => {
         console.error('Error fetching student allocations:', error);
+        toast.error('Error fetching student allocations', {position:"bottom-right"});
       });
   };
 
@@ -23,19 +26,22 @@ function GetAllocation() {
     axios.delete(`${apikey}admin/get/student/allocation/${id}`)
       .then(response => {
         console.log('Allocation deleted successfully');
+        toast.success('Allocation Deleted Successfully', {position:"bottom-right"});
         fetchStudentAllocations(); // Refresh the allocation list
       })
       .catch(error => {
         console.error('Error deleting student allocation:', error);
+        toast.error('Error Deleting student allocations', {position:"bottom-right"});
       });
   };
 
   return (
     <div className="tableee mx-auto bg-white shadow-md rounded-lg max-w-4xl w-full overflow-hidden">
+      <Toaster/>
       <section className="table_header bg-white text-xl text-center py-3">
         <h1>Student Allocation SY</h1>
       </section>
-      <section className="table_body bg-white">
+      <section id='table_body' className="table_body bg-white">
         <table className="w-full">
           <thead>
             <tr className="text-center">
@@ -63,6 +69,7 @@ function GetAllocation() {
           </tbody>
         </table>
       </section>
+      <PrintButton contentId={"table_body"} />
     </div>
   );
 }
