@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { GoogleLogin } from "react-google-login";
 import { RiFacebookBoxFill, RiInstagramFill, RiLinkedinBoxFill, RiTwitterFill } from "react-icons/ri";
 import { Footer } from "../static/Footer";
@@ -11,7 +11,7 @@ import Studentpage from '../static/Studentpage';
 // Constants
 const GOOGLE_CLIENT_ID = "152111620630-d01stikjdcthgcfrjhhmpuetctpnqs61.apps.googleusercontent.com";
 const API_URL = import.meta.env.VITE_API_URL;
-const gapiClientid = import.meta.env.GOOGLE_CLIENT_ID; 
+// const gapiClientid = import.meta.env.GOOGLE_CLIENT_ID; 
 
 // Component for handling login logic and rendering
 const Login = ({ setIsLoggedIn, setUser, setUserImg, setLoginMethod }) => {
@@ -81,7 +81,7 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg, setLoginMethod }) => {
       });
   
       const data = await res.json();
-  
+      
       if (res.ok) {
         // Handle successful login
         setIsLoggedIn(true);
@@ -93,9 +93,10 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg, setLoginMethod }) => {
         Cookies.set("user", userName);
         Cookies.set("userImg", userImg);
         Cookies.set("loginMethod", "Teacher");
-  
+        
+        console.log("cookie: ", data.cookie)
         // Set backend token from response
-        Cookies.set("backendToken", data.teacherData,{
+        Cookies.set("teacherData", data.cookie,{
           expires: 7,
           path: "/",
           secure: true,
@@ -182,7 +183,7 @@ const Login = ({ setIsLoggedIn, setUser, setUserImg, setLoginMethod }) => {
             </div>
             <div className="bg-white pt-0 flex flex-col border-gray-200 w-96 p-10 rounded-lg border-2 max-[465px]:w-10/12">
               <p className="text-center text-lg font-bold mb-4">Pages For <NavLink to="/students" className="hover:text-gray-300 text-nowrap text-red-700">Students</NavLink></p>
-              <p className="text-center mb-4 text-wrap">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."</p>
+              <p className="text-center mb-4 text-wrap">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
               <div className="flex justify-center mb-4">
                 <RiInstagramFill />
                 <RiTwitterFill />

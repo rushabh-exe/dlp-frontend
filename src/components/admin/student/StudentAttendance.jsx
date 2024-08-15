@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -114,48 +114,85 @@ const StudentAttendance = () => {
                 <button onClick={handleDeleteClass}>Delete Class Data</button>
             </div>
 
-            <div className="attendance-data">
-                <h3>Attendance Data:</h3>
+            <div className="attendance-data bg-red-50 p-6 rounded-lg shadow-lg">
+                <h3 className="text-xl font-bold text-red-700 mb-4 text-center">Attendance Data:</h3>
                 {attendanceData.length > 0 ? (
-                    <ul>
-                        {attendanceData.map((entry) => (
-                            <li key={entry.ID}>
-                                {editMode && selectedStudent?.ID === entry.ID ? (
-                                    <div>
-                                        <input
-                                            type="text"
-                                            value={selectedStudent.name}
-                                            onChange={(e) =>
-                                                setSelectedStudent((prev) => ({ ...prev, name: e.target.value }))
-                                            }
-                                        />
-                                        <select
-                                            value={selectedStudent.is_present}
-                                            onChange={(e) =>
-                                                setSelectedStudent((prev) => ({
-                                                    ...prev,
-                                                    is_present: e.target.value === 'true',
-                                                }))
-                                            }
-                                        >
-                                            <option value="true">Present</option>
-                                            <option value="false">Absent</option>
-                                        </select>
-                                        <button onClick={handleSaveAttendance}>Save</button>
-                                    </div>
-                                ) : (
-                                    <div>
-                                        {entry.name} ({entry.roll_no}) - {entry.is_present ? 'Present' : 'Absent'}
-                                        <button onClick={() => handleEditAttendance(entry)}>Edit</button>
-                                    </div>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr>
+                                <th className="border-b-2 border-red-200 p-3 text-red-800">Name</th>
+                                <th className="border-b-2 border-red-200 p-3 text-red-800">Roll No</th>
+                                <th className="border-b-2 border-red-200 p-3 text-red-800">Status</th>
+                                <th className="border-b-2 border-red-200 p-3 text-red-800">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {attendanceData
+                                .slice()
+                                .sort((a, b) => parseInt(a.roll_no, 10) - parseInt(b.roll_no, 10))
+                                .map((entry) => (
+                                    <tr key={entry.ID} className="odd:bg-red-100 even:bg-red-50">
+                                        <td className="p-3">
+                                            {editMode && selectedStudent?.ID === entry.ID ? (
+                                                <input
+                                                    type="text"
+                                                    className="w-full p-2 border border-red-300 rounded-md"
+                                                    value={selectedStudent.name}
+                                                    onChange={(e) =>
+                                                        setSelectedStudent((prev) => ({ ...prev, name: e.target.value }))
+                                                    }
+                                                />
+                                            ) : (
+                                                entry.name
+                                            )}
+                                        </td>
+                                        <td className="p-3">{entry.roll_no}</td>
+                                        <td className="p-3">
+                                            {editMode && selectedStudent?.ID === entry.ID ? (
+                                                <select
+                                                    className="w-full p-2 border border-red-300 rounded-md"
+                                                    value={selectedStudent.is_present}
+                                                    onChange={(e) =>
+                                                        setSelectedStudent((prev) => ({
+                                                            ...prev,
+                                                            is_present: e.target.value === 'true',
+                                                        }))
+                                                    }
+                                                >
+                                                    <option value="true">Present</option>
+                                                    <option value="false">Absent</option>
+                                                </select>
+                                            ) : (
+                                                entry.is_present ? 'Present' : 'Absent'
+                                            )}
+                                        </td>
+                                        <td className="p-3">
+                                            {editMode && selectedStudent?.ID === entry.ID ? (
+                                                <button
+                                                    className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition"
+                                                    onClick={handleSaveAttendance}
+                                                >
+                                                    Save
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition"
+                                                    onClick={() => handleEditAttendance(entry)}
+                                                >
+                                                    Edit
+                                                </button>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </table>
                 ) : (
-                    <p>No data available.</p>
+                    <p className="text-red-700 italic text-center mt-4">No data available.</p>
                 )}
             </div>
+
+
         </div>
     );
 };
