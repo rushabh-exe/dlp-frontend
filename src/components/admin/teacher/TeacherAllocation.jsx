@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import CNavlink from '../../utils/CNavlink';
 import toast, { Toaster } from 'react-hot-toast';
@@ -48,7 +48,7 @@ function TeacherAllocation() {
 // Create Teacher Allocation Component
 export function CreateTeacherAllocation() {
   const apiUrl = `${apikey}admin/create/teacher/allocation`;
-  const { response, error, isLoading, setResponse, setError } = useApiCall(apiUrl, 'POST');
+  const {  error, isLoading, setResponse, setError } = useApiCall(apiUrl, 'POST');
 
   const handleCreateAllocation = async () => {
     try {
@@ -93,23 +93,40 @@ export function GetTeacherAllocation() {
   const apiUrl = `${apikey}admin/get/teacher/allocation`;
   const { response, error, isLoading, setResponse } = useApiCall(apiUrl, 'GET');
   const [deleteError, setDeleteError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   // Function to delete a teacher allocation
   const deleteTeacherAllocation = async (id) => {
     try {
       await axios.delete(`${apikey}admin/get/teacher/allocation/${id}`);
-      toast.success("Teacher Allocation has been deleted",{position: 'bottom-right',});
+      toast.success("Teacher Allocation has been deleted", { position: 'bottom-right' });
       // Refresh the list after deletion
       setResponse(response.filter(item => item.ID !== id));
       setDeleteError(null);
     } catch (err) {
-      setDeleteError('Failed to delete teacher allocation',{position: 'bottom-right',});
+      setDeleteError('Failed to delete teacher allocation', { position: 'bottom-right' });
       toast.error("Failed to delete teacher allocation");
     }
   };
 
+  const handleSendMail = () => {
+    setLoading(true);  // Set loading to true when the request starts
+    axios.post(`${apikey}admin/create/teacher/allocation/sendmail`, { withCredentials: true })
+      .then(response => {
+        console.log('Mail sent successfully:', response.data);
+        toast.success("Email Sent Successfully", { position: "bottom-right" });
+      })
+      .catch(error => {
+        console.error('Error sending mail:', error);
+        toast.error("Error Sending mail", { position: "bottom-right" });
+      })
+      .finally(() => {
+        setLoading(false);  // Set loading to false after the request is completed
+      });
+  };
+
   return (
-    <div id='table_body' className="overflow-x-auto">
+    <div id='table_body' className="overflow-x-auto relative">
       <Toaster />
       <table className="table-auto w-full bg-white shadow-md rounded-lg overflow-hidden">
         <thead>
@@ -147,9 +164,25 @@ export function GetTeacherAllocation() {
       {isLoading && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
       {deleteError && <div>Error: {deleteError}</div>}
-      <PrintButton contentId={'table_body'}/>
+      <PrintButton contentId={'table_body'} />
+      <button
+        onClick={handleSendMail}
+        className="pntbtn fixed bottom-5 left-40 bg-red-800 text-white w-fit p-2"
+        disabled={loading}
+      >
+        {loading ? 'Sending...' : 'Send Mail'}
+      </button>
+
+      {/* Fullscreen Loading Overlay */}
+      {loading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="text-white text-lg">Processing...</div>
+        </div>
+      )}
     </div>
   );
 }
+
+
 
 export default TeacherAllocation;
