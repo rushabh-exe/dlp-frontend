@@ -21,11 +21,12 @@ const fetchPapers = async (apikey, setPapers) => {
   }
 };
 
-// Handle paper approval or rejection
-const handlePaperAction = async (apikey, paper, action, setPapers) => {
+// Handle paper approval or rejection with description
+const handlePaperAction = async (apikey, paper, action, description, setPapers) => {
   try {
     await axios.post(
       `${apikey}dqc/requests/${paper.ID}/${action}`,
+      { description },  // Send description along with the request
       { withCredentials: true }
     );
     toast.success("Reviewed Successfully", { position: "bottom-right" });
@@ -41,21 +42,33 @@ const handlePaperAction = async (apikey, paper, action, setPapers) => {
 
 function PostPapers() {
   const [papers, setPapers] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPaper, setSelectedPaper] = useState(null);
+  const [actionType, setActionType] = useState(null); // "approve" or "reject"
+  const [description, setDescription] = useState(""); // Description input
   const apikey = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     fetchPapers(apikey, setPapers);
   }, [apikey]);
 
-  const handleApprove = useCallback(
-    (paper) => handlePaperAction(apikey, paper, true, setPapers),
-    [apikey]
-  );
+  const openModal = (paper, action) => {
+    setSelectedPaper(paper);
+    setActionType(action);
+    setShowModal(true); // Open the modal
+  };
 
-  const handleReject = useCallback(
-    (paper) => handlePaperAction(apikey, paper, false, setPapers),
-    [apikey]
-  );
+  const closeModal = () => {
+    setShowModal(false); // Close the modal
+    setDescription(""); // Clear the description input
+  };
+
+  const handleSubmit = () => {
+    if (selectedPaper) {
+      handlePaperAction(apikey, selectedPaper, actionType, description, setPapers);
+    }
+    closeModal(); // Close the modal after submission
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -96,19 +109,40 @@ function PostPapers() {
                   <td className="px-4 py-2 border-b text-center">
                     {paper.status ? "Yes" : "No"}
                   </td>
-                  <td className="px-4 py-2 border-b">
-                    {paper.approver || "None"}
+                  <td className="px-4 py-2 border-b text-center">
+                    <button onClick={() => openModal(paper, "approve")}>Approve</button>
                   </td>
-                  <td className="px-4 py-2 border-b text-center text-black">
-                    <button onClick={() => handleApprove(paper)}>Approve</button>
-                  </td>
-                  <td className="px-4 py-2 border-b text-center text-black">
-                    <button onClick={() => handleReject(paper)}>Reject</button>
+                  <td className="px-4 py-2 border-b text-center">
+                    <button onClick={() => openModal(paper, "reject")}>Reject</button>
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
+      )}
+
+      {/* Modal for description input */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-bold mb-4">Enter Description for {actionType === "approve" ? "Approval" : "Rejection"}</h2>
+            <textarea
+              className="w-full p-2 border border-gray-300 rounded-md mb-4"
+              rows="4"
+              placeholder="Enter your description here..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <div className="flex justify-end gap-4">
+              <button className="px-4 py-2 bg-red-600 text-white rounded-md" onClick={closeModal}>
+                Cancel
+              </button>
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-md" onClick={handleSubmit}>
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

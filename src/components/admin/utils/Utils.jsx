@@ -6,6 +6,7 @@ function Utils() {
       <div className=' flex flex-wrap gap-5 w-fit'>
         <NavLink to='/admin/utils/Subject'>Subject</NavLink>
         <NavLink to='/admin/utils/Teacher'>Teacher</NavLink>
+        <NavLink to='/admin/utils/Duties-def'>Duties</NavLink>
       </div>
     </div>
   )

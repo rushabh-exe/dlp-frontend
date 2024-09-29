@@ -33,7 +33,7 @@ const GetAttendance = () => {
         ...student,
         Students: student.Students.map(stud => ({
           ...stud,
-          IsPresent: stud.IsPresent || false, // Ensure all records have IsPresent
+          IsPresent: stud.IsPresent || false,
         }))
       }))
     };

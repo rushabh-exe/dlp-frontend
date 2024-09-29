@@ -12,6 +12,7 @@ const DqcReq = () => {
     const [semester, setSemester] = useState("");
     const [qpLink, setQPLink] = useState("");
     const [apLink, setAPLink] = useState("");
+    const [description, setDescription] = useState("");
     const apikey = import.meta.env.VITE_API_URL;
 
     const fetchData = async () => {
@@ -41,6 +42,7 @@ const DqcReq = () => {
         setYear("")
         setQPLink("")
         setSemester("")
+        setDescription("")
     };
 
     const handleSubmit = async (event) => {
@@ -52,6 +54,7 @@ const DqcReq = () => {
             Semester: semester,
             QPLink: qpLink,
             APLink: apLink,
+            Description: description,
         };
 
         try {
@@ -95,6 +98,7 @@ const DqcReq = () => {
                   <p className="my-1">Subject: {review.subject}</p>
                   <p className="my-1">Year: {review.year}</p>
                   <p className="my-1">Semester: {review.semester}</p>
+                  
                 </div>
                 <div className="text-lg flex justify-around flex-wrap">
                   <a
@@ -128,6 +132,7 @@ const DqcReq = () => {
                     </div>
                   )}
                 </div>
+                <p className="my-1">feedback: {review.description}</p>
                 <button
                   onClick={() => deleteDqcPaperReq(review.ID)}
                   className="bg-red-500 text-white py-1 px-2 rounded mt-2 hover:opacity-80 transition"

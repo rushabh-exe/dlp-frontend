@@ -15,6 +15,7 @@ import GetAllocation from "../../components/admin/student/sAllocation/GetAllocat
 import { AuthContext } from "../../App";
 import GetteacherPaper from "../admin/teacher/GetteacherPaper";
 import PostPaper from "../admin/teacher/PostPaper";
+import UpdateDuties from "../admin/utils/Duties-def/UpdateDuties";
 
 const AdminRoutes = () => {
     const { authState, setAuthState } = useContext(AuthContext);
@@ -35,6 +36,7 @@ const AdminRoutes = () => {
                 <Routes>
                     <Route path="/admin/utils/Subject" element={<SubjectUtils />} />
                     <Route path="/admin/utils/Teacher" element={<TeacherUtils />} />
+                    <Route path="/admin/utils/Duties-def" element={<UpdateDuties />} />
                     <Route path="/admin/utils/*" element={<Utils />} />
                     <Route path="/admin/student/Allocation" element={<StudentAllocation />}>
                         <Route path="createSingle" element={<CreateSingleAllocation />} />

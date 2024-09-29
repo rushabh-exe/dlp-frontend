@@ -39,6 +39,7 @@ function GetPapers() {
               <th className="px-4 py-2 border-b">aplink</th>
               <th className="px-4 py-2 border-b">request</th>
               <th className="px-4 py-2 border-b">status</th>
+              <th className="px-4 py-2 border-b">description</th>
               <th className="px-4 py-2 border-b">approver</th>
             </tr>
           </thead>
@@ -58,6 +59,7 @@ function GetPapers() {
                 <td className="px-4 py-2 border-b text-center">
                   {paper.status ? "Yes" : "No" }
                 </td>
+                <td className="px-4 py-2 border-b">{paper.description}</td>
                 <td className="px-4 py-2 border-b">{paper.approver === "" ? "None" : paper.approver}</td>
               </tr>
             ))}
