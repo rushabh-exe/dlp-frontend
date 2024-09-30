@@ -34,6 +34,7 @@ const GetAttendance = () => {
         Students: student.Students.map(stud => ({
           ...stud,
           IsPresent: stud.IsPresent || false,
+          supplement: stud.supplement || 0,
         }))
       }))
     };
@@ -75,6 +76,7 @@ const GetAttendance = () => {
           roll_no: stud.roll_no,
           class: studentData.class,
           is_present: stud.IsPresent,
+          supplement:stud.supplement,
         }))
       );
 
@@ -168,6 +170,9 @@ const GetAttendance = () => {
                       <th className="p-3 border-2 border-black bg-red-400">
                         Is Present
                       </th>
+                      <th className="p-3 border-2 border-black bg-red-400">
+                        Supplement
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -184,6 +189,16 @@ const GetAttendance = () => {
                             <input
                               type="checkbox"
                               checked={stud.IsPresent}
+                              onChange={(event) =>
+                                handleCheckboxChange(studentIndex, studIndex, event)
+                              }
+                              
+                            />
+                          </td>
+                          <td className="p-3 border-2 border-black bg-red-100">
+                            <input
+                              type="number"
+                              checked={stud.supplement}
                               onChange={(event) =>
                                 handleCheckboxChange(studentIndex, studIndex, event)
                               }

@@ -1,6 +1,7 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+import { useEffect, useState } from 'react';
+import toast, { Toaster } from "react-hot-toast";
+
 
 function UpdateDuties() {
     const [Duties, setDuties] = useState([]);
@@ -11,7 +12,7 @@ function UpdateDuties() {
 
     const fetchDuties = async () => {
         try {
-            const response = await axios.get(`${apikey}fetch`, { withCredentials: true });
+            const response = await axios.get(`${apikey}admin/create/vitals/teacherDuties`, { withCredentials: true });
             setDuties(response.data);
         } catch (error) {
             console.error("Error fetching Duties:", error);
@@ -40,7 +41,7 @@ function UpdateDuties() {
             }
 
             console.log('Post Request Body:', entries);
-            const response = await axios.post(`${apikey}admin/create/`, entries);
+            const response = await axios.post(`${apikey}admin/create/vitals/teacherDuties`, entries);
             console.log(response.data);
             toast.success("Successfully submitted", { position: "bottom-right" });
             fetchDuties();
@@ -52,6 +53,8 @@ function UpdateDuties() {
 
     return (
         <div className="flex-col gap-4 p-4 w-full justify-start items-start">
+      <Toaster />
+
             <div className='flex gap-4 mb-4'>
                 <div>
                     <span className="block font-bold mt-1 text-gray-600">Set Non-teaching Staffs</span>

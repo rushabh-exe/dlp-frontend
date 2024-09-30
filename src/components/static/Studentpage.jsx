@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
-import GetAllocation from '../admin/student/sAllocation/GetAllocation';
-import GetTimeTable  from '../admin/student/Timetable/GetTimetable';
+import  { useState, useCallback } from 'react';
+import StudentTimeTable from './StudentTimeTable';
+import GetStudentAllocation from './GetStudentAllocation'
 
 // Main StudentPage Component
 function StudentPage() {
@@ -11,10 +11,10 @@ function StudentPage() {
     const selectedValue = event.target.value;
     switch (selectedValue) {
       case 'getExamtt':
-        setSelectedComponent(<GetTimeTable />);
+        setSelectedComponent(<StudentTimeTable />);
         break;
       case 'studentAlloc':
-        setSelectedComponent(<GetAllocation />);
+        setSelectedComponent(<GetStudentAllocation />);
         break;
       default:
         setSelectedComponent(<StudentCompo />);
