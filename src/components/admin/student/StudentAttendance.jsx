@@ -33,6 +33,7 @@ const StudentAttendance = () => {
             setAttendanceData(response.data.response);
             if (response.data.response.length === 0) {
                 toast.success("No data", { position: "bottom-right" });
+                console.log(response.data)
             } else {
                 toast.success("Fetched successfully", { position: "bottom-right" });
             }
@@ -172,7 +173,7 @@ const StudentAttendance = () => {
                                                 <input
                                                     type="number"
                                                     className="w-full p-2 border border-red-300 rounded-md"
-                                                    value={selectedStudent.Supplement || 0}
+                                                    value={selectedStudent.supplement || 0}
                                                     onChange={(e) =>
                                                         setSelectedStudent((prev) => ({
                                                             ...prev,
@@ -181,7 +182,7 @@ const StudentAttendance = () => {
                                                     }
                                                 />
                                             ) : (
-                                                entry.Supplement || 0
+                                                entry.supplement || 0
                                             )}
                                         </td>
                                         <td className="p-3 text-center">
