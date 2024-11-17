@@ -109,21 +109,30 @@ export function GetTeacherAllocation() {
     }
   };
 
-  const handleSendMail = () => {
-    setLoading(true);  // Set loading to true when the request starts
-    axios.post(`${apikey}admin/create/teacher/allocation/sendmail`, { withCredentials: true })
-      .then(response => {
-        console.log('Mail sent successfully:', response.data);
-        toast.success("Email Sent Successfully", { position: "bottom-right" });
-      })
-      .catch(error => {
-        console.error('Error sending mail:', error);
-        toast.error("Error Sending mail", { position: "bottom-right" });
-      })
-      .finally(() => {
-        setLoading(false);  // Set loading to false after the request is completed
+  const handleSendMail = async (file) => {
+    setLoading(true); // Set loading to true when the request starts
+    
+    const formData = new FormData();
+    formData.append("file", file); // Attach file to the formData
+    
+    try {
+      const response = await axios.post(`${apikey}admin/create/teacher/allocation/sendmail`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true
       });
+      console.log('Mail sent successfully:', response.data);
+      toast.success("Email Sent Successfully", { position: "bottom-right" });
+    } catch (error) {
+      console.error('Error sending mail:', error);
+      toast.error("Error Sending mail", { position: "bottom-right" });
+    } finally {
+      setLoading(false); // Set loading to false after the request is completed
+    }
   };
+  
+  
 
   return (
     <div id='table_body' className="overflow-x-auto relative">
@@ -165,6 +174,14 @@ export function GetTeacherAllocation() {
       {error && <div>Error: {error}</div>}
       {deleteError && <div>Error: {deleteError}</div>}
       <PrintButton contentId={'table_body'} />
+      <input
+  type="file"
+  accept="application/pdf"
+  onChange={(e) => handleSendMail(e.target.files[0])}
+  className="mb-4"
+/>
+
+
       <button
         onClick={handleSendMail}
         className="pntbtn fixed bottom-5 left-40 bg-red-800 text-white w-fit p-2"
