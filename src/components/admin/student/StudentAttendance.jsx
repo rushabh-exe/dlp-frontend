@@ -114,10 +114,10 @@ const StudentAttendance = () => {
             </div>
 
             {/* Attendance Data */}
-            <div className="attendance-data bg-white p-6 rounded-lg shadow-lg">
+            <div id='table_body' className="table_body attendance-data bg-white p-6 rounded-lg shadow-lg">
                 <h3 className="text-xl font-bold text-red-700 mb-4">Attendance Data:</h3>
                 {attendanceData.length > 0 ? (
-                    <table id='table_body' className="table_body w-full text-left border-collapse">
+                    <table  className=" w-full text-left border-collapse">
                         <thead>
                             <tr>
                                 <th className="border-b-2 border-black p-3 text-red-800 text-center ">Roll No</th>
