@@ -91,9 +91,74 @@ export function CreateTeacherAllocation() {
 // Get Teacher Allocation Component with Delete functionality
 export function GetTeacherAllocation() {
   const apiUrl = `${apikey}admin/get/teacher/allocation`;
-  const { response, error, isLoading, setResponse } = useApiCall(apiUrl, 'GET');
+  const { response, error, isLoading, setResponse } = useApiCall(apiUrl, "GET");
   const [deleteError, setDeleteError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [selectedAllocation, setSelectedAllocation] = useState(null);
+  const [teachers, setTeachers] = useState([]);
+  const [coTeachers, setCoTeachers] = useState([]);
+
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      try {
+        const mainTeachers = await axios.get(
+          `${apikey}admin/create/vitals/teachers/teachingStaff`
+        );
+        setTeachers(mainTeachers.data);
+
+        const nonTeachingStaff = await axios.get(
+          `${apikey}admin/create/vitals/teachers/nonteachingStaff`
+        );
+        setCoTeachers(nonTeachingStaff.data);
+      } catch (err) {
+        console.error("Error fetching teachers:", err);
+      }
+    };
+
+    fetchTeachers();
+  }, []);
+
+
+
+   const handleEditAllocation = (allocation) => {
+    setEditMode(true);
+    const selected = response.find((item) => item.ID === allocation.ID);
+    setSelectedAllocation({ ...selected });
+  };
+
+  const handleSaveAllocation = async () => {
+    setLoading(true);
+    try {
+      await axios.put(
+        `${apikey}admin/create/teacher/allocation/${selectedAllocation.ID}`,
+        selectedAllocation,
+        {
+          withCredentials: true,
+        }
+      );
+      setResponse((prev) =>
+        prev.map((item) =>
+          item.ID === selectedAllocation.ID ? selectedAllocation : item
+        )
+      );
+      setEditMode(false);
+      setSelectedAllocation(null);
+      toast.success("Allocation updated successfully", {
+        position: "bottom-right",
+      });
+    } catch (error) {
+      console.error("Error saving allocation:", error);
+      toast.error("Error saving allocation", { position: "bottom-right" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditMode(false);
+    setSelectedAllocation(null);
+  };
 
   // Function to delete a teacher allocation
   const deleteTeacherAllocation = async (id) => {
@@ -146,6 +211,7 @@ export function GetTeacherAllocation() {
             <th className="px-4 py-2">End Time</th>
             <th className="px-4 py-2">Main Teacher</th>
             <th className="px-4 py-2">Co-Teacher</th>
+            <th className="px-4 py-2">Edit</th>
             <th className="px-4 py-2">Delete</th>
           </tr>
         </thead>
@@ -156,8 +222,78 @@ export function GetTeacherAllocation() {
               <td className="px-4 text-center py-2">{item?.date}</td>
               <td className="px-4 text-center py-2">{item?.start_time}</td>
               <td className="px-4 text-center py-2">{item?.end_time}</td>
-              <td className="px-4 text-center py-2">{item?.main_teacher}</td>
-              <td className="px-4 text-center py-2">{item?.co_teacher}</td>
+              <td className="px-4 text-center py-2">
+                {editMode && selectedAllocation?.ID === item.ID ? (
+                  <select
+                    value={selectedAllocation.Main_Teacher}
+                    onChange={(e) =>
+                      setSelectedAllocation((prev) => ({
+                        ...prev,
+                        Main_Teacher: e.target.value,
+                      }))
+                    }
+                    className="border rounded px-2 py-1"
+                  >
+                    <option value="">Select Main Teacher</option>
+                    {teachers.map((teacher) => (
+                      <option key={teacher.ID} value={teacher.name}>
+                        {teacher.name}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  item?.main_teacher
+                )}
+              </td>
+              <td className="px-4 text-center py-2">
+                {editMode && selectedAllocation?.ID === item.ID ? (
+                  <select
+                    value={selectedAllocation.Co_Teacher}
+                    onChange={(e) =>
+                      setSelectedAllocation((prev) => ({
+                        ...prev,
+                        Co_Teacher: e.target.value,
+                      }))
+                    }
+                    className="border rounded px-2 py-1"
+                  >
+                    <option value="">Select Co-Teacher</option>
+                    {coTeachers.map((teacher) => (
+                      <option key={teacher.ID} value={teacher.name}>
+                        {teacher.name}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  item?.co_teacher
+                )}
+              </td>
+              <td className="px-4 text-center py-2">
+                {editMode && selectedAllocation?.ID === item.ID ? (
+                  <>
+                    <button
+                      onClick={handleSaveAllocation}
+                      className="bg-green-500 text-white py-1 px-2 rounded mr-2"
+                      disabled={loading}
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={handleCancelEdit}
+                      className="bg-gray-500 text-white py-1 px-2 rounded"
+                    >
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => handleEditAllocation(item)}
+                    className="bg-blue-500 text-white py-1 px-2 rounded"
+                  >
+                    Edit
+                  </button>
+                )}
+              </td>
               <td className="p-2 border">
                 <button
                   onClick={() => deleteTeacherAllocation(item?.ID)}
