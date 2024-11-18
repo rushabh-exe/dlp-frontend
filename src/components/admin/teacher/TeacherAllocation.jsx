@@ -94,6 +94,7 @@ export function GetTeacherAllocation() {
   const { response, error, isLoading, setResponse } = useApiCall(apiUrl, 'GET');
   const [deleteError, setDeleteError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [file,setFile] = useState(null)
 
   // Function to delete a teacher allocation
   const deleteTeacherAllocation = async (id) => {
@@ -109,50 +110,61 @@ export function GetTeacherAllocation() {
     }
   };
 
-  const handleSendMail = () => {
-    setLoading(true);  // Set loading to true when the request starts
-    axios.post(`${apikey}admin/create/teacher/allocation/sendmail`, { withCredentials: true })
-      .then(response => {
-        console.log('Mail sent successfully:', response.data);
-        toast.success("Email Sent Successfully", { position: "bottom-right" });
-      })
-      .catch(error => {
-        console.error('Error sending mail:', error);
-        toast.error("Error Sending mail", { position: "bottom-right" });
-      })
-      .finally(() => {
-        setLoading(false);  // Set loading to false after the request is completed
+  const handleSendMail = async () => {
+    setLoading(true); // Set loading to true when the request starts
+    
+    const formData = new FormData();
+    formData.append("file", file); // Attach file to the formData
+    
+    try {
+      const response = await axios.post(`${apikey}admin/create/teacher/allocation/sendmail`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true
       });
+      console.log('Mail sent successfully:', response.data);
+      toast.success("Email Sent Successfully", { position: "bottom-right" });
+    } catch (error) {
+      console.error('Error sending mail:', error);
+      toast.error("Error Sending mail", { position: "bottom-right" });
+    } finally {
+      setLoading(false); // Set loading to false after the request is completed
+    }
   };
+  
+  
 
   return (
     <div id='table_body' className="overflow-x-auto relative">
       <Toaster />
-      <table className="table-auto w-full bg-white shadow-md rounded-lg overflow-hidden">
+      <table className="table-auto w-full border-black border border-collapse  overflow-hidden">
         <thead>
-          <tr className="bg-gray-100">
-            <th className="px-4 py-2">Classroom</th>
-            <th className="px-4 py-2">Date</th>
-            <th className="px-4 py-2">Start Time</th>
-            <th className="px-4 py-2">End Time</th>
-            <th className="px-4 py-2">Main Teacher</th>
-            <th className="px-4 py-2">Co-Teacher</th>
-            <th className="px-4 py-2">Delete</th>
+          <tr className="bg-gray-100 ">
+            <th className="px-4 border-black border border-collapse py-2">Classroom</th>
+            <th className="px-4 border-black border border-collapse py-2">Date</th>
+            <th className="px-4 border-black border border-collapse py-2">Start Time</th>
+            <th className="px-4 border-black border border-collapse py-2">End Time</th>
+            <th className="px-4 border-black border border-collapse py-2">Main Teacher</th>
+            <th className="px-4 border-black border border-collapse py-2">Co-Teacher</th>
+            <th className="pntbtn     py-2"></th>
+            <th className="pntbtn    px-4 py-2">Delete</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className='   '>
           {response?.map((item, index) => (
-            <tr key={index} className="bg-white">
-              <td className="px-4 text-center py-2">{item?.classroom}</td>
-              <td className="px-4 text-center py-2">{item?.date}</td>
-              <td className="px-4 text-center py-2">{item?.start_time}</td>
-              <td className="px-4 text-center py-2">{item?.end_time}</td>
-              <td className="px-4 text-center py-2">{item?.main_teacher}</td>
-              <td className="px-4 text-center py-2">{item?.co_teacher}</td>
-              <td className="p-2 border">
+            <tr key={index} className="bg-white border-black border border-collapse">
+              <td className="px-4 border-black border border-collapse text-center py-2">{item?.classroom}</td>
+              <td className="px-4 border-black border border-collapse text-center py-2">{item?.date}</td>
+              <td className="px-4 border-black border border-collapse text-center py-2">{item?.start_time}</td>
+              <td className="px-4 border-black border border-collapse text-center py-2">{item?.end_time}</td>
+              <td className="px-4 border-black border border-collapse text-center py-2">{item?.main_teacher}</td>
+              <td className="px-4 border-black border border-collapse text-center py-2">{item?.co_teacher}</td>
+              <td className=" border-black border border-collapse text-center py-2"></td>
+              <td className="pntbtn  p-2 ">
                 <button
                   onClick={() => deleteTeacherAllocation(item?.ID)}
-                  className="bg-red-500 text-white py-1 px-2 rounded"
+                  className="bg-red-500 pntbtn text-white py-1 px-2 rounded"
                 >
                   Delete
                 </button>
@@ -165,6 +177,14 @@ export function GetTeacherAllocation() {
       {error && <div>Error: {error}</div>}
       {deleteError && <div>Error: {deleteError}</div>}
       <PrintButton contentId={'table_body'} />
+      <input
+  type="file"
+  accept="application/pdf"
+  onChange={(e) => setFile(e.target.files[0])}
+  className="pntbtn fixed bottom-20 left-5 bg-red-800 text-white w-fit p-2"
+/>
+
+
       <button
         onClick={handleSendMail}
         className="pntbtn fixed bottom-5 left-40 bg-red-800 text-white w-fit p-2"

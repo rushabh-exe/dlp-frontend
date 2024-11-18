@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext } from "react";
+import { useEffect, useState, createContext } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { gapi } from "gapi-script";
 import Cookies from "js-cookie";
