@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import PrintButton from '../../../utils/PrintButton';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+import pdfmake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import {leftimage} from '../../../../assets/leftimageData'
+import {rightimage} from '../../../../assets/rightimageData'
+// Initialize pdfmake
+pdfmake.vfs = pdfFonts.vfs;
 
 function GetTimeTable({ year }) {
   const [fetchedTimetables, setFetchedTimetables] = useState([]);
@@ -52,6 +57,136 @@ function GetTimeTable({ year }) {
     ? fetchedTimetables.filter(entry => entry.sem === selectSem)
     : fetchedTimetables;
 
+  const createPdf = () => {
+    if (!filteredTimetables || filteredTimetables.length === 0) {
+      toast.error("No data available to generate PDF");
+      return;
+    }
+
+    const docDefinition = {
+      content: [
+        {
+          columns: [
+            {
+              image:`${leftimage}`, 
+              width: 50,
+              height: 50,
+              alignment: 'center'
+            },
+            {
+              stack: [
+                {
+                  text: 'K. J. Somaiya Institute of Technology Sion, Mumbai-22',
+                  style: 'headerLarge',
+                  alignment: 'center'
+                },
+                {
+                  text: 'An Autonomous Institute permanently affiliated to University of Mumbai',
+                  style: 'headerSmall',
+                  alignment: 'center'
+                },
+                {
+                  text: 'Accredited by NAAC and NBA, Approved by AICTE, New Delhi',
+                  style: 'headerSmall',
+                  alignment: 'center'
+                }
+              ],
+              alignment: 'center'
+            },
+            {
+              image: `${rightimage}`,
+              width: 50,
+              height: 50,
+              alignment: 'center'
+            }
+          ]
+        },
+        {
+          text: `Department of Electronics and Telecommunication Engineering`,
+          alignment: 'center',
+          fontSize: 13,
+          margin: [0, 15, 0, 5]
+        },
+        {
+          text: `Year: ${selectYear}${selectSem ? ` - Semester ${selectSem}` : ''} Timetable`,
+          alignment: 'center',
+          fontSize: 12,
+          margin: [0, 0, 0, 15]
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: ['*', '*', 'auto', 'auto'],
+            body: [
+              [
+                { text: 'Date', style: 'tableHeader', alignment: 'center' },
+                { text: 'Subject', style: 'tableHeader', alignment: 'center' },
+                { text: 'Start Time', style: 'tableHeader', alignment: 'center' },
+                { text: 'End Time', style: 'tableHeader', alignment: 'center' }
+              ],
+              ...filteredTimetables.map(entry => [
+                { text: entry.date || '', alignment: 'center' },
+                { text: entry.subject || '', alignment: 'center' },
+                { text: entry.start_time || '', alignment: 'center' },
+                { text: entry.end_time || '', alignment: 'center' }
+              ])
+            ]
+          },
+          layout: {
+            hLineWidth: function(i, node) { return 1; },
+            vLineWidth: function(i, node) { return 1; },
+            hLineColor: function(i, node) { return '#ddd'; },
+            vLineColor: function(i, node) { return '#ddd'; },
+            paddingLeft: function(i) { return 10; },
+            paddingRight: function(i) { return 10; },
+            paddingTop: function(i) { return 5; },
+            paddingBottom: function(i) { return 5; }
+          }
+        }
+      ],
+      styles: {
+        headerLarge: {
+          fontSize: 14,
+          bold: true,
+          margin: [0, 0, 0, 5]
+        },
+        headerSmall: {
+          fontSize: 10,
+          margin: [0, 0, 0, 3]
+        },
+        tableHeader: {
+          bold: true,
+          fontSize: 11,
+          fillColor: '#f3f4f6'
+        }
+      },
+      defaultStyle: {
+        fontSize: 10
+      },
+      pageMargins: [40, 40, 40, 40],
+      pageSize: 'A4'
+    };
+
+    try {
+      const pdfGenerator = pdfmake.createPdf(docDefinition);
+      pdfGenerator.getBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Timetable_${selectYear}_${selectSem || 'All'}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      });
+
+      toast.success("PDF generated successfully");
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      toast.error("Failed to generate PDF");
+    }
+  };
+
   return (
     <div className='flex flex-col w-full gap-5'>
       <Toaster/>
@@ -74,8 +209,14 @@ function GetTimeTable({ year }) {
         >
           Delete {year} Timetable
         </button>
+        <button 
+          className='bg-white rounded-xl active:bg-blue-200 p-1' 
+          onClick={createPdf}
+        >
+          Download PDF
+        </button>
       </div>
-      <PrintButton contentId={'table_body'} />
+     
       <section id='table_body' className="table_body w-1/2">
         <table className="w-full bg-white">
           <thead>

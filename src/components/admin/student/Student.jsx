@@ -1,12 +1,10 @@
 import CNavlink from '../../utils/CNavlink';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import  StudentAttendance  from './StudentAttendance';
 import TimeTable from './Timetable/TimeTable';
 function Student() {
   const [firstSelect, setFirstSelect] = useState('');
   const [secondSelect, setSecondSelect] = useState('');
-  const apikey = import.meta.env.VITE_API_URL;
 
   const handleBack = () => {
     setSecondSelect('');

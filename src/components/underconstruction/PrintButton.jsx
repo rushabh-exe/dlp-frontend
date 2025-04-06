@@ -1,5 +1,5 @@
 import React from "react";
-
+//useless stuff for now 
 function PrintButton({ contentId }) {
   const printTable = () => {
     const printContent = document.getElementById(contentId).innerHTML || document.getElementsByClassName(contentId).innerHTML;

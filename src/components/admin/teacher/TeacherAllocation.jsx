@@ -2,10 +2,14 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import CNavlink from '../../utils/CNavlink';
 import toast, { Toaster } from 'react-hot-toast';
-import PrintButton from '../../utils/PrintButton';
-
+import pdfmake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import {leftimage} from '../../../assets/leftimageData'
+import {rightimage} from '../../../assets/rightimageData'
+pdfmake.vfs = pdfFonts.vfs;
 // Base API URL
 const apikey = import.meta.env.VITE_API_URL;
+
 
 // Utility hook for API calls
 const useApiCall = (apiUrl, method, data = null) => {
@@ -48,20 +52,24 @@ function TeacherAllocation() {
 // Create Teacher Allocation Component
 export function CreateTeacherAllocation() {
   const apiUrl = `${apikey}admin/create/teacher/allocation`;
-  const {  error, isLoading, setResponse, setError } = useApiCall(apiUrl, 'POST');
+  const { error, isLoading, setResponse, setError } = useApiCall(apiUrl, 'POST');
 
   const handleCreateAllocation = async () => {
     try {
       await axios.post(apiUrl);
-      toast.success("Teacher Allocation has been created",{position: 'bottom-right',});
+      toast.success("Teacher Allocation has been created", { position: 'bottom-right', });
       setTimeout(() => {
         window.location.href = "/admin/teacher/Allocation/getAllocation";
       }, 2000);
     } catch (err) {
-      setError(err.message);
-      toast.error("Failed to create teacher allocation",{position: 'bottom-right',});
+      setError(err.response?.data?.message || err.message);
+      toast.error(
+        err.response?.data?.error ||
+        "Failed to create teacher allocation. Please check the console for more details.",
+        { position: "bottom-right" }
+      );
     } finally {
-      setResponse(null); // Reset response to avoid automatic reload
+      setResponse(null);
     }
   };
 
@@ -121,7 +129,7 @@ export function GetTeacherAllocation() {
 
 
 
-   const handleEditAllocation = (allocation) => {
+  const handleEditAllocation = (allocation) => {
     setEditMode(true);
     const selected = response.find((item) => item.ID === allocation.ID);
     setSelectedAllocation({ ...selected });
@@ -176,10 +184,10 @@ export function GetTeacherAllocation() {
 
   const handleSendMail = async (file) => {
     setLoading(true); // Set loading to true when the request starts
-    
+
     const formData = new FormData();
     formData.append("file", file); // Attach file to the formData
-    
+
     try {
       const response = await axios.post(`${apikey}admin/create/teacher/allocation/sendmail`, formData, {
         headers: {
@@ -196,8 +204,198 @@ export function GetTeacherAllocation() {
       setLoading(false); // Set loading to false after the request is completed
     }
   };
-  
-  
+
+  const [url, setUrl] = useState(null)
+
+  const createPdf = () => {
+    if (!response || response.length === 0) {
+      toast.error("No data available to generate PDF");
+      return;
+    }
+
+    const docDefinition = {
+      pageSize: 'A4',
+      pageMargins: [40, 40, 40, 40],
+      content: [
+        {
+          columns: [
+            {
+              image: `${leftimage}`,
+              width: 50,
+              height: 50,
+              alignment: 'center'
+            },
+            {
+              stack: [
+                {
+                  text: 'K. J. Somaiya Institute of Technology Sion, Mumbai-22',
+                  style: 'headerLarge',
+                  alignment: 'center'
+                },
+                {
+                  text: 'An Autonomous Institute permanently affiliated to University of Mumbai',
+                  style: 'headerSmall',
+                  alignment: 'center'
+                },
+                {
+                  text: 'Accredited by NAAC and NBA, Approved by AICTE, New Delhi',
+                  style: 'headerSmall',
+                  alignment: 'center'
+                }
+              ],
+              alignment: 'center'
+            },
+            {
+              image: `${rightimage}`,
+              width: 50,
+              height: 50,
+              alignment: 'center'
+            }
+          ],
+          columnGap: 10
+        },
+        {
+          stack: [
+            {
+              text: 'Department of Electronics and Telecommunication Engineering',
+              style: 'departmentHeader',
+              alignment: 'center'
+            },
+            {
+              text: `Even Semester ${new Date().getFullYear()}`,
+              style: 'subHeader',
+              alignment: 'center'
+            },
+            {
+              text: 'Duty Chart For CLASS TEST - I',
+              style: 'subHeader',
+              alignment: 'center'
+            }
+          ],
+          margin: [0, 20, 0, 20]
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: ['*', 'auto', 'auto', 'auto', '*', '*'],
+            body: [
+              [
+                { text: 'Classroom', style: 'tableHeader', alignment: 'center' },
+                { text: 'Date', style: 'tableHeader', alignment: 'center' },
+                { text: 'Start Time', style: 'tableHeader', alignment: 'center' },
+                { text: 'End Time', style: 'tableHeader', alignment: 'center' },
+                { text: 'Main Teacher', style: 'tableHeader', alignment: 'center' },
+                { text: 'Co-Teacher', style: 'tableHeader', alignment: 'center' }
+              ],
+              ...response.map(item => [
+                { text: item.classroom || '', alignment: 'center' },
+                { text: item.date || '', alignment: 'center' },
+                { text: item.start_time || '', alignment: 'center' },
+                { text: item.end_time || '', alignment: 'center' },
+                { text: item.main_teacher || '', alignment: 'center' },
+                { text: item.co_teacher || '', alignment: 'center' }
+              ])
+            ]
+          },
+          layout: {
+            hLineWidth: function(i, node) { return 1; },
+            vLineWidth: function(i, node) { return 1; },
+            hLineColor: function(i, node) { return '#aaa'; },
+            vLineColor: function(i, node) { return '#aaa'; },
+            paddingLeft: function(i) { return 10; },
+            paddingRight: function(i) { return 10; },
+            paddingTop: function(i) { return 8; },
+            paddingBottom: function(i) { return 8; }
+          }
+        },
+        {
+          text: '*All Invigilators are required to report in Lab 603 before 20 minutes of commencement of examination',
+          style: 'noteText',
+          margin: [0, 20, 0, 20]
+        },
+        {
+          columns: [
+            {
+              stack: [
+                { text: 'Test Coordinator:', style: 'signatureHeader' },
+                { text: 'Ms. S', margin: [10, 5, 0, 0] },
+                { text: 'Mr. A', margin: [10, 2, 0, 0] },
+                { text: 'Ms. C', margin: [10, 2, 0, 0] }
+              ]
+            },
+            {
+              stack: [
+                { text: 'HOD EXTC', style: 'signatureHeader', alignment: 'right' },
+                { text: 'Dr. J', alignment: 'right', margin: [0, 5, 0, 0] }
+              ]
+            }
+          ],
+          margin: [0, 30, 0, 0]
+        }
+      ],
+      styles: {
+        headerLarge: {
+          fontSize: 16,
+          bold: true,
+          margin: [0, 0, 0, 5]
+        },
+        headerSmall: {
+          fontSize: 10,
+          margin: [0, 0, 0, 3]
+        },
+        departmentHeader: {
+          fontSize: 14,
+          bold: true,
+          margin: [0, 0, 0, 10]
+        },
+        subHeader: {
+          fontSize: 12,
+          margin: [0, 0, 0, 5]
+        },
+        tableHeader: {
+          fontSize: 11,
+          bold: true,
+          fillColor: '#f3f4f6',
+          margin: [0, 5, 0, 5]
+        },
+        noteText: {
+          fontSize: 11,
+          italics: true
+        },
+        signatureHeader: {
+          fontSize: 12,
+          bold: true,
+          margin: [0, 0, 0, 5]
+        }
+      },
+      defaultStyle: {
+        fontSize: 10
+      }
+    };
+
+    try {
+      const pdfGenerator = pdfMake.createPdf(docDefinition);
+      pdfGenerator.getBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        setUrl(url);
+
+        const link = document.createElement('a');
+        link.href = url;
+        const fileName = `Teacher_Allocation_${new Date().toLocaleDateString().replace(/\//g, '-')}.pdf`;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        setTimeout(() => URL.revokeObjectURL(url), 100);
+      });
+
+      toast.success("PDF generated successfully");
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      toast.error("Failed to generate PDF");
+    }
+  };
 
   return (
     <div id='table_body' className="overflow-x-auto relative">
@@ -306,24 +504,31 @@ export function GetTeacherAllocation() {
           ))}
         </tbody>
       </table>
+
       {isLoading && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
       {deleteError && <div>Error: {deleteError}</div>}
-      <PrintButton contentId={'table_body'} />
       <input
-  type="file"
-  accept="application/pdf"
-  onChange={(e) => handleSendMail(e.target.files[0])}
-  className="mb-4"
-/>
+        type="file"
+        accept="application/pdf"
+        onChange={(e) => handleSendMail(e.target.files[0])}
+        className="mb-4"
+      />
 
 
       <button
         onClick={handleSendMail}
-        className="pntbtn fixed bottom-5 left-40 bg-red-800 text-white w-fit p-2"
+        className="pntbtn fixed bottom-5 right-10 bg-red-800 text-white w-fit p-2"
         disabled={loading}
       >
         {loading ? 'Sending...' : 'Send Mail'}
+      </button>
+      {/* <Generatepdf/> */}
+      <button
+        onClick={createPdf}
+        className="pntbtn fixed bottom-5 right-40 bg-red-800 text-white w-fit p-2"
+      >
+        Generate PDF
       </button>
 
       {/* Fullscreen Loading Overlay */}
@@ -335,7 +540,4 @@ export function GetTeacherAllocation() {
     </div>
   );
 }
-
-
-
 export default TeacherAllocation;

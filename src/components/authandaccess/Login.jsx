@@ -7,9 +7,9 @@ import { NavLink, Routes, Route, Navigate } from "react-router-dom";
 import About from '../static/About';
 import Event from '../static/Event';
 import Studentpage from '../static/Studentpage';
-
+const GCIK = import.meta.env.GOOGLE_CLIENT_ID_KEY;
 // Constants
-const GOOGLE_CLIENT_ID = "152111620630-d01stikjdcthgcfrjhhmpuetctpnqs61.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = GCIK;
 const API_URL = import.meta.env.VITE_API_URL;
 // const gapiClientid = import.meta.env.GOOGLE_CLIENT_ID; 
 

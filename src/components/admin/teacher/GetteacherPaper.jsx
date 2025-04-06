@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import PrintButton from '../../utils/PrintButton';
 
 function GetteacherPaper() {
   const [papers, setPapers] = useState([]);
@@ -57,7 +56,7 @@ function GetteacherPaper() {
           </tbody>
         </table>
       )}
-      <PrintButton contentId={'table_body'}/>
+      
     </div>
   );
 }

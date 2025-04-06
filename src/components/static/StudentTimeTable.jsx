@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import PrintButton from '../utils/PrintButton';
+
 
 function StudentTimeTable() {
   const [fetchedTimetables, setFetchedTimetables] = useState([]);
@@ -86,7 +86,6 @@ function StudentTimeTable() {
           ))}
         </select>
       </div>
-      <PrintButton contentId={'table_body'} />
       <section id='table_body' className="table_body w-1/2">
         <table className="w-full bg-white">
           <thead>

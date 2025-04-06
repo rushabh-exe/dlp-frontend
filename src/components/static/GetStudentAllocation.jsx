@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import PrintButton from '../utils/PrintButton';
 
 function GetAllocation() {
   const [studentAllocations, setStudentAllocations] = useState([]);
@@ -52,7 +51,6 @@ function GetAllocation() {
           </tbody>
         </table>
       </section>
-      <PrintButton contentId={"table_body"} />
     </div>
   );
 }

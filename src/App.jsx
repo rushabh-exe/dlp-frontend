@@ -7,7 +7,7 @@ import Loader from "./components/utils/Loader";
 import AdminRoutes from "./components/Routes/AdminRoutes";
 import TeacherRoutes from "./components/Routes/TeacherRoutes";
 import DqcRoutes from "./components/Routes/DqcRoutes";
-
+const GCIK = import.meta.env.GOOGLE_CLIENT_ID_KEY;
 // Context for managing global state
 export const AuthContext = createContext();
 
@@ -24,7 +24,7 @@ const App = () => {
   useEffect(() => {
     const initClient = async () => {
       try {
-        await gapi.client.init({ clientId: "152111620630-d01stikjdcthgcfrjhhmpuetctpnqs61.apps.googleusercontent.com", scope: "profile email" });
+        await gapi.client.init({ clientId: GCIK, scope: "profile email" });
       } catch (error) {
         console.error("Error initializing Google API client:", error);
       } finally {
