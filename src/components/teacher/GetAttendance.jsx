@@ -33,8 +33,8 @@ const GetAttendance = () => {
         ...student,
         Students: student.Students.map(stud => ({
           ...stud,
-          IsPresent: stud.IsPresent || false,
-          supplement: stud.supplement || 0,
+          IsPresent: stud.IsPresent || true,
+          supplement: stud.supplement || "0",
         }))
       }))
     };
@@ -51,6 +51,20 @@ const GetAttendance = () => {
     if (modalContent) {
       const updatedStudents = modalContent.student_data[studentIndex].Students.map((stud, idx) =>
         idx === studIndex ? { ...stud, IsPresent: event.target.checked } : stud
+      );
+
+      const updatedStudentData = [...modalContent.student_data];
+      updatedStudentData[studentIndex].Students = updatedStudents;
+
+      setModalContent({ ...modalContent, student_data: updatedStudentData });
+    }
+  };
+
+  // Add this new handler for supplement updates
+  const handleSupplementChange = (studentIndex, studIndex, event) => {
+    if (modalContent) {
+      const updatedStudents = modalContent.student_data[studentIndex].Students.map((stud, idx) =>
+        idx === studIndex ? { ...stud, supplement: event.target.value } : stud
       );
 
       const updatedStudentData = [...modalContent.student_data];
@@ -198,11 +212,12 @@ const GetAttendance = () => {
                           <td className="p-3 border-2 border-black bg-red-100">
                             <input
                               type="number"
-                              checked={stud.supplement}
+                              value={stud.supplement}
                               onChange={(event) =>
-                                handleCheckboxChange(studentIndex, studIndex, event)
+                                handleSupplementChange(studentIndex, studIndex, event)
                               }
-                              
+                              min="0"
+                              className="w-20 p-1"
                             />
                           </td>
                         </tr>
