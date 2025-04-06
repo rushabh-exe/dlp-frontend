@@ -1,2 +1,18 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment Variables
 .env
+
+# Build Output
+build/
+dist/
+
+# Logs
+*.log
+logs/
+
+# IDE or Editor Specific
+.idea/
+.vscode/
+*.swp
