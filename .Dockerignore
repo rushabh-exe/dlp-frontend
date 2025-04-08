@@ -1,0 +1,39 @@
+# Ignore node modules (not needed in the container)
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Ignore build artifacts
+build/
+dist/
+*.log
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE/editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore environment files (unless you need them in Docker)
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Ignore Git files
+.git
+.gitignore
+.gitattributes
+
+# Ignore Docker-related files (if not needed)
+Dockerfile
+.dockerignore
+
+# Ignore temporary files
+tmp/
+cache/
